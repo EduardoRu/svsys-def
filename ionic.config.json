@@ -1,0 +1,7 @@
+{
+  "name": "SVSYS-DEF",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
