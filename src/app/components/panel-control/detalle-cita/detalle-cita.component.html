@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Editar cita - {{cita.nombre_razon_social}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form (ngSubmit)="editarCita()" [formGroup]="citaInformacion">
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingnombre_razon_social" formControlName="nombre_razon_social">
+      <label for="floatingnombre_razon_social">Razón Social y/o Nombre</label>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingtelefono"
+            formControlName="telefono">
+          <label for="floatingtelefono">Teléfono</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputfecha"
+            formControlName="fecha">
+          <label for="floatingInputfecha">Fecha</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputtipo_servicio"
+            formControlName="tipo_servicio">
+          <label for="floatingInputtipo_servicio">Tipo de servicio</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-5">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputdomicilio"
+            formControlName="domicilio">
+          <label for="floatingInputdomicilio">Domicilio</label>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" id="floatingInputnum"
+            formControlName="num">
+          <label for="floatingInputnum"># Num</label>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputcolonia"
+            formControlName="colonia">
+          <label for="floatingInputcolonia">Colonia</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputmunicipio"
+            formControlName="municipio">
+          <label for="floatingInputmunicipio">Municipio</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputestado"
+            formControlName="estado">
+          <label for="floatingInputestado">Estado/Edo</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" id="floatingInputcp"
+            formControlName="cp">
+          <label for="floatingInputcp">Código postal</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputgiro"
+            formControlName="giro">
+          <label for="floatingInputgiro">Giro empresarial</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row text-center">
+      <div class="col-md-6 d-grid gap-2">
+        <ion-button fill="clear" class="btn btn-danger btn-lg mt-3" (click)="eliminarCita()">Eliminar cita</ion-button>
+      </div>
+      <div class="col-md-6 d-grid gap-2">
+        <button type="submit" class="btn btn-success mt-3 btn-lg">EDITAR CITA</button>
+      </div>
+    </div>
+  </form>
+</ion-content>

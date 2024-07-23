@@ -1,0 +1,34 @@
+ion-menu::part(container) {
+    //border-radius: 0 20px 20px 0;
+    --background: #757374;
+  }
+
+  ion-item {
+    --background-color: #c0c0c0;
+    --color: #c0c0c0;
+  
+    --border-color: #c0c0c0;
+    --border-width: 2px;
+  
+    --detail-icon-color: white;
+    --detail-icon-opacity: 1;
+    --detail-icon-font-size: 20px;
+  }
+
+/* Estilos para la barra de herramientas (footer) */
+.cerrar-sesion-toolbar {
+  --background: #d6282e; /* Color de fondo normal */
+  transition: background-color 0.4s ease; /* Transición suave del color de fondo */
+  cursor: pointer; /* Cambia el cursor del ratón a pointer */
+}
+
+/* Efecto de oscurecimiento al pasar el ratón */
+.cerrar-sesion-toolbar:hover {
+  --background: rgba(151, 43, 43, 0.692); /* Oscurece el color de fondo al 80% */
+}
+
+/* Estilos para el texto dentro del ion-label */
+#cerrar-sesion {
+  color: white; /* Color de texto normal */
+  transition: color 0.3s ease; /* Transición suave del color de texto */
+}

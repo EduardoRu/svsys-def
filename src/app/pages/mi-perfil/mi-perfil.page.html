@@ -1,0 +1,63 @@
+<app-menu titulo="Mi perfil"></app-menu>
+
+<ion-content [fullscreen]="true">
+  
+<ion-card>
+  <ion-card-content>
+    <div class="text-center">
+      <img src="/assets/user.png" alt="" srcset="" style="max-width: 200px;">
+      <h1>Nombre de usuario</h1>
+    </div>
+
+    <hr>
+
+    <div class="text-center">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="6">
+            <h1>CORREO ELÉCTRONICO</h1>
+          </ion-col>
+          <ion-col size="6">
+            <h1>admin&#64;svsys.com</h1>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="6">
+            <h1>Tipo de trabajador</h1>
+          </ion-col>
+          <ion-col size="6">
+            <h1>Adminstrador</h1>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <hr>
+
+    <div>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="4">
+            <h1 class="pt-3">Cambio de contraseña</h1>
+          </ion-col>
+          <ion-col size="6">
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="floatingInput" placeholder="Nueva contraseña">
+              <label for="floatingInput">Nueva contraseña</label>
+            </div>
+          </ion-col>
+          <ion-col size="2">
+            <div class="text-center">
+              <button type="button" class="btn btn-success btn-lg mt-1">Cambiar</button>
+            </div>
+          </ion-col>
+        </ion-row>
+        
+      </ion-grid>
+    </div>
+  </ion-card-content>
+</ion-card>
+</ion-content>

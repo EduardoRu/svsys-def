@@ -1,0 +1,50 @@
+<app-menu titulo="Historial de reportes"></app-menu>
+
+<ion-content [fullscreen]="true">
+  <ion-card class="container">
+    <ion-card-header>
+      <ion-card-title class="text-center">
+        LISTA DE REPORTES
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-searchbar placeholder="Buscar cita" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"># Cita</th>
+          <th scope="col">Nombre / Razón Social</th>
+          <th scope="col">Domicilio</th>
+          <th scope="col">Tipo de servicio</th>
+          <th scope="col">Administración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>mdo</td>
+          <td>mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>fat</td>
+          <td>mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>mdo</td>
+          <td>mdo</td>
+        </tr>
+      </tbody>
+    </table>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,49 @@
+<app-menu titulo="Cuentas"></app-menu>
+
+<ion-content [fullscreen]="true">
+  <ion-card class="container">
+    <ion-card-header>
+      <ion-card-title class="text-center">
+        LISTA DE USUARIOS
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"># Persona</th>
+          <th scope="col">Nombre de usuario</th>
+          <th scope="col">Correo eléctronico</th>
+          <th scope="col">Tipo de usuario</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>mdo</td>
+          <td>mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>fat</td>
+          <td>mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>mdo</td>
+          <td>mdo</td>
+        </tr>
+      </tbody>
+    </table>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,66 @@
+<app-menu titulo="Panel de control"></app-menu>
+
+<ion-content [fullscreen]="true" >
+  <ion-card class="container">
+    <ion-card-header>
+      <ion-card-title class="text-center">
+        ACTIVIDAD MENSUAL
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="chart-container">
+      <div id="chart_div"></div>
+    </ion-card-content>
+  </ion-card>
+  
+
+  <ion-card class="container">
+    <ion-card-header>
+      <ion-card-title class="text-center">
+        CITAS PROGRAMADAS
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-searchbar placeholder="Buscar cita"type="decimal" [debounce]="250" showCancelButton="always" (ionInput)="handleInput($event)"></ion-searchbar>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre / Razón Social</th>
+          <th scope="col">Domicilio</th>
+          <th scope="col">Tipo de servicio</th>
+          <th scope="col">Fecha</th>
+          <th scope="col" class="text-center">Administración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of results; let i = index">
+          <ng-container *ngIf="i < 5">
+            <th scope="row">{{ item.nombre_razon_social }}</th>
+            <td>{{ item.domicilio }}</td>
+            <td>{{ item.tipo_servicio }}</td>
+            <td>{{ item.fecha }}</td>
+            <td>
+              <ion-button (click)="mostrarDetalles(item)" expand="block" color="success" fill="clear" shape="round">
+                Detalles
+              </ion-button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+    </ion-card-content>
+    
+  </ion-card>
+
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="addCita()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>
