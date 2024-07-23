@@ -5,8 +5,7 @@ import {
   collectionData,
   docData,
   Firestore,
-  updateDoc,
-  setDoc
+  updateDoc
 } from '@angular/fire/firestore';
 import {
   deleteDoc,
