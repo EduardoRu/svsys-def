@@ -52,6 +52,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule),
     ...canActivate(redirectUnauthorizedToLogin)
   },
+  {
+    path: 'pruebassql',
+    loadChildren: () => import('./pages/pruebassql/pruebassql.module').then( m => m.PruebassqlPageModule)
+  },
 ];
 
 @NgModule({

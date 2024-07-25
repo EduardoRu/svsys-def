@@ -13,14 +13,17 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 
 import { environment } from 'src/environments/environment';
 
+import { IonicStorageModule } from '@ionic/storage-angular';
+
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), 
     provideAuth(() => getAuth()), 
     provideFirestore(() => getFirestore()), 
-    provideStorage(() => getStorage())],
+    provideStorage(() => getStorage()),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
