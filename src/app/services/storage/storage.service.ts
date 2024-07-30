@@ -17,7 +17,6 @@ export class StorageService {
   private async init() {
     const storage = await this.storage.create();
     this._storage = storage;
-    console.log('Storage service initialized')
   }
 
   /**
@@ -74,8 +73,6 @@ export class StorageService {
   async clearTempValues() {
     await this._storage?.clear();
   }
-
-
 
 
 }

@@ -15,6 +15,8 @@ import { environment } from 'src/environments/environment';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
@@ -23,6 +25,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
     provideAuth(() => getAuth()), 
     provideFirestore(() => getFirestore()), 
     provideStorage(() => getStorage()),
+    provideHttpClient(withInterceptorsFromDi())
   ],
   bootstrap: [AppComponent],
 })

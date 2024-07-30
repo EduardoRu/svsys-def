@@ -40,7 +40,7 @@
             <td>{{ item.tipo_servicio }}</td>
             <td>{{ item.fecha }}</td>
             <td>
-              <ion-button (click)="mostrarDetalles(item)" expand="block" color="success" fill="clear" shape="round">
+              <ion-button (click)="mostrarDetalles(item)" expand="block" color="primary" fill="clear" shape="round">
                 Detalles
               </ion-button>
             </td>
@@ -53,13 +53,13 @@
   </ion-card>
 
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" color="primary">
+    <ion-fab-button color="primary">
       <ion-icon name="chevron-up-circle"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button (click)="addCita()">
-        <ion-icon name="add-circle-outline"></ion-icon>
+      <ion-fab-button (click)="addCita()" color="primary">
+        <ion-icon name="add-circle-outline" ></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>

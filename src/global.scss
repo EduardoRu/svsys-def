@@ -52,12 +52,22 @@
         --height: 80%;
         --width: 80%
     }
+
+    ion-modal.modalUsuarios {
+        --height: 80%;
+        --width: 80%
+    }
 }
 
 /* Estilos para pantallas de escritorio */
 /* Mayor a 1024px */
 @media (min-width: 1025px) {
     ion-modal.modalCitas {
+        --height: 80%;
+        --width: 80%
+    }
+
+    ion-modal.modalUsuarios {
         --height: 80%;
         --width: 80%
     }

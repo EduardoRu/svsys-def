@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { SqliteService } from 'src/app/services/sqlite/sqlite.service';
 
 @Component({
   selector: 'app-pruebassql',
@@ -12,6 +13,7 @@ export class PruebassqlPage implements OnInit {
 
   constructor(
     private storageService: StorageService,
+    private sqliteService: SqliteService
   ) { }
 
   async ngOnInit() {

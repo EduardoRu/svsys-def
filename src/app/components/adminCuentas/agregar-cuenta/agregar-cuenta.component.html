@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Agrega un nuevo usuario
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form action="">
+
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingUsuario" formControlName="usuario">
+      <label for="floatingUsuario">Usuario</label>
+    </div>
+
+    <div class=" form-floating input-group mb-3">
+      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+      <span class="input-group-text" id="basic-addon2">&#64;example.com</span>
+      <label for="basic-addon2">Usuario</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingPassword" formControlName="telefono">
+      <label for="floatingPassword">Contraseña</label>
+    </div>
+
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+      <option selected>Open this select menu</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
+
+    <div class="row text-center">
+      <div class="col-md-6 d-grid gap-2">
+        <button class="btn btn-secondary btn-lg mt-3">Limpiar formulario</button>
+      </div>
+      <div class="col-md-6 d-grid gap-2">
+        <button type="submit" class="btn btn-success mt-3 btn-lg">Agregar usuario</button>
+      </div>
+    </div>
+  </form>
+</ion-content>

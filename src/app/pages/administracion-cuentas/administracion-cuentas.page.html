@@ -1,7 +1,7 @@
 <app-menu titulo="Cuentas"></app-menu>
 
 <ion-content [fullscreen]="true">
-  <ion-card class="container">
+  <ion-card class="mx-5">
     <ion-card-header>
       <ion-card-title class="text-center">
         LISTA DE USUARIOS
@@ -9,7 +9,6 @@
     </ion-card-header>
     <ion-card-content>
       <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
-
     <table class="table">
       <thead>
         <tr>
@@ -46,4 +45,15 @@
     </table>
     </ion-card-content>
   </ion-card>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="addUser()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>
