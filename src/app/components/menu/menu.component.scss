@@ -17,14 +17,14 @@ ion-menu::part(container) {
 
 /* Estilos para la barra de herramientas (footer) */
 .cerrar-sesion-toolbar {
-  --background: #d6282e; /* Color de fondo normal */
+  --background: #ff0008; /* Color de fondo normal */
   transition: background-color 0.4s ease; /* Transición suave del color de fondo */
   cursor: pointer; /* Cambia el cursor del ratón a pointer */
 }
 
 /* Efecto de oscurecimiento al pasar el ratón */
 .cerrar-sesion-toolbar:hover {
-  --background: rgba(151, 43, 43, 0.692); /* Oscurece el color de fondo al 80% */
+  --background: rgba(255, 0, 0, 0.692); /* Oscurece el color de fondo al 80% */
 }
 
 /* Estilos para el texto dentro del ion-label */

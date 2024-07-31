@@ -1,12 +1,19 @@
 <div>
-  <ion-menu contentId="main-content">
+  <ion-menu contentId="main-content" class="ion-justify-content-end">
 
     <ion-content style="--background: #ffffff;">
 
       <div class="text-center pt-5">
-        <img src="/assets/user.png" alt="" srcset="" style="max-width: 50%;">
+        <img src="/assets/user.png" alt="" srcset="" style="max-width: 50%;" (click)="rToMiPerfil()">
         <h5 class="mt-3" style="color: white;"><b>Administrador</b></h5>
       </div>
+
+
+
+      
+
+
+
 
       <ion-list style="background: #ffffff;">
         <ion-item  (click)="rToPanelControl()" lines="none" slot="header" color="light" button >
@@ -33,7 +40,7 @@
       </ion-list>
     </ion-content>
     <ion-footer style="background-color: #ffffff;">
-    <div class="d-grid gap-2"> <button type="button" class="btn btn-danger " id="cerrar-sesion" (click)="logout()">Cerrar Sesión</button></div>
+    <div class="d-grid gap-2"> <button type="button" class="btn btn-outline-danger fw-bold" id="cerrar-sesion" (click)="logout()" style="color: #000000;">Cerrar Sesión</button></div>
        
    
     
@@ -42,18 +49,14 @@
 
 
   <ion-header id="main-content">
-    <ion-toolbar style="--background: #000000; color: white;">
+    <ion-toolbar style="--background: #ffffe2; color: rgb(0, 0, 0);">
       <ion-buttons slot="start">
         <ion-menu-button autoHide="false"></ion-menu-button>
       </ion-buttons>
-      <ion-text style="text-align: center;">
-        <h4><b>{{titulo}}</b></h4>
+      <ion-text style="text-align: left;"> <br>
+        <p class="text-break fs-5 fw-lighter">{{titulo}}</p>
       </ion-text>
-      <ion-buttons slot="end">
-        <ion-button size="large" (click)="rToMiPerfil()">
-          <ion-icon slot="icon-only" name="person-circle-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+      
     </ion-toolbar>
   </ion-header>
 </div>
