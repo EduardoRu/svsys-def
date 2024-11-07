@@ -15,3 +15,28 @@ ion-fab-button {
   --box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   --color: black;
 }
+
+.center-elements-table{
+  padding-top: 3%;
+}
+
+ion-content::part(background) {
+  background: #ebebeb;
+  
+}
+
+@media screen and (min-width: 768px) {
+  .dispositivos-busqueda{
+
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .celulares-busqueda{
+
+  }
+}
+
+ion-card{
+  border-radius: 0;
+}

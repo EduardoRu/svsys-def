@@ -8,6 +8,8 @@ import { ReportesPageRoutingModule } from './reportes-routing.module';
 
 import { ReportesPage } from './reportes.page';
 import { MenuComponent } from 'src/app/components/menu/menu.component';
+import { GenerarReporteCeluComponent } from 'src/app/components/reportes/generar-reporte-celu/generar-reporte-celu.component';
+import { GenerarReporteDesktopComponent } from 'src/app/components/reportes/generar-reporte-desktop/generar-reporte-desktop.component';
 
 @NgModule({
   imports: [
@@ -15,7 +17,9 @@ import { MenuComponent } from 'src/app/components/menu/menu.component';
     FormsModule,
     IonicModule,
     ReportesPageRoutingModule,
-    MenuComponent
+    MenuComponent,
+    GenerarReporteCeluComponent,
+    GenerarReporteDesktopComponent
   ],
   declarations: [ReportesPage]
 })

@@ -1,15 +1,16 @@
 <app-menu titulo="Historial de reportes"></app-menu>
 
 <ion-content [fullscreen]="true">
-  <ion-card class="container">
-    <ion-card-header>
-      <ion-card-title class="text-center">
+  <ion-card class="m-5">
+    <ion-card-header style="background-color: #211F20;">
+      <ion-card-title class="text-center" style="color: white;">
         LISTA DE REPORTES
       </ion-card-title>
+      <ion-card-subtitle>
+        <ion-searchbar placeholder="Buscar cita" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+      </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-searchbar placeholder="Buscar cita" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
-
     <table class="table">
       <thead>
         <tr>
@@ -21,30 +22,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>mdo</td>
-          <td>mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>fat</td>
-          <td>mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>mdo</td>
-          <td>mdo</td>
-        </tr>
+        
       </tbody>
     </table>
     </ion-card-content>
   </ion-card>
 
+  <ion-button (click)="mostrarPdf()" expand="block" fill="clear" shape="round">
+    Mostrar
+  </ion-button>
 </ion-content>

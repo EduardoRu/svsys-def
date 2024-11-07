@@ -11,38 +11,43 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <form action="">
-
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="floatingUsuario" formControlName="usuario">
-      <label for="floatingUsuario">Usuario</label>
+  <div class="row p-5">
+    <div class="col-md-4 text-center">
+      <img src="assets/user_sys.png" alt="" style="height: 80%;">
     </div>
-
-    <div class=" form-floating input-group mb-3">
-      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-      <span class="input-group-text" id="basic-addon2">&#64;example.com</span>
-      <label for="basic-addon2">Usuario</label>
+    <div class="col-md-8">
+      <form (ngSubmit)="getInformacionUsuario()" [formGroup]="informacionUsuario">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputUser" placeholder="Nombre del usuario" formControlName="usuario">
+          <label for="floatingInputUser">Nombre de usuario</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="floatingInputEmail" placeholder="ejemplo@gmail.com" formControlName="email">
+          <label for="floatingInputEmail">Correo electrónico</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInputPassword" placeholder="*********" formControlName="password">
+          <label for="floatingInputPassword">Contraseña</label>
+        </div>
+    
+        <select class="form-select  mb-3" aria-label="Large select example" formControlName="role">
+          <option value="" selected>Tipo de usuario</option>
+          <option value="Administrador">Administrador</option>
+          <option value="Capturista">Capturista</option>
+          <option value="Analista">Analista</option>
+        </select>
+    
+        <div class="row text-center">
+          <div class="col-md-6 d-grid gap-2">
+            <ion-button class="btn btn-secondary mt-3" fill="clear" (click)="limpiarFormulario()">Limpiar formulario</ion-button>
+          </div>
+          <div class="col-md-6 d-grid gap-2">
+            <ion-button type="submit" class="btn btn-success mt-3" fill="clear">Agregar usuario</ion-button>
+          </div>
+        </div>
+      </form>
     </div>
-
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="floatingPassword" formControlName="telefono">
-      <label for="floatingPassword">Contraseña</label>
-    </div>
-
-    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-      <option selected>Open this select menu</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>
-
-    <div class="row text-center">
-      <div class="col-md-6 d-grid gap-2">
-        <button class="btn btn-secondary btn-lg mt-3">Limpiar formulario</button>
-      </div>
-      <div class="col-md-6 d-grid gap-2">
-        <button type="submit" class="btn btn-success mt-3 btn-lg">Agregar usuario</button>
-      </div>
-    </div>
-  </form>
+  </div>
 </ion-content>

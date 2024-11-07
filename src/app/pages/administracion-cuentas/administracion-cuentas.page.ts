@@ -12,6 +12,8 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 })
 export class AdministracionCuentasPage implements OnInit {
 
+  public usuariosRegistrados:any = [];
+
   constructor(
     private authService: AuthService,
     private modalController: ModalController,
@@ -20,7 +22,18 @@ export class AdministracionCuentasPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+    this.getInformacion();
+  }
+
+  async getInformacion(){
+    (await this.authService.getUsers()).subscribe({
+      next: (users) => {
+        this.usuariosRegistrados = users;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
   async addUser(){
@@ -32,8 +45,17 @@ export class AdministracionCuentasPage implements OnInit {
     modalUserCreate.present();
   }
 
-  detailUser(){
+  async detailUser(usuario:any){
+    const modalUserUpdate = await this.modalController.create({
+      component: DetalleCuentaComponent,
+      componentProps: {
+        usuario
+      },
+      cssClass: 'modalUsuarios'
+    });
 
+    modalUserUpdate.present();
   }
+
 
 }

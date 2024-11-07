@@ -1,47 +1,50 @@
 <app-menu titulo="Control de información"></app-menu>
 
 <ion-content [fullscreen]="true">
-  <ion-card class="container">
-    <ion-card-header>
-      <ion-card-title class="text-center">
+  <ion-card class="m-5">
+    <ion-card-header style="background-color: #211F20;">
+      <ion-card-title class="text-center" style="color: white;">
         LISTA DE REPORTES
       </ion-card-title>
+      <ion-card-subtitle>
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="9">
+              <ion-searchbar class="pt-3" placeholder="BUSCAR INFORMIACÓN POR NOMBRE O RAZÓN SOCIAL" inputmode="decimal" type="decimal" [debounce]="250"
+                showCancelButton="always"></ion-searchbar>
+              <ion-searchbar placeholder="BUSCAR INFORMACIÓN POR EQUIPO" inputmode="decimal" type="decimal" [debounce]="250"
+                showCancelButton="always"></ion-searchbar>
+            </ion-col>
+            <ion-col size="3">
+              <div>
+                <h5 class="text-center">Rango de fechas</h5>
+              </div>
+              <div class="pt-1">
+                <ion-datetime-button datetime="datetimeIni"></ion-datetime-button>
+  
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime presentation="date" id="datetimeIni"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </div>
+  
+              <div class="pt-4">
+                <ion-datetime-button datetime="datetimeFin"></ion-datetime-button>
+  
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime presentation="date" id="datetimeFin"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="9">
-            <ion-searchbar class="pt-3" placeholder="BUSCAR INFORMIACÓN POR NOMBRE O RAZÓN SOCIAL" inputmode="decimal" type="decimal" [debounce]="250"
-              showCancelButton="always"></ion-searchbar>
-            <ion-searchbar placeholder="BUSCAR INFORMACIÓN POR EQUIPO" inputmode="decimal" type="decimal" [debounce]="250"
-              showCancelButton="always"></ion-searchbar>
-          </ion-col>
-          <ion-col size="3">
-            <div>
-              <h5 class="text-center">Rango de fechas</h5>
-            </div>
-            <div class="pt-1">
-              <ion-datetime-button datetime="datetimeIni"></ion-datetime-button>
-
-              <ion-modal [keepContentsMounted]="true">
-                <ng-template>
-                  <ion-datetime id="datetimeIni"></ion-datetime>
-                </ng-template>
-              </ion-modal>
-            </div>
-
-            <div class="pt-4">
-              <ion-datetime-button datetime="datetimeFin"></ion-datetime-button>
-
-              <ion-modal [keepContentsMounted]="true">
-                <ng-template>
-                  <ion-datetime id="datetimeFin"></ion-datetime>
-                </ng-template>
-              </ion-modal>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      
 
       <table class="table">
         <thead>
@@ -54,27 +57,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-            <td>mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-            <td>mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-            <td>mdo</td>
-          </tr>
+
         </tbody>
       </table>
     </ion-card-content>

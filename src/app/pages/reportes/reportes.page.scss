@@ -1,0 +1,24 @@
+ion-content::part(background) {
+  background: #ebebeb;
+}
+
+ion-card {
+  border-radius: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .solo-desktop {
+    display: none;
+    padding: 5%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .vision-dispositivos {
+    display: none;
+  }
+
+  .solo-desktop {
+    padding: 2%;
+  }
+}

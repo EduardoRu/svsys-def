@@ -24,6 +24,10 @@ export class PanelControlPage implements OnInit {
 
   ngOnInit() {
     this.getInformacion();
+    this.generarChart();
+  }
+
+  async generarChart() {
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(() => {
       this.zone.run(() => {
@@ -40,7 +44,6 @@ export class PanelControlPage implements OnInit {
   }
   
   async drawChart() {
-    // Datos de ejemplo para la actividad mensual
     const monthlyActivityData = [
       ['Mes', 'Actividad'],
       ['Enero', 300],
@@ -56,25 +59,29 @@ export class PanelControlPage implements OnInit {
       ['Noviembre', 700],
       ['Diciembre', 850]
     ];
-
+  
     // Crear un DataTable de Google Charts
     var data = await new google.visualization.DataTable();
-    data.addColumn('string', 'Mes');
-    data.addColumn('number', 'Actividad');
-    data.addRows(monthlyActivityData.slice(1)); // Usar los datos de ejemplo, excluyendo la primera fila de encabezados
-
+    data?.addColumn('string', 'Mes');
+    data?.addColumn('number', 'Actividad');
+    data?.addRows(monthlyActivityData.slice(1)); // Usar los datos de ejemplo, excluyendo la primera fila de encabezados
+  
     // Configuración del gráfico
     var options = {
-      
       legend: { position: 'bottom' },  // Posición de la leyenda
-      width: '100%',  // Ancho del gráfico
+      width: '200%',  // Ancho del gráfico
       height: 250     // Altura del gráfico
     };
-
-    // Dibujar el gráfico en un elemento HTML específico
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
+  
+    // Dibujar el gráfico de línea en un elemento HTML específico
+    var chartLine = new google.visualization.LineChart(document.getElementById('chart_div'));
+    chartLine.draw(data, options);
+  
+    // Dibujar el gráfico de pastel en otro elemento HTML específico
+    var chartPie = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
+    chartPie.draw(data, options);
   }
+  
 
   getInformacion(){
     this.citasService.getCitaProgramada().subscribe((data) => {

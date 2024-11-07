@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-reportes',
@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportesPage implements OnInit {
 
-  constructor() { }
+  public segment = "iCliente";
+
+  constructor(
+    private cd: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
+  }
+
+  onSegementChanged(event:any){
+    this.cd.detectChanges();
+    this.segment = event.detail.value;
   }
 
 }

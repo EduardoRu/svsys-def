@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController, ModalController } from '@ionic/angular';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
+import { CodigosPService } from 'src/app/services/cod_pos/codigos-p.service';
+
 @Component({
   selector: 'app-agregar-cita',
   templateUrl: './agregar-cita.component.html',
@@ -19,8 +21,11 @@ export class AgregarCitaComponent  implements OnInit {
     private fb: FormBuilder,
     private loadingController: LoadingController,
     private alertConoller: AlertController,
-    private citasService: CitasService
+    private citasService: CitasService,
+    private codpos: CodigosPService
   ) { }
+
+  private codigosPostales:any;
 
   get nombre_razon_social() {
     return this.citaInformacion.get('nombre_razon_social');
@@ -58,6 +63,8 @@ export class AgregarCitaComponent  implements OnInit {
   }
 
   ngOnInit() {
+    this.getInfromacion();
+
     this.citaInformacion = this.fb.group({
       nombre_razon_social: ['', [Validators.required]],
       telefono: ['', [Validators.required]],
@@ -69,7 +76,8 @@ export class AgregarCitaComponent  implements OnInit {
       municipio: ['', [Validators.required]],
       estado: ['', [Validators.required]],
       cp: ['', [Validators.required]],
-      giro: ['', [Validators.required]]
+      giro: ['', [Validators.required]],
+      creado_en: ['']
     });
   }
 
@@ -77,13 +85,40 @@ export class AgregarCitaComponent  implements OnInit {
     this.modalController.dismiss(null, 'cancel');
   }
 
+  async getInfromacion() {
+    this.codpos.getData().subscribe({
+      next:(data) => {
+        this.codigosPostales = data;
+      },
+      error: error => {
+        console.error('Error al obtener la información de códigos postales', error);
+      }
+    })
+  }
+
+  handleInput(event:any){
+    const query = event.target.value;
+    
+    if(query.length === 5){
+      const informacion = this.codigosPostales.find((d:any) => d.d_codigo == query);
+      console.log(informacion);
+      if(informacion){
+        this.citaInformacion.get('municipio').setValue(informacion.D_mnpio);
+        this.citaInformacion.get('estado').setValue(informacion.d_estado);
+      }
+    }
+  }
+
   async getCita(){
     const loading = await this.loadingController.create({
       message: 'Generando cita...'
     });
     await loading.present();
+    const fechaActual: Date = new Date();
 
     if(this.citaInformacion.valid){
+      this.citaInformacion.get('creado_en').setValue(fechaActual.toLocaleString());
+
       this.citasService.addCita(this.citaInformacion.value);
 
       const alertCitaInformacion = await this.alertConoller.create({

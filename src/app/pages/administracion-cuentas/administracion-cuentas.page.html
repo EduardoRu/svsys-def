@@ -2,56 +2,50 @@
 
 <ion-content [fullscreen]="true">
   <ion-card class="mx-5">
-    <ion-card-header>
-      <ion-card-title class="text-center">
+    <ion-card-header style="background-color: #211F20;">
+      <ion-card-title class="text-center" style="color: white;">
         LISTA DE USUARIOS
       </ion-card-title>
+      <ion-card-subtitle>
+        <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+      </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+      
     <table class="table">
       <thead>
         <tr>
-          <th scope="col"># Persona</th>
           <th scope="col">Nombre de usuario</th>
           <th scope="col">Correo eléctronico</th>
           <th scope="col">Tipo de usuario</th>
-          <th scope="col">Acciones</th>
+          <th scope="col" class="text-center">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>mdo</td>
-          <td>mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>fat</td>
-          <td>mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>mdo</td>
-          <td>mdo</td>
+        <tr *ngFor="let item of usuariosRegistrados; let i = index">
+          <ng-container *ngIf="i < 10">
+            <th scope="row" class="center-elements-table pt-3">{{ item.usuario }}</th>
+            <td class="center-elements-table pt-3">{{ item.email }}</td>
+            <td class="center-elements-table pt-3">{{ item.role }}</td>
+            <td>
+              <ion-button (click)="detailUser(item)" expand="block" color="primary" fill="clear"
+                shape="round">
+                Detalles
+              </ion-button>
+            </td>
+          </ng-container>
         </tr>
       </tbody>
     </table>
     </ion-card-content>
   </ion-card>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" color="primary">
+    <ion-fab-button color="primary">
       <ion-icon name="chevron-up-circle"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button (click)="addUser()">
+      <ion-fab-button (click)="addUser()" color="primary">
         <ion-icon name="add-circle-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>

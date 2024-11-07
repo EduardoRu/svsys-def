@@ -38,7 +38,8 @@ export class DetalleCitaComponent implements OnInit {
       municipio: [this.cita.municipio, [Validators.required]],
       estado: [this.cita.estado, [Validators.required]],
       cp: [this.cita.cp, [Validators.required]],
-      giro: [this.cita.giro, [Validators.required]]
+      giro: [this.cita.giro, [Validators.required]],
+      creado_en: [this.cita.creado_en, [Validators.required]]
     });
   }
 
@@ -51,11 +52,8 @@ export class DetalleCitaComponent implements OnInit {
       message: 'Actualizando cita...'
     });
     await loading.present();
-
     if (this.citaInformacion.valid) {
       this.citasService.updateCita(this.citaInformacion.value);
-
-      console.log(this.citaInformacion.value)
 
       const alertCitaInformacion = await this.alertConoller.create({
         header: 'Cita actualizada',
