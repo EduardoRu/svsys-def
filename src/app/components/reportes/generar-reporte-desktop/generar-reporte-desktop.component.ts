@@ -423,5 +423,5 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
 
 
-
+  
 }
