@@ -124,6 +124,79 @@ var dd = {
             ]
         },
         {
+            margin: [0,10,0,0],
+            columns: [
+                {
+                    width:'40%',
+                    margin:[0,0,5,0],
+                    table: {
+                        widths: ['*','*'],
+                        body:[
+                            [{text:'Fecha de', alignment:'center', colSpan:2, fontSize:10, bold:true}, {}],
+                            [
+                                {
+                                    fontSize:10,
+                                    text:'Compromiso: '    
+                                },
+                                {
+                                    fontSize:10,
+                                    text:'Inspección: '
+                                }
+                            ]
+                        ]
+                    }
+                },
+                {
+                    width:'40%',
+                    margin:[0,0,5,0],
+                    table: {
+                        widths: ['*','*', '*'],
+                        body:[
+                            [{text:'Tipo de inspección', alignment:'center', colSpan:3,fontSize:10, bold:true}, {}, {}],
+                            [
+                                {
+                                    fontSize:10,
+                                    text:'Inicial',
+                                    alignment:'center'
+                                },
+                                {
+                                    fontSize:10,
+                                    text:'Periódica',
+                                    alignment:'center'
+                                },
+                                {
+                                    fontSize:10,
+                                    text:'Extraordinaria',
+                                    alignment:'center'
+                                }
+                            ]
+                        ]
+                    }
+                },
+                {
+                    width:'20%',
+                    table: {
+                        widths: ['*','*'],
+                        body:[
+                            [{text:'Semestre', alignment:'center', colSpan:2,fontSize:10, bold:true}, {}],
+                            [
+                                {
+                                    fontSize:10,
+                                    text: 'Primero',
+                                    alignment:'center'
+                                },
+                                {
+                                    fontSize:10,
+                                    text: 'Segundo',
+                                    alignment:'center'
+                                }
+                            ]
+                        ],
+                    }
+                }
+            ]
+        },
+        {
             alignment:'center',
             columns: [
                 
