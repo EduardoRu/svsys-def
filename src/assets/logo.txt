@@ -1,7 +1,9 @@
 var dd = {
     pageOrientation: 'landscape',
     content: [
+        
         {
+            
             columns: [
                 {
                     text: 'image', 
@@ -429,7 +431,7 @@ var dd = {
                     fontSize:9
                 }
             ],
-            pageBreak: 'after',  
+            
         },
         {
             text:'CLÁUSULAS',
@@ -726,9 +728,438 @@ var dd = {
 				    text:'C/NC',
 				    width:60
 				}
-			]
+			],
+			pageOrientation: 'portrait', pageBreak: 'after'
 		},
-        
+        {
+            text:'ENCUESTA DE SATSIFACCIÓN DE CLIENTES',
+            fontSize: 15,
+            alignment:'center'
+        },
+        {
+            text:'Estimado Cliente:',
+            bold:true,
+            fontSzie:15,
+            margin:[0,15]
+        },
+        {
+            text:'Con la finalidad de brindarle un mejor servicio y lograr su satisfacción solicitamos de su ayuda para proprocionar los siguientes datos:'
+        },
+        {
+            margin:[0,20,0,0],
+            columns:[
+                {
+                    width:'40%',
+                    text:'COMENTARIOS',
+                    fontSize:15
+                },
+                {
+                    width:'60%',
+                    table: {
+                        widths:['*','*','*','*','*'],
+                        body: [
+                            [{
+                                text:'10 \n Excelente',
+                                alignment:'center'
+                            },{
+                                text:'8 \n Bueno',
+                                alignment:'center'
+                            },{
+                                text:'6 \n Regular',
+                                alignment:'center'
+                            },{
+                                text:'4 \n Malo',
+                                alignment:'center'
+                            },{
+                                text:'2 \n Pésimo',
+                                alignment:'center'
+                            }]
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            columns:[
+                {
+                    width:'40%',
+                    table:{
+                        widths:['*'],
+                        body:[
+                            [{
+                                text:'1.- El tiempo de Respuesta desde la solicitud del servicio hasta su realización fue:',
+                                margin:[0,0,0,43]
+                            }]    
+                        ]
+                    }
+                },
+                {
+                    width:'60%',
+                    table: {
+                        widths:['*','*','*','*','*'],
+                        body: [
+                            [{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            }]
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            columns:[
+                {
+                    width:'40%',
+                    table:{
+                        widths:['*'],
+                        body:[
+                            [{
+                                text:'2.- La Calidad respesto al servicio proporcionada por nuestro personal fue:',
+                                margin:[0,0,0,43]
+                            }]    
+                        ]
+                    }
+                },
+                {
+                    width:'60%',
+                    table: {
+                        widths:['*','*','*','*','*'],
+                        body: [
+                            [{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            }]
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            columns:[
+                {
+                    width:'40%',
+                    heigth:'30%',
+                    table:{
+                        widths:['*'],
+                        body:[
+                            [{
+                                text:'3.- La Atención personal hacia usted fue:',
+                                margin:[0,0,0,57]
+                            }]    
+                        ]
+                    }
+                },
+                {
+                    width:'60%',
+                    table: {
+                        widths:['*','*','*','*','*'],
+                        body: [
+                            [{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            }]
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            columns:[
+                {
+                    width:'40%',
+                    table:{
+                        widths:['*'],
+                        body:[
+                            [{
+                                text:'4.- Algún miembro de nuestro personal le atendió mal o incorrectamente:',
+                                margin:[0,0,0,43]
+                            }]    
+                        ]
+                    }
+                },
+                {
+                    width:'60%',
+                    table: {
+                        widths:['*','*','*','*','*'],
+                        body: [
+                            [{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            },{
+                                canvas: [
+                                    {
+                                        type: 'rect', // Tipo de figura: rectángulo (cuadrado)
+                                        x: 5,
+                                        y: 0,
+                                        w: 45, // Ancho del cuadrado
+                                        h: 45, // Alto del cuadrado
+                                        color: '#D3D3D3',// Color de relleno (gris claro)
+                                        r: 10
+                                    }
+                                ],
+                                alignment:'center',
+                                margin:[0,20,0,20]
+                            }]
+                        ]
+                    }
+                }
+            ]
+        }
     ],
     styles: {
         tableInspeccionVisual: {
