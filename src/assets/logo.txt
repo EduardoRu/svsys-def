@@ -1159,6 +1159,38 @@ var dd = {
                     }
                 }
             ]
+        },
+        {
+            text:'5.- OBSERVACIONES:',
+            margin:[0,20,0,0],
+            fontSize:15
+        },
+        {
+            margin:[0,20,0,0],
+            text:'______________________________________________________________________________________________________________________________________________________________________________________________'
+        },
+        {
+            margin:[0,20,0,0],
+            columns:[
+                {
+                    margin:[0,2],
+                    width:'20%',
+                    fontSize:15,
+                    text:'RESULTADO',
+                    
+                },
+                {
+                    width:'5%',
+                    table:{
+                        widths:['*'],
+                        body:[[{text:'10', fontSize:15}]]
+                    }
+                }
+            ]
+        },
+        {
+            margin: [0,20],
+            text:'Nota: En caso de alguna inconformidad con el servicio, favor de solicitar formato de "Atención a Quejas, Reclamaciones Técnicas y Apelaciones" DCN-F-21'
         }
     ],
     styles: {
