@@ -12,210 +12,213 @@
 </ion-header>
 <ion-content>
   <div class="text-center">
-    <b >
+    <b>
       Estimado cliente: <br>
-    Con la finalidad de brindarle un mejor servicio y lograr su satisfacción solicitamos de su ayuda para proprocionar los
-    siguientes datos:
+      Con la finalidad de brindarle un mejor servicio y lograr su satisfacción solicitamos de su ayuda para proprocionar
+      los
+      siguientes datos:
     </b>
   </div>
   <hr>
   <div class="table-responsive m-3">
-    <table class="table table-striped table-hover">
-      <thead>
-        <tr>
-          <td>
-            Comentarios
-          </td>
-          <td class="text-center">
-            10
-            <br>
-            Excelente
-          </td>
-          <td class="text-center">
-            8
-            <br>
-            Bueno
-          </td>
-          <td class="text-center">
-            6
-            <br>
-            Regular
-          </td>
-          <td class="text-center">
-            4
-            <br>
-            Malo
-          </td>
-          <td class="text-center">
-            2
-            <br>
-            Pésimo
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            1.- El <b>Tiempo de respuesta</b> desde la solicitud del servicio hasta su realización fue:
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="tRespuesta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="tRespuesta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="tRespuesta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="tRespuesta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="tRespuesta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-        </tr>
+    <form (ngSubmit)="guardarEncuesta()" [formGroup]="encuesta">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <td>
+              Comentarios
+            </td>
+            <td class="text-center">
+              10
+              <br>
+              Excelente
+            </td>
+            <td class="text-center">
+              8
+              <br>
+              Bueno
+            </td>
+            <td class="text-center">
+              6
+              <br>
+              Regular
+            </td>
+            <td class="text-center">
+              4
+              <br>
+              Malo
+            </td>
+            <td class="text-center">
+              2
+              <br>
+              Pésimo
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              1.- El <b>Tiempo de respuesta</b> desde la solicitud del servicio hasta su realización fue:
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="tiempo_respuesta" id="radioRespuesta1" value="10"
+                  aria-label="..." formControlName="tiempo_respuesta">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="tiempo_respuesta" id="radioRespuesta2" value="8"
+                  aria-label="..." formControlName="tiempo_respuesta">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="tiempo_respuesta" id="radioRespuesta3" value="6"
+                  aria-label="..." formControlName="tiempo_respuesta">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="tiempo_respuesta" id="radioRespuesta4" value="4"
+                  aria-label="..." formControlName="tiempo_respuesta">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="tiempo_respuesta" id="radioRespuesta5" value="2"
+                  aria-label="..." formControlName="tiempo_respuesta">
+              </div>
+            </td>
+          </tr>
 
-        <tr>
-          <td>
-            2.- <b>La Calidad</b> respecto al servicio proprocionada por nuestro personal fue:
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="calidad" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="calidad" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="calidad" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="calidad" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="calidad" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-        </tr>
+          <tr>
+            <td>
+              2.- <b>La Calidad</b> respecto al servicio proprocionada por nuestro personal fue:
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="calidad" id="radioCalidad1" value="10"
+                  aria-label="..." formControlName="calidad">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="calidad" id="radioCalidad2" value="8"
+                  aria-label="..." formControlName="calidad">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="calidad" id="radioCalidad3" value="6"
+                  aria-label="..." formControlName="calidad">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="calidad" id="radioCalidad4" value="4"
+                  aria-label="..." formControlName="calidad">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="calidad" id="radioCalidad5" value="2"
+                  aria-label="..." formControlName="calidad">
+              </div>
+            </td>
+          </tr>
 
-        <tr>
-          <td>
-            3.- <b>La atención personal hacia usted fue: </b>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="atencion" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="atencion" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="atencion" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="atencion" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="atencion" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-        </tr>
+          <tr>
+            <td>
+              3.- <b>La atención personal hacia usted fue: </b>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="atencion" id="radioatencion1" value="10"
+                  aria-label="..." formControlName="atencion">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="atencion" id="radioatencion2" value="8"
+                  aria-label="..." formControlName="atencion">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="atencion" id="radioatencion3" value="6"
+                  aria-label="..." formControlName="atencion">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="atencion" id="radioatencion4" value="4"
+                  aria-label="..." formControlName="atencion">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="atencion" id="radioatencion5" value="2"
+                  aria-label="..." formControlName="atencion">
+              </div>
+            </td>
+          </tr>
 
-        <tr>
-          <td>
-            4.- Algún miembro de nuestro personal le atendió mal o incorrectamente:
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="conducta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="conducta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="conducta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="conducta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-          <td class="text-center">
-            <div>
-              <input class="form-check-input" type="radio" name="conducta" id="radioNoLabel1" value=""
-                aria-label="...">
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tr>
+            <td>
+              4.- Algún miembro de nuestro personal le atendió mal o incorrectamente:
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="mala_conducta_personal" id="radiomala_conducta_personal1" value="10"
+                  aria-label="..." formControlName="mala_conducta_personal">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="mala_conducta_personal" id="radiomala_conducta_personal2" value="8"
+                  aria-label="..." formControlName="mala_conducta_personal">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="mala_conducta_personal" id="radiomala_conducta_personal3" value="6"
+                  aria-label="..." formControlName="mala_conducta_personal">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="mala_conducta_personal" id="radiomala_conducta_personal4" value="4"
+                  aria-label="..." formControlName="mala_conducta_personal">
+              </div>
+            </td>
+            <td class="text-center">
+              <div>
+                <input class="form-check-input" type="radio" name="mala_conducta_personal" id="radiomala_conducta_personal5" value="2"
+                  aria-label="..." formControlName="mala_conducta_personal">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <ion-textarea class="p-2" label="Observaciones del inspector" labelPlacement="floating" fill="outline"
-      placeholder="Observaciones" [autoGrow]="true">
-    </ion-textarea>
+      <ion-textarea class="p-2" label="Observaciones del inspector" labelPlacement="floating" fill="outline"
+        placeholder="Observaciones" [autoGrow]="true" formControlName="observaciones">
+      </ion-textarea>
 
-    <hr>
-    <div class="row text-center m-3">
-      <div class="col-md-6 d-grid gap-2">
-        <ion-button fill="clear" class="btn btn-secondary">
-          Limpiar Formulario
-        </ion-button>
+      <hr>
+      <div class="row text-center m-3">
+        <div class="col-md-6 d-grid gap-2">
+          <ion-button fill="clear" class="btn btn-secondary">
+            Limpiar Formulario
+          </ion-button>
+        </div>
+        <div class="col-md-6 d-grid gap-2">
+          <ion-button type="submit" fill="clear" class="btn btn-success">
+            Guardar encuesta
+          </ion-button>
+        </div>
       </div>
-      <div class="col-md-6 d-grid gap-2">
-        <ion-button (click)="generarReporte()" fill="clear" class="btn btn-success">
-          Guardar y generar reporte
-        </ion-button>
-      </div>
-    </div>
+    </form>
   </div>
 </ion-content>
