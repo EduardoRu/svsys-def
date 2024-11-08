@@ -933,92 +933,90 @@
 
     <ng-container *ngIf="segment == 'Firma'">
 
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr class="text-center">
-              <td><b>INFORMACIÓN DE PAGO</b></td>
-            </tr>
-          </thead>
-        </table>
-
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Cantidad</th>
-              <th>Descripción</th>
-              <th>Costo</th>
-              <th>Importe</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th><input type="number" class="form-control" id="floatingInput"></th>
-              <th><input type="number" class="form-control" id="floatingInput"></th>
-              <th><input type="number" class="form-control" id="floatingInput"></th>
-              <th><input type="number" class="form-control" id="floatingInput"></th>
-            </tr>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th><input type="number" class="form-control" id="floatingInput"></th>
-            </tr>
-          </tbody>
-        </table>
-
-        <h5 class="text-center"> Firmas </h5>
-
-        <div style="margin-left: 90px;">
-          <div class="row m-5 text-center" style="margin-left: 5%;">
-            <div class="col-md-3 border border-dark" style="height: 250px;">
-
-            </div>
-            <div class="col-md-1" style="height: 250px;">
-
-            </div>
-            <div class="col-md-3 border border-dark" style="height: 250px;">
-
-            </div>
-            <div class="col-md-1" style="height: 250px;">
-
-            </div>
-            <div class="col-md-3 border border-dark" style="height: 250px;">
-
-            </div>
-
-            <div class="col-md-3 border">
-              Nombre y Firma del cliente
-            </div>
-            <div class="col-md-1 ">
-
-            </div>
-            <div class="col-md-3 border">
-              Nombre y Firma del inspector
-            </div>
-            <div class="col-md-1 ">
-
-            </div>
-            <div class="col-md-3 border">
-              Nombre y Firma del personal de apoyo
+      <form [formGroup]="infoPago">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr class="text-center">
+                <td><b>INFORMACIÓN DE PAGO</b></td>
+              </tr>
+            </thead>
+          </table>
+  
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Cantidad</th>
+                <th>Descripción</th>
+                <th>Costo</th>
+                <th>Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><input type="number" class="form-control" id="floatingInput" formControlName="cantidad"></th>
+                <th><input type="text" class="form-control" id="floatingInput" formControlName="desc"></th>
+                <th><input type="number" class="form-control" id="floatingInput" formControlName="costo"></th>
+                <th><input type="number" class="form-control" id="floatingInput" formControlName="importe"></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><input type="number" class="form-control" id="floatingInput" formControlName="importe2"></th>
+              </tr>
+            </tbody>
+          </table>
+          <h5 class="text-center"> Firmas </h5>
+          <div style="margin-left: 90px;">
+            <div class="row m-5 text-center" style="margin-left: 5%;">
+              <div class="col-md-3 border border-dark" style="height: 250px;">
+  
+              </div>
+              <div class="col-md-1" style="height: 250px;">
+  
+              </div>
+              <div class="col-md-3 border border-dark" style="height: 250px;">
+  
+              </div>
+              <div class="col-md-1" style="height: 250px;">
+  
+              </div>
+              <div class="col-md-3 border border-dark" style="height: 250px;">
+  
+              </div>
+  
+              <div class="col-md-3 border">
+                Nombre y Firma del cliente
+              </div>
+              <div class="col-md-1 ">
+  
+              </div>
+              <div class="col-md-3 border">
+                Nombre y Firma del inspector
+              </div>
+              <div class="col-md-1 ">
+  
+              </div>
+              <div class="col-md-3 border">
+                Nombre y Firma del personal de apoyo
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-
-      <div class="row text-center ">
-        <div class="col-md-6 d-grid gap-2">
-          <ion-button fill="clear" class="btn btn-secondary">
-            Limpiar Formulario
-          </ion-button>
+        <div class="row text-center ">
+          <div class="col-md-6 d-grid gap-2">
+            <ion-button fill="clear" class="btn btn-secondary">
+              Limpiar Formulario
+            </ion-button>
+          </div>
+          <div class="col-md-6 d-grid gap-2">
+            <ion-button fill="clear" class="btn btn-success" (click)="encuestaSatifaccion()">
+              Guardar
+            </ion-button>
+          </div>
         </div>
-        <div class="col-md-6 d-grid gap-2">
-          <ion-button fill="clear" class="btn btn-success" (click)="encuestaSatifaccion()">
-            Guardar
-          </ion-button>
-        </div>
-      </div>
+      </form>
 
       
       <div class="text-center">
