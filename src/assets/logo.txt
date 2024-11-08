@@ -51,10 +51,10 @@ var dd = {
           fontSize: 11,
           bold:true,
           alignment:'center',
-          margin: [0,10,0,0]
+          margin: [0,5,0,0]
         },
         {
-            margin:[0,10,0,0],
+            margin:[0,5,0,0],
             columns:[
                 {
                     width:'75%',
@@ -69,7 +69,7 @@ var dd = {
             ]  
         },
         {
-            margin:[0,10,0,0],
+            margin:[0,5,0,0],
             columns:[
                 {
                     width:'40%',
@@ -94,7 +94,7 @@ var dd = {
             ]  
         },
         {
-            margin:[0,10,0,0],
+            margin:[0,5,0,0],
             columns: [
                 {
                     width:'30%',
@@ -197,14 +197,236 @@ var dd = {
             ]
         },
         {
+            margin:[0,5,0,0],
+            table: {
+                widths:['*','*','*','*','*','*','*'],
+                body:[
+                    [{
+                        text:'SOLICITUD', 
+                        colSpan:7,
+                        alignment:'center',
+                        bold:true
+                    },{},{},{},{},{},{}],
+                    [
+                       {
+                           text:'MARCA',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,23]
+                       },{
+                           text:'MODELO',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,23]
+                       },{
+                           text:'No. SERIE',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,23]
+                       },{
+                           text:'DIVISIÓN \n MÍNIMA (g)',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,18]
+                       },{
+                           text:'ALCANCE MÁXIMO\nDE MEDICIÓN (kg)',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,18]
+                       },{
+                           text:'CLASE DE \n EXACTITUD',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,18]
+                       },{
+                           text:'TIPO DE INSTRUMENTO\n(M) MECÁNICO\n(E)ELECTRÓNICO\n(H)HIBRIDO',
+                           bold:true,
+                           alignment:'center',
+                           fontSize:10,
+                           margin:[0,2]
+                       }
+                    ],
+                    [
+                    {
+                        text:'1'
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    } // SUJETO A CAMBIOS
+                    ],
+                    [
+                    {
+                        text:'2'
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    } // SUJETO A CAMBIOS
+                    ],
+                    [
+                    {
+                        text:'3'
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    } // SUJETO A CAMBIOS
+                    ],
+                    [
+                    {
+                        text:'',
+                        colSpan:5,
+                        border:[0,0,0,0]
+                    },{
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        text:'DESCRIPCIÓN',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    },{
+                        text: 'CENTRO UNITARIO',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    } 
+                    ],
+                    [
+                    {
+                        text:'',
+                        colSpan:5,
+                        border:[0,0,0,0]
+                    },{
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        text:'0-99 kg',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    },{
+                        text: '$',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    } 
+                    ],
+                    [
+                    {
+                        text:'',
+                        colSpan:5,
+                        border:[0,0,0,0]
+                    },{
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        text:'De 100 a 200 kg',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    },{
+                        text: '$',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    } 
+                    ],
+                    [
+                    {
+                        text:'',
+                        colSpan:5,
+                        border:[0,0,0,0]
+                    },{
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        
+                    },{
+                        text:'MAYOR DE 200 kg SEGÚN COTIZACIÓN',
+                        fontSize:10,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    },{
+                        text: '',
+                        fontSize:8,
+                        alignment:'center',
+                        bold:true,
+                        fillColor: '#eeeeee'
+                    } 
+                    ]
+                ]
+            }
+        },
+        {
+          text:'SE DECLARA AL CLIENTE QUE LA INFORMACIÓN OBTENIDA DURANTE LA INSPECCIÓN SERÁ ENTREGADA A LA PROFECO, DGN, EMA DEBIDO A LAS REGLAS ESTABLECIDAS EN LA LISTA DE INSTRUMENTOS VIGENTE, LA DEMÁS INFORMACIÓN SE TRATARÁ DE MANERA CONFIDENCIAL, Y SI POR LEY SE DEBA DIVULGAR INFORMACIÓN CONFIDENCIAL SE NOTIFICARÁ MEDIANTE EL \"AVISO DE DIVULGACIÓN DE INFORMACIÓN CONFIDENCIAL\" DCN-F-67. SERVICIO DE VERIFICACIÓN SALIA Y SUAREZ, S.A. DE CV. SE COMPROMETE A MANTENER LA CONFIDENCIALIDAD, SALVAGUARDAR TODA LA INFORMACION Y DOCUMENTACION QUE LE ES PROPORCIONADA Y/O PRESENTADA POR SUS CLIENTES EL DICTAMEN DE INSPECCIÓN CERTIFICA QUE LAS PRUEBAS EFECTUADAS CON LOS INSTRUMENTOS DESCRITOS SE EFECTUARON DE ACUERDO CON LA NORMA NOM-010-SCFI-1994 \"INSTRUMENTOS DE MEDICION-INSTRUMENTOS PARA PESAR DE FUNCIONAMIENTO NO AUTOMATICO-REQUISITOS TECNICOS Y METROLOGICOS\". ATENCIÓN A QUEJAS Y SUGERENCIAS TEL. 492 156 4697, contacto_svsys@yahoo.com.mx.',
+          fontSize:6,
+          margin:[0,3],
+          alignment:'justify'
+        },
+        {
             alignment:'center',
             columns: [
                 
                 {
-                    text:'___________________________________________________\n NOMBRE Y FIRMA DEL SOLICITANTE'
+                    text:'___________________________________________________\n NOMBRE Y FIRMA DEL SOLICITANTE',
+                    fontSize:9
                 },
                 {
-                    text:'___________________________________________________ \n NOMBRE Y FIRMA DEL INSPECTOR'
+                    text:'___________________________________________________ \n NOMBRE Y FIRMA DEL INSPECTOR',
+                    fontSize:9
                 }
             ],
             pageBreak: 'after',  
