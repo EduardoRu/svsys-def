@@ -77,6 +77,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     // Inzilializar la información del cliente
     this.clienteInformacion = this.fb.group({
       nombre_razon_social: ['', Validators.required],
+      rfc: ['', Validators.required],
       telefono: ['', Validators.required],
       Fecha: ['', Validators.required],
       tipo_servicio: ['', Validators.required],
@@ -104,7 +105,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
       no_serie: ['', Validators.required],
-      clase: ['', Validators.required],
+      clase: [{value:'', disabled: true}, Validators.required],
       divi_max: ['', Validators.required],
       alcance_max: ['', Validators.required],
       tipo_bascula: ['', Validators.required]
@@ -137,7 +138,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
       alc_max: [{ value: '', disabled: true }],
       divi_max: [{ value: '', disabled: true }],
       clase_ex: [{ value: '', disabled: true }],
-      exactitud: [{}]
+      exactitud1: [{ value: '0.040', disabled: true }]
     });
 
     // Resumen
@@ -172,7 +173,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
     this.citasService.getCitaProgramada().subscribe({
       next: (data) => {
         this.citasProgramadas = data;
-        console.log(this.citasProgramadas);
       },
       error: (error) => {
         console.error(error);
@@ -184,6 +184,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     console.log(e.detail.value)
     if (e.detail.value != undefined) {
       this.clienteInformacion.get('nombre_razon_social').setValue(e.detail.value.nombre_razon_social)
+      this.clienteInformacion.get('rfc').setValue(e.detail.value.rfc)
       this.clienteInformacion.get('telefono').setValue(e.detail.value.telefono)
       this.clienteInformacion.get('Fecha').setValue(e.detail.value.fecha)
       this.clienteInformacion.get('tipo_servicio').setValue(e.detail.value.tipo_servicio)
@@ -206,6 +207,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.storageService.getValue('infoClientes').then(res => {
         if (res != undefined) {
           this.clienteInformacion.get('nombre_razon_social').setValue(res.nombre_razon_social)
+          this.clienteInformacion.get('rfc').setValue(res.rfc)
           this.clienteInformacion.get('telefono').setValue(res.telefono)
           this.clienteInformacion.get('Fecha').setValue(res.Fecha)
           this.clienteInformacion.get('tipo_servicio').setValue(res.tipo_servicio)
@@ -288,15 +290,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
   // OBTENER LA INFORMACIÓN DE LAS BASCULAS
 
   limpiarFormularioBasculas() {
-
+    this.basculaInformacion.reset();
+    this.basculas=[]
   }
-
-
-  async getInfoVisual() {
-
-  }
-
-
+  
   getBascula() {
     // Obtener la información de las basculas
     if (this.registroBasculas.valid) {
@@ -307,11 +304,42 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
+  clasifiacionbasculas(event:any, tipo:string){
+    const valor = event.target.value;
+    console.log(event.target.value, tipo)
+
+    if(tipo == 'divi_max'){
+      const fraccionRegex = /^\d+\/\d+$/;
+
+      if(fraccionRegex.test(valor)){
+        console.log("Formato valido");
+
+        const [numerador, denominador] = valor.split('/')
+
+        console.log('El denominador es:' + denominador)
+      }else{
+        console.log("Formato invalido");
+      }
+    }else if(tipo == 'alcance_max'){
+      const fraccionRegex = /^\d+\/\d+$/;
+
+      if(fraccionRegex.test(valor)){
+        console.log("Formato valido");
+
+        const [numerador, denominador] = valor.split('/')
+
+        console.log('El denominador es:' + denominador)
+      }else{
+        console.log("Formato invalido");
+      }
+    }
+  }
+
   eliminarBascula(item: any) {
     this.basculas.splice(item, 1)
   }
 
-  guardarInformacion() {
+  guardarInformacionBasculas() {
     this.basculaInformacion.get('basculas').setValue(this.basculas);
 
     if (this.basculaInformacion.valid) {
@@ -346,6 +374,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
       loading.dismiss();
       return;
     }
+  }
+
+  limpiarInfoVisual(){
+    this.inspeccionVisual.reset();
+    this.storageInfoVisual=[]
   }
 
   loadInfoVisuales(event: any) {
@@ -525,12 +558,14 @@ export class GenerarReporteDesktopComponent implements OnInit {
               {
                 width: '75%',
                 text: 'Razón Social y/o nombre: '+ infoCliente.nombre_razon_social,
-                fontSize: 10
+                fontSize: 10,
+                bold: true
               },
               {
                 wdith: '*',
-                text: 'R.F.C: DEVS0212JS2',
-                fontSize: 10
+                text: 'R.F.C: ' + infoCliente.rfc,
+                fontSize: 10,
+                bold: true
               }
             ]
           },
@@ -540,22 +575,26 @@ export class GenerarReporteDesktopComponent implements OnInit {
               {
                 width: '40%',
                 text: 'Domicilio: ' + infoCliente.domicilio,
-                fontSize: 10
+                fontSize: 10,
+                bold: true
               },
               {
                 width: '10%',
                 text: 'Num. ' + infoCliente.num_dom,
-                fontSize: 10
+                fontSize: 10,
+                bold: true
               },
               {
                 width: '20%',
                 text: 'Col.' + infoCliente.colonia,
-                fontSize: 10
+                fontSize: 10,
+                bold: true
               },
               {
                 width: '30%',
                 text: 'Loc. ' + infoCliente.estado,
-                fontSize: 10
+                fontSize: 10,
+                bold: true
               }
             ]
           },
@@ -565,27 +604,32 @@ export class GenerarReporteDesktopComponent implements OnInit {
               {
                 width: '30%',
                 fontSize: 10,
-                text: 'Municipio: ' + infoCliente.municipio
+                text: 'Municipio: ' + infoCliente.municipio,
+                bold: true
               },
               {
                 width: '30%',
                 fontSize: 10,
-                text: 'Edo. ' + infoCliente.estado
+                text: 'Edo. ' + infoCliente.estado,
+                bold: true
               },
               {
                 width: '10%',
                 fontSize: 10,
-                text: 'C.P. ' + infoCliente.cp
+                text: 'C.P. ' + infoCliente.cp,
+                bold: true
               },
               {
                 width: '15%',
                 fontSize: 10,
-                text: 'Giro: ' + infoCliente.giro_empresarial
+                text: 'Giro: ' + infoCliente.giro_empresarial,
+                bold: true
               },
               {
                 width: '15%',
                 fontSize: 10,
-                text: 'Tel: ' + infoCliente.telefono
+                text: 'Tel: ' + infoCliente.telefono,
+                bold: true
               }
             ]
           },
@@ -1283,7 +1327,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   body: [
                     [{
                       text: '1.- El tiempo de Respuesta desde la solicitud del servicio hasta su realización fue:',
-                      margin: [0, 0, 0, 43]
+                      margin: [0, 0, 0, 33]
                     }]
                   ]
                 }
@@ -1294,73 +1338,28 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   widths: ['*', '*', '*', '*', '*'],
                   body: [
                     [{
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.tiempo_respuesta == "10" ? 'X' : '',
+                      fontSize:30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.tiempo_respuesta == "8" ? 'X' : '',
+                      fontSize:30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.tiempo_respuesta == "6" ? 'X' : '',
+                      fontSize:30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.tiempo_respuesta == "4" ? 'X' : '',
+                      fontSize:30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.tiempo_respuesta == "2" ? 'X' : '',
+                      fontSize:30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }]
@@ -1389,75 +1388,30 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   widths: ['*', '*', '*', '*', '*'],
                   body: [
                     [{
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.calidad == "10" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.calidad == "8" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.calidad == "6" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.calidad == "4" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.calidad == "2" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }]
                   ]
                 }
@@ -1485,75 +1439,30 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   widths: ['*', '*', '*', '*', '*'],
                   body: [
                     [{
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.atencion == "10" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.atencion == "8" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.atencion == "6" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.atencion == "4" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.atencion == "2" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }]
                   ]
                 }
@@ -1580,75 +1489,30 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   widths: ['*', '*', '*', '*', '*'],
                   body: [
                     [{
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.mala_conducta_personal == "10" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.mala_conducta_personal == "8" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.mala_conducta_personal == "6" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.mala_conducta_personal == "4" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }, {
-                      canvas: [
-                        {
-                          type: 'rect', // Tipo de figura: rectángulo (cuadrado)
-                          x: 5,
-                          y: 0,
-                          w: 45, // Ancho del cuadrado
-                          h: 45, // Alto del cuadrado
-                          color: '#D3D3D3',// Color de relleno (gris claro)
-                          r: 10
-                        }
-                      ],
+                      text: encuesta.mala_conducta_personal == "2" ? 'X' : null,
+                      fontSize:30,
                       alignment: 'center',
-                      margin: [0, 20, 0, 20]
+                      margin: [0, 25, 0, 25]
                     }]
                   ]
                 }
@@ -1662,7 +1526,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
           },
           {
             margin: [0, 20, 0, 0],
-            text: '______________________________________________________________________________________________________________________________________________________________________________________________'
+            text: encuesta.observaciones,
+            bold: true
           },
           {
             margin: [0, 20, 0, 0],
@@ -1678,7 +1543,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 width: '5%',
                 table: {
                   widths: ['*'],
-                  body: [[{ text: '10', fontSize: 15 }]]
+                  body: [[{ text: encuesta.resultado, fontSize: 15, bold:true}]]
                 }
               }
             ]

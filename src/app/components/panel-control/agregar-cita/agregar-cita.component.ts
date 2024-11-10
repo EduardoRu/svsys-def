@@ -30,7 +30,9 @@ export class AgregarCitaComponent  implements OnInit {
   get nombre_razon_social() {
     return this.citaInformacion.get('nombre_razon_social');
   }
-
+  get rfc(){
+    return this.citaInformacion.get('rfc');
+  }
   get telefono() {
     return this.citaInformacion.get('telefono');
   }
@@ -67,6 +69,7 @@ export class AgregarCitaComponent  implements OnInit {
 
     this.citaInformacion = this.fb.group({
       nombre_razon_social: ['', [Validators.required]],
+      rfc: ['', Validators.required],
       telefono: ['', [Validators.required]],
       fecha: ['', [Validators.required]],
       tipo_servicio: ['', [Validators.required]],

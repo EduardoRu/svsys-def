@@ -12,9 +12,19 @@
 </ion-header>
 <ion-content class="ion-padding">
   <form (ngSubmit)="getCita()" [formGroup]="citaInformacion">
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="floatingnombre_razon_social" formControlName="nombre_razon_social">
-      <label for="floatingnombre_razon_social">Razón Social y/o Nombre</label>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingnombre_razon_social" formControlName="nombre_razon_social">
+          <label for="floatingnombre_razon_social">Razón Social y/o Nombre</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingrfc" formControlName="rfc">
+          <label for="floatingrfc">R.F.C.</label>
+        </div>
+      </div>
     </div>
 
     <div class="row">

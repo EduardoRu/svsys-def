@@ -29,6 +29,7 @@ export class DetalleCitaComponent implements OnInit {
     this.citaInformacion = this.fb.group({
       id: [this.cita.id],
       nombre_razon_social: [this.cita.nombre_razon_social, [Validators.required]],
+      rfc: [this.cita.rfc, [Validators.required]],
       telefono: [this.cita.telefono, [Validators.required]],
       fecha: [this.cita.fecha, [Validators.required]],
       tipo_servicio: [this.cita.tipo_servicio, [Validators.required]],
