@@ -34,6 +34,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
   registroBasculas: FormGroup;
   public basculas: any = [];
 
+  divi_max:any;
+  alcance_max:any;
+
 
   estudioMtro: FormGroup
   public basculasMetro: any = [];
@@ -306,31 +309,34 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   clasifiacionbasculas(event:any, tipo:string){
     const valor = event.target.value;
-    console.log(event.target.value, tipo)
 
     if(tipo == 'divi_max'){
       const fraccionRegex = /^\d+\/\d+$/;
-
       if(fraccionRegex.test(valor)){
-        console.log("Formato valido");
-
         const [numerador, denominador] = valor.split('/')
-
-        console.log('El denominador es:' + denominador)
+        this.divi_max = parseInt(denominador)
       }else{
-        console.log("Formato invalido");
+        //console.log("Formato invalido");
       }
     }else if(tipo == 'alcance_max'){
       const fraccionRegex = /^\d+\/\d+$/;
-
       if(fraccionRegex.test(valor)){
-        console.log("Formato valido");
-
         const [numerador, denominador] = valor.split('/')
-
-        console.log('El denominador es:' + denominador)
+        this.alcance_max = parseInt(denominador)
       }else{
-        console.log("Formato invalido");
+        //console.log("Formato invalido");
+      }
+    }
+
+    if(this.divi_max != undefined && this.alcance_max != undefined){
+      const clasificacion = (this.alcance_max * 1000) / this.divi_max
+
+      if( clasificacion >= 0 && clasificacion <= 1000) {
+        this.registroBasculas.get('clase').setValue('4')
+      }else if(clasificacion >= 500 && clasificacion <= 10000){
+        this.registroBasculas.get('clase').setValue('3')
+      }else if(clasificacion >= 5000 && clasificacion <= 100000){
+        this.registroBasculas.get('clase').setValue('2')
       }
     }
   }
