@@ -141,7 +141,21 @@ export class GenerarReporteDesktopComponent implements OnInit {
       alc_max: [{ value: '', disabled: true }],
       divi_max: [{ value: '', disabled: true }],
       clase_ex: [{ value: '', disabled: true }],
-      exactitud1: [{ value: '0.040', disabled: true }]
+      carga1: [{ value: ''}],
+      carga2: [{ value: ''}],
+      carga3: [{ value: ''}],
+      carga4: [{ value: ''}],
+      carga5: [{ value: ''}],
+      carga6: [{ value: ''}],
+      carga7: [{ value: ''}],
+      carga8: [{ value: ''}],
+      carga9: [{ value: ''}],
+      carga10: [{ value: ''}],
+      repeCarga1: [{ value:''}],
+      repeCarga2: [{ value:''}],
+      repeCarga3: [{ value:''}],
+      repeCarga4: [{ value:''}],
+      repeCarga5: [{ value:''}]
     });
 
     // Resumen
@@ -361,6 +375,38 @@ export class GenerarReporteDesktopComponent implements OnInit {
     this.estudioMtro.get('alc_max').setValue(e.detail.value.alcance_max)
     this.estudioMtro.get('divi_max').setValue(e.detail.value.divi_max)
     this.estudioMtro.get('clase_ex').setValue(e.detail.value.clase)
+
+    const alc_max = this.estudioMtro.get('alc_max').value
+    const [numerador, denominador] = alc_max.split('/')
+
+    this.estudioMtro.get('precarga').setValue(denominador)
+
+
+    this.estudioMtro.get('carga10').setValue(denominador)
+    this.estudioMtro.get('carga8').setValue(denominador*.5)
+    this.estudioMtro.get('carga5').setValue(denominador*.1)
+    this.estudioMtro.get('carga4').setValue(denominador*.05)
+
+    // DATOS QUE PUEDEN CAMBIAR
+    this.estudioMtro.get('carga1').setValue(denominador*.002)
+    this.estudioMtro.get('carga2').setValue(denominador*.005)
+    this.estudioMtro.get('carga3').setValue(denominador*.025)
+
+    // DESPUES DE 
+    this.estudioMtro.get('carga6').setValue(denominador*.2)
+    this.estudioMtro.get('carga7').setValue(denominador*.35)
+    this.estudioMtro.get('carga9').setValue(denominador*.6)
+
+
+    this.estudioMtro.get('repeCarga1').setValue(numerador*.5)
+    this.estudioMtro.get('repeCarga2').setValue(numerador)
+    this.estudioMtro.get('repeCarga3').setValue(denominador*.5)
+    this.estudioMtro.get('repeCarga4').setValue(denominador)
+    this.estudioMtro.get('repeCarga5').setValue(Math.round(denominador * 0.33));
+
+
+    
+
   }
 
 
