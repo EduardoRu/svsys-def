@@ -108,7 +108,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
       no_serie: ['', Validators.required],
-      clase: [{value:'', disabled: true}, Validators.required],
+      clase: ['', Validators.required],
       divi_max: ['', Validators.required],
       alcance_max: ['', Validators.required],
       tipo_bascula: ['', Validators.required]
@@ -155,7 +155,17 @@ export class GenerarReporteDesktopComponent implements OnInit {
       repeCarga2: [{ value:''}],
       repeCarga3: [{ value:''}],
       repeCarga4: [{ value:''}],
-      repeCarga5: [{ value:''}]
+      repeCarga5: [{ value:''}],
+      emt1: [{ value: ''}],
+      emt2: [{ value: ''}],
+      emt3: [{ value: ''}],
+      emt4: [{ value: ''}],
+      emt5: [{ value: ''}],
+      emt6: [{ value: ''}],
+      emt7: [{ value: ''}],
+      emt8: [{ value: ''}],
+      emt9: [{ value: ''}],
+      emt10: [{ value: ''}],
     });
 
     // Resumen
@@ -299,6 +309,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   }
 
+
+
   limpiarInfoCliente() {
     //Limpiar la infromación del formulario
     this.clienteInformacion.reset();
@@ -312,6 +324,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
   
   getBascula() {
+    console.log(this.registroBasculas.value)
     // Obtener la información de las basculas
     if (this.registroBasculas.valid) {
       this.basculas.push(this.registroBasculas.value);
@@ -377,6 +390,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
     this.estudioMtro.get('clase_ex').setValue(e.detail.value.clase)
 
     const alc_max = this.estudioMtro.get('alc_max').value
+    const clase = this.estudioMtro.get('clase_ex').value
+
+    console.log(clase)
+
     const [numerador, denominador] = alc_max.split('/')
 
     this.estudioMtro.get('precarga').setValue(denominador)
@@ -405,8 +422,104 @@ export class GenerarReporteDesktopComponent implements OnInit {
     this.estudioMtro.get('repeCarga5').setValue(Math.round(denominador * 0.33));
 
 
-    
 
+    //ASIGNACIÓN DEL EMT
+    if(clase == "2"){
+
+    }else if(clase == 3){
+      const divi_mina = this.estudioMtro.get('divi_max').value
+      const [numerador, denominador] = divi_mina.split('/')
+
+      const escala1 = denominador * 500
+      const escala2 = denominador * 2000
+      const escala3 = denominador * 10000
+
+      const cla1 = denominador * 1
+      const cla2 = denominador * 2
+      const cla3 = denominador * 3
+
+      console.log(this.estudioMtro.get('carga1').value*1000 <= escala1)
+
+      this.estudioMtro.get('emt1').setValue(
+        (this.estudioMtro.get('carga1').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga1').value*1000) &&  escala3 <= (this.estudioMtro.get('carga1').value*1000) ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga1').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt2').setValue(
+        (this.estudioMtro.get('carga2').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga2').value*1000) &&  (this.estudioMtro.get('carga2').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga2').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt3').setValue(
+        (this.estudioMtro.get('carga3').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga3').value*1000) &&  (this.estudioMtro.get('carga3').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga3').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt4').setValue(
+        (this.estudioMtro.get('carga4').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga4').value*1000) &&  (this.estudioMtro.get('carga4').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga4').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt5').setValue(
+        (this.estudioMtro.get('carga5').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga5').value*1000) &&  (this.estudioMtro.get('carga5').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga5').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt6').setValue(
+        (this.estudioMtro.get('carga6').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga6').value*1000) &&  (this.estudioMtro.get('carga6').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga6').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt7').setValue(
+        (this.estudioMtro.get('carga7').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga7').value*1000) &&  (this.estudioMtro.get('carga7').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga7').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt8').setValue(
+        (this.estudioMtro.get('carga8').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga8').value*1000) && (this.estudioMtro.get('carga8').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga8').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt9').setValue(
+        (this.estudioMtro.get('carga9').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga9').value*1000) &&  (this.estudioMtro.get('carga9').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga9').value*1000)? cla3 : 0
+      )
+
+      this.estudioMtro.get('emt10').setValue(
+        (this.estudioMtro.get('carga10').value*1000) <= escala1   ? cla1 :
+        escala2 >= (this.estudioMtro.get('carga10').value*1000) &&  (this.estudioMtro.get('carga10').value*1000) <= escala3 ? cla2 : 
+        escala3 >= (this.estudioMtro.get('carga10').value*1000)? cla3 : 0
+      )
+
+
+    }else if(clase == "4"){
+
+    }
+  }
+
+  async getestudioMetro(){
+    const load = await this.loadingController.create({
+      message: 'Cargando estudio metrológico...'
+    })
+
+    load.present();
+
+    if(this.estudioMtro.valid){
+      this.storageService.addValue('estudioMtro', this.estudioMtro.value)
+      load.dismiss();
+    }else{
+      this.presentAlert('Todos los campos son obligatorios');
+      load.dismiss();
+    }
   }
 
 
