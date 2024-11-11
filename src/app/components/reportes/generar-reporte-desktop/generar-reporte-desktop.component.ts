@@ -138,9 +138,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
     // Estudio Mtro
     this.estudioMtro = this.fb.group({
       precarga: ['', Validators.required],
-      alc_max: [{ value: '', disabled: true }],
-      divi_max: [{ value: '', disabled: true }],
-      clase_ex: [{ value: '', disabled: true }],
+      alc_max: [{ value: '' }],
+      divi_max: [{ value: '' }],
+      clase_ex: [{ value: '' }],
       carga1: [{ value: ''}],
       carga2: [{ value: ''}],
       carga3: [{ value: ''}],
@@ -166,6 +166,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
       emt8: [{ value: ''}],
       emt9: [{ value: ''}],
       emt10: [{ value: ''}],
+      observaciones: ['', Validators.required]
     });
 
     // Resumen
@@ -657,6 +658,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
     const infoVisuales = await this.storageService.getValue('inspeccionVisual');
     const encuesta = await this.storageService.getValue('encuesta_satisfaccion');
     const infoBasculas = await this.storageService.getValue('infoBasculas');
+    const estudioMtro = await this.storageService.getValue('estudioMtro');
+
+    console.log(estudioMtro)
 
     if(
       infoCliente && infoPago && infoVisuales && encuesta
@@ -1201,16 +1205,16 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   { text: 'EXCENTRICIDAD', fontSize: 10, alignment: 'center' }
                 ],
                 [
-                  { text: '', fontSize: 10.5, alignment: 'center' },
-                  { text: 'kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                  { text: 'g', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                  { text: '', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                  { text: 'kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                  { text: '50% DE MÁX', fontSize: 9, alignment: 'center' },
-                  { text: '100% DE MÁX', fontSize: 9, alignment: 'center' },
-                  { text: '50% DE MÁX', fontSize: 9, alignment: 'center' },
-                  { text: '50% DE MÁX', fontSize: 9, alignment: 'center' },
-                  { text: '1/3 DE MÁXkg', fontSize: 10, alignment: 'center' }
+                  { text: '1', fontSize: 10.5, alignment: 'center' },
+                  { text: estudioMtro.alc_max  +' kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                  { text: [estudioMtro.divi_max + 'g'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                  { text: estudioMtro.clase_ex, colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                  { text: [estudioMtro.carga10 + 'kg'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                  { text: ['50% DE MÁX\n' + estudioMtro.repeCarga1], fontSize: 6, alignment: 'center' },
+                  { text: ['100% DE MÁX\n' + estudioMtro.repeCarga2], fontSize: 6, alignment: 'center' },
+                  { text: ['50% DE MÁX\n' + estudioMtro.repeCarga3], fontSize: 6, alignment: 'center' },
+                  { text: ['50% DE MÁ\n' + estudioMtro.repeCarga4], fontSize: 6, alignment: 'center' },
+                  { text: ['1/3 DE MÁX \n' + estudioMtro.repeCarga5], fontSize: 7, alignment: 'center' }
                 ],
                 [
                   { text: 'EXACTITUD', fontSize: 10.5, colSpan: 9, alignment: 'center' },
@@ -1242,8 +1246,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '1', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga1, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt1, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1258,8 +1262,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '2', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga2, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt2, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1274,8 +1278,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '3', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga3, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt3, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1290,8 +1294,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '4', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga4, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt4, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1306,8 +1310,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '5', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga5, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt5, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1322,8 +1326,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '6', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga6, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt6, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1338,8 +1342,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '7', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga7, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt7, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1354,8 +1358,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '8', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga8, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt8, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1370,8 +1374,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '9', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga9, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt9, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1386,8 +1390,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '10', fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
+                  { text: estudioMtro.carga10, fontSize: 8, alignment: 'center' },
+                  { text: estudioMtro.emt10, fontSize:8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1422,7 +1426,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
           {
             columns: [
               {
-                text: 'OBSERVACIONES DEL INSPECTOR: __________________________________________________________', fontSize: 10
+                text: 'OBSERVACIONES DEL INSPECTOR:' + estudioMtro.observaciones, fontSize: 10
               },
               {
                 text: 'CUMPLE CON LA NORMA NOM-010-SCFI-1994 CUMPLE (C) NO CUMPLE (NC)', fontSize: 10, width: 220
