@@ -7,6 +7,8 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { EncuestaSatifaccionComponent } from '../encuesta-satifaccion/encuesta-satifaccion.component';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { AlmacenamientoService } from 'src/app/services/firebase/almacenamiento/almacenamiento.service';
+import { QrModalComponent } from 'src/app/qr-modal/qr-modal.component';
 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
@@ -34,8 +36,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
   registroBasculas: FormGroup;
   public basculas: any = [];
 
-  divi_max:any;
-  alcance_max:any;
+  divi_max: any;
+  alcance_max: any;
 
 
   estudioMtro: FormGroup
@@ -64,7 +66,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
     private storageService: StorageService,
     private alertController: AlertController,
     private citasService: CitasService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private almacenamientoService: AlmacenamientoService
   ) { }
 
   async presentAlert(msj: string) {
@@ -138,34 +141,34 @@ export class GenerarReporteDesktopComponent implements OnInit {
     // Estudio Mtro
     this.estudioMtro = this.fb.group({
       precarga: ['', Validators.required],
-      alc_max: [{ value: '' }],
-      divi_max: [{ value: '' }],
-      clase_ex: [{ value: '' }],
-      carga1: [{ value: ''}],
-      carga2: [{ value: ''}],
-      carga3: [{ value: ''}],
-      carga4: [{ value: ''}],
-      carga5: [{ value: ''}],
-      carga6: [{ value: ''}],
-      carga7: [{ value: ''}],
-      carga8: [{ value: ''}],
-      carga9: [{ value: ''}],
-      carga10: [{ value: ''}],
-      repeCarga1: [{ value:''}],
-      repeCarga2: [{ value:''}],
-      repeCarga3: [{ value:''}],
-      repeCarga4: [{ value:''}],
-      repeCarga5: [{ value:''}],
-      emt1: [{ value: ''}],
-      emt2: [{ value: ''}],
-      emt3: [{ value: ''}],
-      emt4: [{ value: ''}],
-      emt5: [{ value: ''}],
-      emt6: [{ value: ''}],
-      emt7: [{ value: ''}],
-      emt8: [{ value: ''}],
-      emt9: [{ value: ''}],
-      emt10: [{ value: ''}],
+      alc_max: [''],
+      divi_max: [''],
+      clase_ex: [''],
+      carga1: [{ value: '' }],
+      carga2: [{ value: '' }],
+      carga3: [{ value: '' }],
+      carga4: [{ value: '' }],
+      carga5: [{ value: '' }],
+      carga6: [{ value: '' }],
+      carga7: [{ value: '' }],
+      carga8: [{ value: '' }],
+      carga9: [{ value: '' }],
+      carga10: [{ value: '' }],
+      repeCarga1: [{ value: '' }],
+      repeCarga2: [{ value: '' }],
+      repeCarga3: [{ value: '' }],
+      repeCarga4: [{ value: '' }],
+      repeCarga5: [{ value: '' }],
+      emt1: [{ value: '' }],
+      emt2: [{ value: '' }],
+      emt3: [{ value: '' }],
+      emt4: [{ value: '' }],
+      emt5: [{ value: '' }],
+      emt6: [{ value: '' }],
+      emt7: [{ value: '' }],
+      emt8: [{ value: '' }],
+      emt9: [{ value: '' }],
+      emt10: [{ value: '' }],
       observaciones: ['', Validators.required]
     });
 
@@ -321,9 +324,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   limpiarFormularioBasculas() {
     this.basculaInformacion.reset();
-    this.basculas=[]
+    this.basculas = []
   }
-  
+
   getBascula() {
     console.log(this.registroBasculas.value)
     // Obtener la información de las basculas
@@ -335,35 +338,35 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  clasifiacionbasculas(event:any, tipo:string){
+  clasifiacionbasculas(event: any, tipo: string) {
     const valor = event.target.value;
 
-    if(tipo == 'divi_max'){
+    if (tipo == 'divi_max') {
       const fraccionRegex = /^\d+\/\d+$/;
-      if(fraccionRegex.test(valor)){
+      if (fraccionRegex.test(valor)) {
         const [numerador, denominador] = valor.split('/')
         this.divi_max = parseInt(denominador)
-      }else{
+      } else {
         //console.log("Formato invalido");
       }
-    }else if(tipo == 'alcance_max'){
+    } else if (tipo == 'alcance_max') {
       const fraccionRegex = /^\d+\/\d+$/;
-      if(fraccionRegex.test(valor)){
+      if (fraccionRegex.test(valor)) {
         const [numerador, denominador] = valor.split('/')
         this.alcance_max = parseInt(denominador)
-      }else{
+      } else {
         //console.log("Formato invalido");
       }
     }
 
-    if(this.divi_max != undefined && this.alcance_max != undefined){
+    if (this.divi_max != undefined && this.alcance_max != undefined) {
       const clasificacion = (this.alcance_max * 1000) / this.divi_max
 
-      if( clasificacion >= 0 && clasificacion <= 1000) {
+      if (clasificacion >= 0 && clasificacion <= 1000) {
         this.registroBasculas.get('clase').setValue('4')
-      }else if(clasificacion >= 500 && clasificacion <= 10000){
+      } else if (clasificacion >= 500 && clasificacion <= 10000) {
         this.registroBasculas.get('clase').setValue('3')
-      }else if(clasificacion >= 5000 && clasificacion <= 100000){
+      } else if (clasificacion >= 5000 && clasificacion <= 100000) {
         this.registroBasculas.get('clase').setValue('2')
       }
     }
@@ -401,33 +404,33 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
 
     this.estudioMtro.get('carga10').setValue(denominador)
-    this.estudioMtro.get('carga8').setValue(denominador*.5)
-    this.estudioMtro.get('carga5').setValue(denominador*.1)
-    this.estudioMtro.get('carga4').setValue(denominador*.05)
+    this.estudioMtro.get('carga8').setValue(denominador * .5)
+    this.estudioMtro.get('carga5').setValue(denominador * .1)
+    this.estudioMtro.get('carga4').setValue(denominador * .05)
 
     // DATOS QUE PUEDEN CAMBIAR
-    this.estudioMtro.get('carga1').setValue(denominador*.002)
-    this.estudioMtro.get('carga2').setValue(denominador*.005)
-    this.estudioMtro.get('carga3').setValue(denominador*.025)
+    this.estudioMtro.get('carga1').setValue(denominador * .002)
+    this.estudioMtro.get('carga2').setValue(denominador * .005)
+    this.estudioMtro.get('carga3').setValue(denominador * .025)
 
     // DESPUES DE 
-    this.estudioMtro.get('carga6').setValue(denominador*.2)
-    this.estudioMtro.get('carga7').setValue(denominador*.35)
-    this.estudioMtro.get('carga9').setValue(denominador*.6)
+    this.estudioMtro.get('carga6').setValue(denominador * .2)
+    this.estudioMtro.get('carga7').setValue(denominador * .35)
+    this.estudioMtro.get('carga9').setValue(denominador * .6)
 
 
-    this.estudioMtro.get('repeCarga1').setValue(numerador*.5)
+    this.estudioMtro.get('repeCarga1').setValue(numerador * .5)
     this.estudioMtro.get('repeCarga2').setValue(numerador)
-    this.estudioMtro.get('repeCarga3').setValue(denominador*.5)
+    this.estudioMtro.get('repeCarga3').setValue(denominador * .5)
     this.estudioMtro.get('repeCarga4').setValue(denominador)
     this.estudioMtro.get('repeCarga5').setValue(Math.round(denominador * 0.33));
 
 
 
     //ASIGNACIÓN DEL EMT
-    if(clase == "2"){
+    if (clase == "2") {
 
-    }else if(clase == 3){
+    } else if (clase == 3) {
       const divi_mina = this.estudioMtro.get('divi_max').value
       const [numerador, denominador] = divi_mina.split('/')
 
@@ -439,85 +442,85 @@ export class GenerarReporteDesktopComponent implements OnInit {
       const cla2 = denominador * 2
       const cla3 = denominador * 3
 
-      console.log(this.estudioMtro.get('carga1').value*1000 <= escala1)
+      console.log(this.estudioMtro.get('carga1').value * 1000 <= escala1)
 
       this.estudioMtro.get('emt1').setValue(
-        (this.estudioMtro.get('carga1').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga1').value*1000) &&  escala3 <= (this.estudioMtro.get('carga1').value*1000) ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga1').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga1').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga1').value * 1000) && escala3 <= (this.estudioMtro.get('carga1').value * 1000) ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga1').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt2').setValue(
-        (this.estudioMtro.get('carga2').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga2').value*1000) &&  (this.estudioMtro.get('carga2').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga2').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga2').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga2').value * 1000) && (this.estudioMtro.get('carga2').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga2').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt3').setValue(
-        (this.estudioMtro.get('carga3').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga3').value*1000) &&  (this.estudioMtro.get('carga3').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga3').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga3').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga3').value * 1000) && (this.estudioMtro.get('carga3').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga3').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt4').setValue(
-        (this.estudioMtro.get('carga4').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga4').value*1000) &&  (this.estudioMtro.get('carga4').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga4').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga4').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga4').value * 1000) && (this.estudioMtro.get('carga4').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga4').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt5').setValue(
-        (this.estudioMtro.get('carga5').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga5').value*1000) &&  (this.estudioMtro.get('carga5').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga5').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga5').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga5').value * 1000) && (this.estudioMtro.get('carga5').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga5').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt6').setValue(
-        (this.estudioMtro.get('carga6').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga6').value*1000) &&  (this.estudioMtro.get('carga6').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga6').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga6').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga6').value * 1000) && (this.estudioMtro.get('carga6').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga6').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt7').setValue(
-        (this.estudioMtro.get('carga7').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga7').value*1000) &&  (this.estudioMtro.get('carga7').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga7').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga7').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga7').value * 1000) && (this.estudioMtro.get('carga7').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga7').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt8').setValue(
-        (this.estudioMtro.get('carga8').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga8').value*1000) && (this.estudioMtro.get('carga8').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga8').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga8').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga8').value * 1000) && (this.estudioMtro.get('carga8').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga8').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt9').setValue(
-        (this.estudioMtro.get('carga9').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga9').value*1000) &&  (this.estudioMtro.get('carga9').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga9').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga9').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga9').value * 1000) && (this.estudioMtro.get('carga9').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga9').value * 1000) ? cla3 : 0
       )
 
       this.estudioMtro.get('emt10').setValue(
-        (this.estudioMtro.get('carga10').value*1000) <= escala1   ? cla1 :
-        escala2 >= (this.estudioMtro.get('carga10').value*1000) &&  (this.estudioMtro.get('carga10').value*1000) <= escala3 ? cla2 : 
-        escala3 >= (this.estudioMtro.get('carga10').value*1000)? cla3 : 0
+        (this.estudioMtro.get('carga10').value * 1000) <= escala1 ? cla1 :
+          escala2 >= (this.estudioMtro.get('carga10').value * 1000) && (this.estudioMtro.get('carga10').value * 1000) <= escala3 ? cla2 :
+            escala3 >= (this.estudioMtro.get('carga10').value * 1000) ? cla3 : 0
       )
 
 
-    }else if(clase == "4"){
+    } else if (clase == "4") {
 
     }
   }
 
-  async getestudioMetro(){
+  async getestudioMetro() {
     const load = await this.loadingController.create({
       message: 'Cargando estudio metrológico...'
     })
 
     load.present();
 
-    if(this.estudioMtro.valid){
+    if (this.estudioMtro.valid) {
       this.storageService.addValue('estudioMtro', this.estudioMtro.value)
       load.dismiss();
-    }else{
+    } else {
       this.presentAlert('Todos los campos son obligatorios');
       load.dismiss();
     }
@@ -542,9 +545,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  limpiarInfoVisual(){
+  limpiarInfoVisual() {
     this.inspeccionVisual.reset();
-    this.storageInfoVisual=[]
+    this.storageInfoVisual = []
   }
 
   loadInfoVisuales(event: any) {
@@ -653,7 +656,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   async imprimirReporte() {
 
-    const infoCliente = await  this.storageService.getValue('infoClientes');
+    const infoCliente = await this.storageService.getValue('infoClientes');
     const infoPago = await this.storageService.getValue('infoPago');
     const infoVisuales = await this.storageService.getValue('inspeccionVisual');
     const encuesta = await this.storageService.getValue('encuesta_satisfaccion');
@@ -662,15 +665,15 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
     console.log(estudioMtro)
 
-    if(
+    if (
       infoCliente && infoPago && infoVisuales && encuesta
-    ){
+    ) {
       var dd = {
         pageOrientation: 'landscape',
         content: [
-  
+
           {
-  
+
             columns: [
               {
                 text: 'logo',
@@ -726,7 +729,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
             columns: [
               {
                 width: '75%',
-                text: 'Razón Social y/o nombre: '+ infoCliente.nombre_razon_social,
+                text: 'Razón Social y/o nombre: ' + infoCliente.nombre_razon_social,
                 fontSize: 10,
                 bold: true
               },
@@ -836,7 +839,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
                       {
                         fontSize: 10,
                         text: 'Inicial',
-                        alignment: 'center'
+                        alignment: 'center',
+                        bold: true
                       },
                       {
                         fontSize: 10,
@@ -846,8 +850,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                       {
                         fontSize: 10,
                         text: 'Extraordinaria',
-                        alignment: 'center',
-                        bold: true
+                        alignment: 'center'
                       }
                     ]
                   ]
@@ -887,7 +890,14 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   colSpan: 7,
                   alignment: 'center',
                   bold: true
-                }, {}, {}, {}, {}, {}, {}],
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
+                ],
                 [
                   {
                     text: 'MARCA',
@@ -954,34 +964,34 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   {
                     text: '2'
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   } // SUJETO A CAMBIOS
                 ],
                 [
                   {
                     text: '3'
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   } // SUJETO A CAMBIOS
                 ],
                 [
@@ -991,11 +1001,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     border: [0, 0, 0, 0]
                   }, {
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
                     text: 'DESCRIPCIÓN',
                     fontSize: 10,
@@ -1018,11 +1028,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   }, {
 
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
                     text: '0-99 kg',
                     fontSize: 10,
@@ -1044,11 +1054,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     border: [0, 0, 0, 0]
                   }, {
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
                     text: 'De 100 a 200 kg',
                     fontSize: 10,
@@ -1070,11 +1080,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     border: [0, 0, 0, 0]
                   }, {
                   }, {
-  
+
                   }, {
-  
+
                   }, {
-  
+
                   }, {
                     text: 'MAYOR DE 200 kg SEGÚN COTIZACIÓN',
                     fontSize: 10,
@@ -1101,7 +1111,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
           {
             alignment: 'center',
             columns: [
-  
+
               {
                 text: '___________________________________________________\n NOMBRE Y FIRMA DEL SOLICITANTE',
                 fontSize: 9
@@ -1111,12 +1121,12 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 fontSize: 9
               }
             ],
-  
+
           },
           {
             text: 'CLÁUSULAS',
             alignment: 'center',
-  
+
           },
           {
             text: `
@@ -1149,11 +1159,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 // Primera fila que abarca las cuatro columnas
                 [{ text: 'INSPECCIÓN VISUAL', colSpan: 4, alignment: 'center', fontSize: 13 }, {}, {}, {}],
                 [{ text: 'INSPECCIONAR QUE EL INSTRUMENTO DE MEDICIÓN CUMPLA CON LAS CARACTERÍSTICAS QUE LE APLIQUEN DE LA SIGUIENTE LISTA Y REGISTRAR EL CUMPLIMIENTO (C), NO CUMPLIMIENTO (NC) O NO APLICA (NA)', colSpan: 4, alignment: 'center', fontSize: 10 }, {}, {}, {}],
-  
+
                 [{ text: 'El aspecto general del instrumento debe estar en buenas condiciones y no tener piezas sueltas.', fontSize: 9 }, {
-                  text:infoVisuales.IV1
+                  text: infoVisuales.IV1
                 }, { text: 'El estado de la escala debe ser aceptable, entendiendo que no presente ralladuras ni deformaciones que afecten la claridad en la toma de lecturas.', fontSize: 9 }, {
-                  text:infoVisuales.IV2
+                  text: infoVisuales.IV2
                 }],
                 [{ text: 'Se debe inspeccionar que el tornillo que sostiene las piezas para nivelar el dispositivo esté fijo y que las piezas no puedan retirarse fácilmente.', fontSize: 9 }, {
                   text: infoVisuales.IV3
@@ -1188,7 +1198,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
               ]
             }
           },
-  
+
           {
             style: 'tableInspeccionMtro',
             table: {
@@ -1206,7 +1216,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 ],
                 [
                   { text: '1', fontSize: 10.5, alignment: 'center' },
-                  { text: estudioMtro.alc_max  +' kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                  { text: estudioMtro.alc_max + ' kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                   { text: [estudioMtro.divi_max + 'g'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                   { text: estudioMtro.clase_ex, colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                   { text: [estudioMtro.carga10 + 'kg'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
@@ -1247,7 +1257,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '1', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga1, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt1, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt1, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1263,7 +1273,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '2', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga2, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt2, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt2, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1279,7 +1289,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '3', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga3, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt3, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt3, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1295,7 +1305,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '4', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga4, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt4, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt4, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1311,7 +1321,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '5', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga5, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt5, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt5, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1327,7 +1337,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '6', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga6, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt6, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt6, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1343,7 +1353,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '7', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga7, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt7, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt7, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1359,7 +1369,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '8', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga8, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt8, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt8, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1375,7 +1385,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '9', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga9, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt9, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt9, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1391,7 +1401,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 [
                   { text: '10', fontSize: 8, alignment: 'center' },
                   { text: estudioMtro.carga10, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt10, fontSize:8, alignment: 'center' },
+                  { text: estudioMtro.emt10, fontSize: 8, alignment: 'center' },
                   {},
                   {},
                   {},
@@ -1430,7 +1440,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
               },
               {
                 text: 'CUMPLE CON LA NORMA NOM-010-SCFI-1994 CUMPLE (C) NO CUMPLE (NC)', fontSize: 10, width: 220
-  
+
               },
               {
                 text: 'C/NC',
@@ -1508,27 +1518,27 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   body: [
                     [{
                       text: encuesta.tiempo_respuesta == "10" ? 'X' : '',
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
                       text: encuesta.tiempo_respuesta == "8" ? 'X' : '',
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
                       text: encuesta.tiempo_respuesta == "6" ? 'X' : '',
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
                       text: encuesta.tiempo_respuesta == "4" ? 'X' : '',
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }, {
                       text: encuesta.tiempo_respuesta == "2" ? 'X' : '',
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 20, 0, 20]
                     }]
@@ -1558,27 +1568,27 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   body: [
                     [{
                       text: encuesta.calidad == "10" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.calidad == "8" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.calidad == "6" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.calidad == "4" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.calidad == "2" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }]
@@ -1609,27 +1619,27 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   body: [
                     [{
                       text: encuesta.atencion == "10" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.atencion == "8" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.atencion == "6" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.atencion == "4" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.atencion == "2" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }]
@@ -1659,27 +1669,27 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   body: [
                     [{
                       text: encuesta.mala_conducta_personal == "10" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.mala_conducta_personal == "8" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.mala_conducta_personal == "6" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.mala_conducta_personal == "4" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }, {
                       text: encuesta.mala_conducta_personal == "2" ? 'X' : null,
-                      fontSize:30,
+                      fontSize: 30,
                       alignment: 'center',
                       margin: [0, 25, 0, 25]
                     }]
@@ -1706,13 +1716,13 @@ export class GenerarReporteDesktopComponent implements OnInit {
                 width: '20%',
                 fontSize: 15,
                 text: 'RESULTADO',
-  
+
               },
               {
                 width: '5%',
                 table: {
                   widths: ['*'],
-                  body: [[{ text: encuesta.resultado, fontSize: 15, bold:true}]]
+                  body: [[{ text: encuesta.resultado, fontSize: 15, bold: true }]]
                 }
               }
             ]
@@ -1734,28 +1744,27 @@ export class GenerarReporteDesktopComponent implements OnInit {
           }
         }
       };
-  
+
+      const pdfDocGenerator = pdfMake.createPdf(dd);
+
+      pdfDocGenerator.getBlob(async (blob) => {
+        const fileName = `ejemplo_${new Date().getTime()}.pdf`;
+        const url = await this.almacenamientoService.uploadPDF(blob, fileName);
+        await this.presentQrModal(url);
+        console.log('Enlace del PDF:', url);
+      });
+
       pdfMake.createPdf(dd).open();
     }
-    
+
   }
 
 
-  convertToBase64(url: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = url;
-      img.crossOrigin = 'Anonymous';
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(img, 0, 0);
-        const base64Image = canvas.toDataURL('image/png');
-        resolve(base64Image);
-      };
-      img.onerror = (error) => reject(error);
+  async presentQrModal(qrCodeUrl: string) {
+    const modal = await this.modalController.create({
+      component: QrModalComponent,
+      componentProps: { qrCodeUrl },
     });
+    await modal.present();
   }
 }
