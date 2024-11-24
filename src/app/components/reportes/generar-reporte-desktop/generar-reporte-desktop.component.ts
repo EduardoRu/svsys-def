@@ -78,8 +78,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
     await alert.present();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.infoClientes();
+
     // Inzilializar la información del cliente
     this.clienteInformacion = this.fb.group({
       nombre_razon_social: ['', Validators.required],
@@ -120,6 +121,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
     // INSEPCCIÓN VISUAL
     this.inspeccionVisual = this.fb.group({
+      bascula: [[]],
       IV1: ['', Validators.required],
       IV2: ['', Validators.required],
       IV3: ['', Validators.required],
@@ -197,11 +199,19 @@ export class GenerarReporteDesktopComponent implements OnInit {
       firma_inspector: [],
       firma_apoto: []
     });
-
+    setTimeout(async () => {
+      const loagin = await this.loadingController.create({
+        message: "Cargando infocmaicón",
+        duration: 1000
+      });
+      loagin.present();
+      await this.onSegementChanged({ detail: { value: this.segment } });
+    }, 1000); // Espera 1 segundo antes de ejecutar la función
   }
 
+
   async infoClientes() {
-    this.citasService.getCitaProgramada().subscribe({
+    return this.citasService.getCitaProgramada().subscribe({
       next: (data) => {
         this.citasProgramadas = data;
       },
@@ -231,26 +241,27 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   async onSegementChanged(event: any) {
     this.cd.detectChanges();
-    this.segment = event.detail.value;
-
+    if (event.detail != undefined) {
+      this.segment = event.detail.value;
+    }
 
     if (this.segment === 'infoClientes') {
-      this.storageService.getValue('infoClientes').then(res => {
-        if (res != undefined) {
-          this.clienteInformacion.get('nombre_razon_social').setValue(res.nombre_razon_social)
-          this.clienteInformacion.get('rfc').setValue(res.rfc)
-          this.clienteInformacion.get('telefono').setValue(res.telefono)
-          this.clienteInformacion.get('Fecha').setValue(res.Fecha)
-          this.clienteInformacion.get('tipo_servicio').setValue(res.tipo_servicio)
-          this.clienteInformacion.get('cp').setValue(res.cp)
-          this.clienteInformacion.get('giro_empresarial').setValue(res.giro_empresarial)
-          this.clienteInformacion.get('colonia').setValue(res.colonia)
-          this.clienteInformacion.get('domicilio').setValue(res.domicilio)
-          this.clienteInformacion.get('num_dom').setValue(res.num_dom)
-          this.clienteInformacion.get('municipio').setValue(res.municipio)
-          this.clienteInformacion.get('estado').setValue(res.estado)
-        }
-      });
+      const res: any = await this.storageService.getValue('infoClientes').then(res => {return res});
+      console.log(res)
+      if (res != undefined) {
+        this.clienteInformacion.get('nombre_razon_social').setValue(res.nombre_razon_social)
+        this.clienteInformacion.get('rfc').setValue(res.rfc)
+        this.clienteInformacion.get('telefono').setValue(res.telefono)
+        this.clienteInformacion.get('Fecha').setValue(res.Fecha)
+        this.clienteInformacion.get('tipo_servicio').setValue(res.tipo_servicio)
+        this.clienteInformacion.get('cp').setValue(res.cp)
+        this.clienteInformacion.get('giro_empresarial').setValue(res.giro_empresarial)
+        this.clienteInformacion.get('colonia').setValue(res.colonia)
+        this.clienteInformacion.get('domicilio').setValue(res.domicilio)
+        this.clienteInformacion.get('num_dom').setValue(res.num_dom)
+        this.clienteInformacion.get('municipio').setValue(res.municipio)
+        this.clienteInformacion.get('estado').setValue(res.estado)
+      }
     } else if (this.segment == 'Basculas') {
       this.storageService.getValue('infoBasculas').then(res => {
         if (res != undefined) {
@@ -552,34 +563,57 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   loadInfoVisuales(event: any) {
     const infoBascula = event.detail.value;
+    console.log(infoBascula)
 
     if (infoBascula) {
-      const inspecciones = [this.storageInfoVisual];
-      const result = inspecciones.find((item: any) => item.basculaInspeccion.alcance_max == infoBascula.alcance_max &&
-        item.basculaInspeccion.marca == infoBascula.marca &&
-        item.basculaInspeccion.modelo == infoBascula.modelo &&
-        item.basculaInspeccion.no_serie == infoBascula.no_serie &&
-        item.basculaInspeccion.tipo_bascula == infoBascula.tipo_bascula &&
-        item.basculaInspeccion.clase == infoBascula.clase &&
-        item.basculaInspeccion.divi_max == infoBascula.divi_max
-      )
+      var inspecciones = this.storageInfoVisual;
 
-      if (result) {
-        this.inspeccionVisual.get('IV1').setValue(result.IV1)
-        this.inspeccionVisual.get('IV2').setValue(result.IV2)
-        this.inspeccionVisual.get('IV3').setValue(result.IV3)
-        this.inspeccionVisual.get('IV4').setValue(result.IV4)
-        this.inspeccionVisual.get('IV5').setValue(result.IV5)
-        this.inspeccionVisual.get('IV6').setValue(result.IV6)
-        this.inspeccionVisual.get('IV7').setValue(result.IV7)
-        this.inspeccionVisual.get('IV8').setValue(result.IV8)
-        this.inspeccionVisual.get('IV9').setValue(result.IV9)
-        this.inspeccionVisual.get('IV10').setValue(result.IV10)
-        this.inspeccionVisual.get('IV11').setValue(result.IV11)
-        this.inspeccionVisual.get('IV12').setValue(result.IV12)
-        this.inspeccionVisual.get('IV13').setValue(result.IV13)
-        this.inspeccionVisual.get('ObervacionesInspeccionVisual').setValue(result.ObervacionesInspeccionVisual)
+      if (inspecciones.length != 0) {
+        inspecciones = [inspecciones]
+        const result = inspecciones.find((item: any) => item.basculaInspeccion.alcance_max == infoBascula.alcance_max &&
+          item.basculaInspeccion.marca == infoBascula.marca &&
+          item.basculaInspeccion.modelo == infoBascula.modelo &&
+          item.basculaInspeccion.no_serie == infoBascula.no_serie &&
+          item.basculaInspeccion.tipo_bascula == infoBascula.tipo_bascula &&
+          item.basculaInspeccion.clase == infoBascula.clase &&
+          item.basculaInspeccion.divi_max == infoBascula.divi_max
+        )
+
+        if (result) {
+          this.inspeccionVisual.get('bascula').setValue(infoBascula)
+          this.inspeccionVisual.get('IV1').setValue(result.IV1)
+          this.inspeccionVisual.get('IV2').setValue(result.IV2)
+          this.inspeccionVisual.get('IV3').setValue(result.IV3)
+          this.inspeccionVisual.get('IV4').setValue(result.IV4)
+          this.inspeccionVisual.get('IV5').setValue(result.IV5)
+          this.inspeccionVisual.get('IV6').setValue(result.IV6)
+          this.inspeccionVisual.get('IV7').setValue(result.IV7)
+          this.inspeccionVisual.get('IV8').setValue(result.IV8)
+          this.inspeccionVisual.get('IV9').setValue(result.IV9)
+          this.inspeccionVisual.get('IV10').setValue(result.IV10)
+          this.inspeccionVisual.get('IV11').setValue(result.IV11)
+          this.inspeccionVisual.get('IV12').setValue(result.IV12)
+          this.inspeccionVisual.get('IV13').setValue(result.IV13)
+          this.inspeccionVisual.get('ObervacionesInspeccionVisual').setValue(result.ObervacionesInspeccionVisual)
+        }
+      }else if(inspecciones.length == 0 && infoBascula.tipo_bascula == "E"){
+          this.inspeccionVisual.get('bascula').setValue(infoBascula)
+          this.inspeccionVisual.get('IV1').setValue("C")
+          this.inspeccionVisual.get('IV2').setValue("C")
+          this.inspeccionVisual.get('IV3').setValue("C")
+          this.inspeccionVisual.get('IV4').setValue("C")
+          this.inspeccionVisual.get('IV5').setValue("C")
+          this.inspeccionVisual.get('IV6').setValue("C")
+          this.inspeccionVisual.get('IV7').setValue("C")
+          this.inspeccionVisual.get('IV8').setValue("C")
+          this.inspeccionVisual.get('IV9').setValue("C")
+          this.inspeccionVisual.get('IV10').setValue("C")
+          this.inspeccionVisual.get('IV11').setValue("C")
+          this.inspeccionVisual.get('IV12').setValue("C")
+          this.inspeccionVisual.get('IV13').setValue("C")
+          this.inspeccionVisual.get('ObervacionesInspeccionVisual').setValue("CUMPLE")
       }
+
 
     }
   }
@@ -606,6 +640,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   infoBasculaResumen(e: any) {
     this.basculaResumen = e.detail.value;
+    console.log(e.detail.value)
 
     if (this.basculaResumen) {
       const bascula = e.detail.value;
