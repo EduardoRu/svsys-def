@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, FormGroup, Validators, FormArray } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController, ModalController } from '@ionic/angular';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -171,8 +171,28 @@ export class GenerarReporteDesktopComponent implements OnInit {
       emt8: [{ value: '' }],
       emt9: [{ value: '' }],
       emt10: [{ value: '' }],
+      observaciones: ['', Validators.required],
+      ejemplo1: [[], Validators.required]
+    });
+
+    // ESTUDIO METRO 2.0
+    /*
+    this.estudioMtro = this.fb.group({
+      infoBascula: [[], Validators.required],
+      infoRepetibilidad: [[], Validators.required],
+      cargaUno: [[], Validators.required],
+      cargaDos: [[], Validators.required],
+      cargaTres: [[], Validators.required],
+      cargaCuatro: [[], Validators.required],
+      cargaCinco: [[], Validators.required],
+      cargaSeis: [[], Validators.required],
+      cargaSiete: [[], Validators.required],
+      cargaOcho: [[], Validators.required],
+      cargaNueve: [[], Validators.required],
+      cargaDiez: [[], Validators.required],
       observaciones: ['', Validators.required]
     });
+    */
 
     // Resumen
     this.resumen = this.fb.group({
@@ -396,6 +416,35 @@ export class GenerarReporteDesktopComponent implements OnInit {
     } else {
       this.presentAlert('Todos los campos son obligatorios para generar un registro de las basculas');
     }
+  }
+
+  async almacenarCargas(nomCarga:string,valor:string, data:any) {
+    const cargas = [
+      {cargaUno: 
+        {carga:'', emt:'', errASC:'', errDSC:'', num50:'', num100:'', den50:'', den100:'', emt13:''}
+      },
+      {cargaDos: 
+        {carga:'', emt:'', errASC:'', errDSC:'', num50:'', num100:'', den50:'', den100:'', emt13:''}
+      },
+      {cargaTres: 
+        {carga:'', emt:'', errASC:'', errDSC:'', num50:'', num100:'', den50:'', den100:'', emt13:''}
+      },
+    ];
+    
+    cargas[
+      nomCarga == 'cargaUno'? 0: 
+      nomCarga == 'cargaDos'? 1: 
+      nomCarga == 'cargaTres'? 2: 
+      nomCarga == 'cargaCuatro'? 3: 
+      nomCarga == 'cargaQuinto'? 4:
+      nomCarga == 'cargaSeis'? 5:
+      nomCarga == 'cargaSiete'? 6:
+      nomCarga == 'cargaOcho'? 7:
+      nomCarga == 'cargaNueve'? 8:
+      nomCarga == 'cargaDiez'? 9: null
+    ][nomCarga][valor] = data.detail.value;
+    
+   console.log(cargas);
   }
 
 
