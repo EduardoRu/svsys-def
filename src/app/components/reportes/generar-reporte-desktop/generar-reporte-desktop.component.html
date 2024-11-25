@@ -497,36 +497,85 @@
         <div class="row">
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="alc_max">
+              <input type="text" class="form-control" id="floatingtelefono">
               <label for="floatingtelefono">Alcance Máximo</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="divi_max">
+              <input type="text" class="form-control" id="floatingtelefono">
               <label for="floatingtelefono">Divisón mínima</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="clase_ex">
+              <input type="text" class="form-control" id="floatingtelefono">
               <label for="floatingtelefono">Clase de exactitud</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="precarga">
+              <input type="text" class="form-control" id="floatingtelefono">
               <label for="floatingtelefono">Precarga 100% de Máx</label>
             </div>
           </div>
         </div>
         <hr>
+        <h1 class="text-center">Repetibilidad</h1>
+        <div>
+          <table class="table table-striped table-hover" >
+            <thead>
+              <tr class="text-center">
+                <th></th>
+                <th>50% de Máx</th>
+                <th>100% de Máx</th>
+                <th>50% de Máx</th>
+                <th>100% de Máx</th>
+                <th>1/3 de Máx</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th></th>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+              </tr>
+              <tr class="text-center">
+                <th></th>
+                <th>Diferencia</th>
+                <th>Diferencia</th>
+                <th>Diferencia</th>
+                <th>Diferencia</th>
+                <th>EMT</th>
+              </tr>
+              <tr>
+                <th></th>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+                <td><input type="number" class="form-control" id="floatingInput"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr>
         <div class="row">
-          <div class="col-md-6">
-            <h1 class="text-center">
-              Exactitud
-            </h1>
-            <div class="table-responsive" style="padding-top: 165px;">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <h1 class="text-center">
+                  Exactitud
+                </h1>
+              </div>
+              <div class="col-md-6">
+                <h1 class="text-center">Repetibilidad</h1>
+              </div>
+            </div>
+            <div class="table-responsive">
               <table class="table table-striped table-hover">
                 <thead>
                   <tr class="text-center">
@@ -535,297 +584,51 @@
                     <th>EMT (g)</th>
                     <th>Error +/- (g) <br> ASCENDIENTE</th>
                     <th>Error +/- (g) <br> DESCENDIENTE</th>
+                    <th></th>
+                    <th>Error +/- (g)</th>
+                    <th>Error +/- (g)</th>
+                    <th>Error +/- (g)</th>
+                    <th>Error +/- (g)</th>
+                    <th>Error +/- (g)</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th>1</th>
+                <tbody formArrayName="ejemplo1">
+                  <tr *ngFor="let item of ejemplo1.controls; let i = index" [formGroupName]="i">
+                    <th>{{ i + 1 }}</th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'carga',$event)"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'carga',$event)" formControlName="carga"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'emt',$event)"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'emt',$event)" formControlName="emt"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'errASC',$event)"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'errASC',$event)" formControlName="errASC"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'errDSC',$event)"></ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>2</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'errDSC',$event)" formControlName="errDSC"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"></ion-input>
+                      
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'num50',$event)" formControlName="num50"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"></ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>3</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'num100',$event)" formControlName="num100"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'den50',$event)" formControlName="den50"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'den100',$event)" formControlName="den100"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput" (ionChange)="almacenarCargas('cargaUno', 'emt13',$event)" formControlName="emt13"></ion-input>
                     </th>
                   </tr>
-                  <tr>
-                    <th>4</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>5</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>6</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>7</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>8</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>9</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>10</th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" > </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                    <th>
-                      <ion-input type="number" class="form-control" id="floatingInput"> </ion-input>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h1 class="text-center">Repetibilidad</h1>
 
-            <div class="table-responsive">
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr class="text-center">
-                    <th></th>
-                    <th>50% de Máx</th>
-                    <th>100% de Máx</th>
-                    <th>50% de Máx</th>
-                    <th>100% de Máx</th>
-                    <th>1/3 de Máx</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th></th>
-                    <td><input type="number" class="form-control" id="floatingInput" formControlName="repeCarga1"></td>
-                    <td><input type="number" class="form-control" id="floatingInput" formControlName="repeCarga2"></td>
-                    <td><input type="number" class="form-control" id="floatingInput" formControlName="repeCarga3"></td>
-                    <td><input type="number" class="form-control" id="floatingInput" formControlName="repeCarga4"></td>
-                    <td><input type="number" class="form-control" id="floatingInput" formControlName="repeCarga5"></td>
-                  </tr>
-                  <tr class="text-center">
-                    <th></th>
-                    <th>Diferencia</th>
-                    <th>Diferencia</th>
-                    <th>Diferencia</th>
-                    <th>Diferencia</th>
-                    <th>EMT</th>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr class="text-center">
-                    <th></th>
-                    <th>Error +/- (g)</th>
-                    <th>Error +/- (g)</th>
-                    <th>Error +/- (g)</th>
-                    <th>Error +/- (g)</th>
-                    <th>Error +/- (g)</th>
-                  </tr>
-                  <tr>
-                    <th>1</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>2</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>3</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>4</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>5</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>6</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>7</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>8</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>9</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-                  <tr>
-                    <th>10</th>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                    <td><input type="number" class="form-control" id="floatingInput"></td>
-                  </tr>
-    
                 </tbody>
               </table>
-    
-              <hr>
-              
             </div>
           </div>
           <ion-textarea label="Observaciones del inspector" labelPlacement="floating" fill="outline"

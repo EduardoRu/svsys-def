@@ -59,6 +59,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
   infoPago: FormGroup;
   storageInfoPago: any = []
 
+  // INFO METROLOGICA
+  cargas: any;
+
   constructor(
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
@@ -76,6 +79,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
     });
 
     await alert.present();
+  }
+
+  get ejemplo1(): FormArray {
+    return this.estudioMtro.get('ejemplo1') as FormArray;
   }
 
   async ngOnInit() {
@@ -146,33 +153,119 @@ export class GenerarReporteDesktopComponent implements OnInit {
       alc_max: [''],
       divi_max: [''],
       clase_ex: [''],
-      carga1: [{ value: '' }],
-      carga2: [{ value: '' }],
-      carga3: [{ value: '' }],
-      carga4: [{ value: '' }],
-      carga5: [{ value: '' }],
-      carga6: [{ value: '' }],
-      carga7: [{ value: '' }],
-      carga8: [{ value: '' }],
-      carga9: [{ value: '' }],
-      carga10: [{ value: '' }],
-      repeCarga1: [{ value: '' }],
-      repeCarga2: [{ value: '' }],
-      repeCarga3: [{ value: '' }],
-      repeCarga4: [{ value: '' }],
-      repeCarga5: [{ value: '' }],
-      emt1: [{ value: '' }],
-      emt2: [{ value: '' }],
-      emt3: [{ value: '' }],
-      emt4: [{ value: '' }],
-      emt5: [{ value: '' }],
-      emt6: [{ value: '' }],
-      emt7: [{ value: '' }],
-      emt8: [{ value: '' }],
-      emt9: [{ value: '' }],
-      emt10: [{ value: '' }],
       observaciones: ['', Validators.required],
-      ejemplo1: [[], Validators.required]
+      ejemplo1: this.fb.array([
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        }),
+        this.fb.group({
+          carga: [''],
+          emt: [''],
+          errASC: [''],
+          errDSC: [''],
+          num50: [''],
+          num100: [''],
+          den50: [''],
+          den100: [''],
+          emt13: [''],
+        })
+      ]), // <-- Definimos el FormArray aquí
     });
 
     // ESTUDIO METRO 2.0
@@ -229,6 +322,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }, 1000); // Espera 1 segundo antes de ejecutar la función
   }
 
+  
+
 
   async infoClientes() {
     return this.citasService.getCitaProgramada().subscribe({
@@ -266,7 +361,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
 
     if (this.segment === 'infoClientes') {
-      const res: any = await this.storageService.getValue('infoClientes').then(res => {return res});
+      const res: any = await this.storageService.getValue('infoClientes').then(res => { return res });
       console.log(res)
       if (res != undefined) {
         this.clienteInformacion.get('nombre_razon_social').setValue(res.nombre_razon_social)
@@ -418,33 +513,64 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  async almacenarCargas(nomCarga:string,valor:string, data:any) {
-    const cargas = [
-      {cargaUno: 
-        {carga:'', emt:'', errASC:'', errDSC:'', num50:'', num100:'', den50:'', den100:'', emt13:''}
+  async almacenarCargas(nomCarga: string, valor: string, data: any) {
+    this.cargas = [
+      {
+        cargaUno:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
       },
-      {cargaDos: 
-        {carga:'', emt:'', errASC:'', errDSC:'', num50:'', num100:'', den50:'', den100:'', emt13:''}
+      {
+        cargaDos:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
       },
-      {cargaTres: 
-        {carga:'', emt:'', errASC:'', errDSC:'', num50:'', num100:'', den50:'', den100:'', emt13:''}
+      {
+        cargaTres:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaCuatro:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaQuinto:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaSeis:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaSiete:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaOcho:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaNueve:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
+      },
+      {
+        cargaDiez:
+          { carga: '', emt: '', errASC: '', errDSC: '', num50: '', num100: '', den50: '', den100: '', emt13: '' }
       },
     ];
-    
-    cargas[
-      nomCarga == 'cargaUno'? 0: 
-      nomCarga == 'cargaDos'? 1: 
-      nomCarga == 'cargaTres'? 2: 
-      nomCarga == 'cargaCuatro'? 3: 
-      nomCarga == 'cargaQuinto'? 4:
-      nomCarga == 'cargaSeis'? 5:
-      nomCarga == 'cargaSiete'? 6:
-      nomCarga == 'cargaOcho'? 7:
-      nomCarga == 'cargaNueve'? 8:
-      nomCarga == 'cargaDiez'? 9: null
+
+    this.cargas[
+      nomCarga == 'cargaUno' ? 0 :
+        nomCarga == 'cargaDos' ? 1 :
+          nomCarga == 'cargaTres' ? 2 :
+            nomCarga == 'cargaCuatro' ? 3 :
+              nomCarga == 'cargaQuinto' ? 4 :
+                nomCarga == 'cargaSeis' ? 5 :
+                  nomCarga == 'cargaSiete' ? 6 :
+                    nomCarga == 'cargaOcho' ? 7 :
+                      nomCarga == 'cargaNueve' ? 8 :
+                        nomCarga == 'cargaDiez' ? 9 : null
     ][nomCarga][valor] = data.detail.value;
-    
-   console.log(cargas);
+
+    console.log(this.cargas);
   }
 
 
@@ -645,22 +771,22 @@ export class GenerarReporteDesktopComponent implements OnInit {
           this.inspeccionVisual.get('IV13').setValue(result.IV13)
           this.inspeccionVisual.get('ObervacionesInspeccionVisual').setValue(result.ObervacionesInspeccionVisual)
         }
-      }else if(inspecciones.length == 0 && infoBascula.tipo_bascula == "E"){
-          this.inspeccionVisual.get('bascula').setValue(infoBascula)
-          this.inspeccionVisual.get('IV1').setValue("C")
-          this.inspeccionVisual.get('IV2').setValue("C")
-          this.inspeccionVisual.get('IV3').setValue("C")
-          this.inspeccionVisual.get('IV4').setValue("C")
-          this.inspeccionVisual.get('IV5').setValue("C")
-          this.inspeccionVisual.get('IV6').setValue("C")
-          this.inspeccionVisual.get('IV7').setValue("C")
-          this.inspeccionVisual.get('IV8').setValue("C")
-          this.inspeccionVisual.get('IV9').setValue("C")
-          this.inspeccionVisual.get('IV10').setValue("C")
-          this.inspeccionVisual.get('IV11').setValue("C")
-          this.inspeccionVisual.get('IV12').setValue("C")
-          this.inspeccionVisual.get('IV13').setValue("C")
-          this.inspeccionVisual.get('ObervacionesInspeccionVisual').setValue("CUMPLE")
+      } else if (inspecciones.length == 0 && infoBascula.tipo_bascula == "E") {
+        this.inspeccionVisual.get('bascula').setValue(infoBascula)
+        this.inspeccionVisual.get('IV1').setValue("C")
+        this.inspeccionVisual.get('IV2').setValue("C")
+        this.inspeccionVisual.get('IV3').setValue("C")
+        this.inspeccionVisual.get('IV4').setValue("C")
+        this.inspeccionVisual.get('IV5').setValue("C")
+        this.inspeccionVisual.get('IV6').setValue("C")
+        this.inspeccionVisual.get('IV7').setValue("C")
+        this.inspeccionVisual.get('IV8').setValue("C")
+        this.inspeccionVisual.get('IV9').setValue("C")
+        this.inspeccionVisual.get('IV10').setValue("C")
+        this.inspeccionVisual.get('IV11').setValue("C")
+        this.inspeccionVisual.get('IV12').setValue("C")
+        this.inspeccionVisual.get('IV13').setValue("C")
+        this.inspeccionVisual.get('ObervacionesInspeccionVisual').setValue("CUMPLE")
       }
 
 
