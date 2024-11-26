@@ -918,7 +918,35 @@ export class GenerarReporteDesktopComponent implements OnInit {
     const infoBasculas = await this.storageService.getValue('infoBasculas');
     const estudioMtro = await this.storageService.getValue('estudioMtro');
 
-    console.log(estudioMtro)
+    var estudioMtroDatos: any = [];
+
+    for (let i = 0; i < estudioMtro.ejemplo1.length; i++) {
+      const element = estudioMtro.ejemplo1[i];
+
+      const auxDatos =
+        [
+          { text: i + 1, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].carga, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].emt, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].errASC, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].errDSC, fontSize: 8, alignment: 'center' },
+          {},
+          {},
+          {},
+          {},
+          { text: estudioMtro.ejemplo1[i].den50, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].den100, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].num50, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].num100, fontSize: 8, alignment: 'center' },
+          { text: estudioMtro.ejemplo1[i].emt13, fontSize: 8, alignment: 'center' },
+        ]
+
+      estudioMtroDatos.push(auxDatos);
+    }
+
+    console.log(estudioMtroDatos)
+
+
 
     if (
       infoCliente && infoPago && infoVisuales && encuesta
@@ -1474,12 +1502,12 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   { text: estudioMtro.alc_max + ' kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                   { text: [estudioMtro.divi_max + 'g'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                   { text: estudioMtro.clase_ex, colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                  { text: [estudioMtro.carga10 + 'kg'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                  { text: ['50% DE MÁX\n' + estudioMtro.repeCarga1], fontSize: 6, alignment: 'center' },
-                  { text: ['100% DE MÁX\n' + estudioMtro.repeCarga2], fontSize: 6, alignment: 'center' },
-                  { text: ['50% DE MÁX\n' + estudioMtro.repeCarga3], fontSize: 6, alignment: 'center' },
-                  { text: ['50% DE MÁ\n' + estudioMtro.repeCarga4], fontSize: 6, alignment: 'center' },
-                  { text: ['1/3 DE MÁX \n' + estudioMtro.repeCarga5], fontSize: 7, alignment: 'center' }
+                  { text: [estudioMtro.precarga + 'kg'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                  { text: ['50% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep50num], fontSize: 6, alignment: 'center' },
+                  { text: ['100% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep100num], fontSize: 6, alignment: 'center' },
+                  { text: ['50% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep50den], fontSize: 6, alignment: 'center' },
+                  { text: ['50% DE MÁ\n' + estudioMtro.infoRepetibilidad[0].rep100den], fontSize: 6, alignment: 'center' },
+                  { text: ['1/3 DE MÁX \n' + estudioMtro.infoRepetibilidad[0].rep13den], fontSize: 7, alignment: 'center' }
                 ],
                 [
                   { text: 'EXACTITUD', fontSize: 10.5, colSpan: 9, alignment: 'center' },
@@ -1487,11 +1515,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   {}, {},
                   {}, {},
                   {}, {},
-                  { text: 'Diferencia', fontSize: 8, alignment: 'center' },
-                  { text: 'Diferencia', fontSize: 8, alignment: 'center' },
-                  { text: 'Diferencia', fontSize: 8, alignment: 'center' },
-                  { text: 'Diferencia', fontSize: 8, alignment: 'center' },
-                  { text: 'EMT', fontSize: 10, alignment: 'center' }
+                  { text: 'Diferencia\n' + estudioMtro.infoRepetibilidad[0].diferenciaUno, fontSize: 8, alignment: 'center' },
+                  { text: 'Diferencia\n' + estudioMtro.infoRepetibilidad[0].diferenciaDos, fontSize: 8, alignment: 'center' },
+                  { text: 'Diferencia\n' + estudioMtro.infoRepetibilidad[0].diferenciaTres, fontSize: 8, alignment: 'center' },
+                  { text: 'Diferencia\n' + estudioMtro.infoRepetibilidad[0].diferenciaCuatro, fontSize: 8, alignment: 'center' },
+                  { text: 'EMT\n' + estudioMtro.infoRepetibilidad[0].emt13den, fontSize: 10, alignment: 'center' }
                 ],
                 [
                   {},
@@ -1509,166 +1537,26 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   { text: 'Error +/- (g)', fontSize: 7, alignment: 'center' },
                   { text: 'Error +/- (g)', fontSize: 7, alignment: 'center' }
                 ],
-                [
-                  { text: '1', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga1, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt1, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '2', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga2, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt2, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '3', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga3, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt3, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '4', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga4, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt4, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '5', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga5, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt5, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '6', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga6, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt6, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '7', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga7, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt7, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '8', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga8, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt8, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '9', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga9, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt9, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
-                [
-                  { text: '10', fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.carga10, fontSize: 8, alignment: 'center' },
-                  { text: estudioMtro.emt10, fontSize: 8, alignment: 'center' },
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                  {},
-                ],
+                estudioMtroDatos[0]
+                ,
+                estudioMtroDatos[1]
+                ,
+                estudioMtroDatos[2]
+                ,
+                estudioMtroDatos[3]
+                ,
+                estudioMtroDatos[4]
+                ,
+                estudioMtroDatos[5]
+                ,
+                estudioMtroDatos[6]
+                ,
+                estudioMtroDatos[7]
+                ,
+                estudioMtroDatos[8]
+                ,
+                estudioMtroDatos[9]
+                ,
                 [
                   { text: 'Las cargas de pruebas seleccionadas deben incluir [Máx] y [Mín], y valores cercanos a puntos en los cuales cambian los errores máximos tolerados [EMT]. Para facilitar considere el utilizar lo menos posible pesas fraccionarias y así evitar el apilamiento de pesas pequeñas aunque no coincidan aritméticamente el porcentaje.', fontSize: 8, colSpan: 9 },
                   {},
@@ -1761,12 +1649,12 @@ export class GenerarReporteDesktopComponent implements OnInit {
             columns: [
               {
                 width: '75%',
-                text: 'Razón Social y/o nombre: ____________________________________________________________________________________________________',
+                text: 'Razón Social y/o nombre: ' + infoCliente.nombre_razon_social,
                 fontSize: 10
               },
               {
                 wdith: '*',
-                text: 'R.F.C: ____________________________________',
+                text: 'R.F.C: ' + infoCliente.rfc,
                 fontSize: 10
               }
             ]
@@ -1957,50 +1845,49 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     bold: true,
                     alignment: 'center',
                     fontSize: 8,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
+                    margin: [0, 80, 0, 0]
                   }, {
                     text: 'MODELO',
                     bold: true,
                     alignment: 'center',
                     fontSize: 8,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
+                    margin: [0, 80, 0, 0]
                   }, {
                     text: 'No. SERIE',
                     bold: true,
                     alignment: 'center',
                     fontSize: 8,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
+                    margin: [0, 80, 0, 0]
                   }, {
                     text: 'DIVISIÓN MÍNIMA (g)',
                     bold: true,
                     alignment: 'center',
                     fontSize: 7,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
+                    margin: [0, 80, 0, 0]
                   }, {
                     text: 'ALCANCE MÁXIMO\nDE MEDICIÓN (kg)',
                     bold: true,
                     alignment: 'center',
                     fontSize: 6.5,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
+                    margin: [0, 80, 0, 0]
                   }, {
                     text: 'CLASE DE EXACTITUD',
                     bold: true,
                     alignment: 'center',
                     fontSize: 6.5,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
+                    margin: [0, 80, 0, 0]
                   }, {
                     text: 'TIPO DE INSTRUMENTO\n(M)\n MECÁNICO\n(E)\nELECTRÓNICO\n(H)\nHIBRIDO',
                     bold: true,
                     alignment: 'center',
                     fontSize: 6,
-                    margin: [0, 20],
-                    rowSpan: 4
+                    rowSpan: 4,
                   }, {
                     text: 'INSPECCIÓN VISUAL',
                     fontSize: 8,
@@ -2029,13 +1916,13 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   }, {}
                 ],
                 [{}, {}, {}, {}, {}, {}, {}, {
-                  text: 'CUMPLE'.split('').join('\n'),
+                  text: 'CUMPLE',
                   rowSpan: 3,
                   fontSize: 6,
                   alignment: 'center',
                   bold: true
                 }, {
-                  text: 'NO CUMPLE'.split('').join('\n'),
+                  text: 'NO CUMPLE',
                   rowSpan: 3,
                   fontSize: 6,
                   alignment: 'center',
@@ -2060,14 +1947,14 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   fontSize: 6,
                   alignment: 'center',
                   bold: true,
-                  margin: [0, 40]
+                  margin: [0, 0]
                 }, {
                   text: 'NO CUMPLE',
                   rowSpan: 3,
                   fontSize: 6,
                   alignment: 'center',
                   bold: true,
-                  margin: [0, 35]
+                  margin: [0, 0]
                 }, {
                   text: 'UI',
                   rowSpan: 3,
@@ -2363,7 +2250,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
             margin: [10, 0, 0, 0],
             pageOrientation: 'portrait', pageBreak: 'after'
           },
-          
+
           {
             text: 'ENCUESTA DE SATSIFACCIÓN DE CLIENTES',
             fontSize: 15,
