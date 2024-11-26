@@ -56,6 +56,10 @@ const routes: Routes = [
     path: 'pruebassql',
     loadChildren: () => import('./pages/pruebassql/pruebassql.module').then( m => m.PruebassqlPageModule)
   },
+  {
+    path: 'location',
+    loadChildren: () => import('./location/location.module').then( m => m.LocationPageModule)
+  },
 ];
 
 @NgModule({
