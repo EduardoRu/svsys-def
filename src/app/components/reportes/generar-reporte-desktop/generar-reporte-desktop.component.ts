@@ -1866,9 +1866,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   }, {
                     text: 'PROFECO',
                     rowSpan: 2,
-                    fontSize: 6,
+                    fontSize: 8,
                     alignment: 'center',
-                    bold: true
+                    bold: true,
+                    margin:[0,5,0,0]
                   }],
                   [{}, {}, {}, {}, {}, {}, {}, {
                     text:'',
@@ -1901,7 +1902,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     alignment: 'center',
                     bold: true,
                     border: [true, false, false, false],
-                    margin: [0,30,0,30]
+                    margin: [0,25,0,25]
                   }, {
                     text: 'EXACTITUD'.split('').join('\n'),
                     fontSize: 5,
@@ -1947,7 +1948,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     alignment: 'center',
                     bold: true,
                     border: [true, false, false, false],
-                    margin: [0,30,0,30]
+                    margin: [0,25,0,25]
                   }, {
                     text:'UI',
                     rowSpan: 1,
@@ -1958,9 +1959,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     margin: [0,30,0,30]
                   }, {
                     text: infoResumen.prdfeco,
-                    fontSize: 5,
+                    fontSize: 7,
                     alignment: 'center',
-                    bold: true
+                    bold: true,
+                    margin: [0,25,0,25]
                   }],
                   [{
                     text: '1 ' + infoResumen.basculaResumen.modelo,
@@ -2043,10 +2045,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
                   return 2; // Espacio derecho
                 },
                 hLineWidth: function (i, node) {
-                  return 0.5; // Grosor de líneas horizontales
+                  return 1; // Grosor de líneas horizontales
                 },
                 vLineWidth: function (i, node) {
-                  return 0.5; // Grosor de líneas verticales
+                  return 1; // Grosor de líneas verticales
                 }
               }
             },
