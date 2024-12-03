@@ -1118,7 +1118,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
                       bold: true,
                       alignment: 'center',
                       fontSize: 10,
-                      margin: [0, 2]
+                      margin: [0, 20]
                     }
                   ],
                   [
@@ -1759,48 +1759,52 @@ export class GenerarReporteDesktopComponent implements OnInit {
                       alignment: 'center',
                       fontSize: 8,
                       rowSpan: 4,
+                      margin: [0, 60, 0, 50]
                     }, {
                       text: 'MODELO',
                       bold: true,
                       alignment: 'center',
                       fontSize: 8,
                       rowSpan: 4,
+                      margin: [0, 60, 0, 50]
                     }, {
                       text: 'No. SERIE',
                       bold: true,
                       alignment: 'center',
                       fontSize: 8,
                       rowSpan: 4,
+                      margin: [0, 60, 0, 50]
                     }, {
                       text: 'DIVISIÓN MÍNIMA (g)',
                       bold: true,
                       alignment: 'center',
                       fontSize: 7,
                       rowSpan: 4,
+                      margin: [0, 50, 0, 50]
                     }, {
                       text: 'ALCANCE MÁXIMO\nDE MEDICIÓN (kg)',
                       bold: true,
                       alignment: 'center',
                       fontSize: 6.5,
                       rowSpan: 4,
+                      margin: [0, 45, 0, 50]
                     }, {
                       text: 'CLASE DE EXACTITUD',
                       bold: true,
                       alignment: 'center',
                       fontSize: 6.5,
                       rowSpan: 4,
+                      margin: [0, 55, 0, 50]
                     }, {
-                      text: 'TIPO DE INSTRUMENTO\n(M)\n MECÁNICO\n(E)\nELECTRÓNICO\n(H)\nHIBRIDO',
-                      bold: true,
-                      alignment: 'center',
-                      fontSize: 7,
-                      rowSpan: 4,
+                      text:'',
+                      border: [false, false, false, false]
                     }, {
                       text: 'INSPECCIÓN VISUAL',
                       fontSize: 7,
                       colSpan: 2,
                       alignment: 'center',
-                      bold: true
+                      bold: true,
+                      margin:[0,5,0,0]
                     }, {}, {
                       text: 'INSPECCIÓN DE PROPIEDADES METROLOGICAS',
                       fontSize: 7,
@@ -1812,27 +1816,30 @@ export class GenerarReporteDesktopComponent implements OnInit {
                       fontSize: 7,
                       bold: true,
                       alignment: 'center',
-                      colSpan: 2
+                      colSpan: 2,
+                      margin:[0,10,0,0]
                     }, {}, {
                       text: 'FOLIOS',
                       fontSize: 7,
                       bold: true,
                       alignment: 'center',
-                      colSpan: 2
+                      colSpan: 2,
+                      margin:[0,10,0,0]
                     }, {}
                   ],
-                  [{}, {}, {}, {}, {}, {}, {}, {
-                    text: 'CUMPLE',
-                    rowSpan: 3,
-                    fontSize: 6,
-                    alignment: 'center',
-                    bold: true
+                  [{}, {}, {}, {}, {}, {}, {
+                    text: 'TIPO DE INSTRUMENTO\n(M)\n MECÁNICO\n(E)\nELECTRÓNICO\n(H)\nHIBRIDO',
+                      bold: true,
+                      alignment: 'center',
+                      fontSize: 7,
+                      rowSpan: 3,
+                      border: [false, false, false, false]
                   }, {
-                    text: 'NO CUMPLE',
-                    rowSpan: 3,
-                    fontSize: 6,
-                    alignment: 'center',
-                    bold: true
+                    text:'',
+                    border: [true, false, false, false]
+                  }, {
+                    text:'',
+                    border: [true, false, false, false]
                   }, {
                     text: 'CUMPLE',
                     rowSpan: 2,
@@ -1848,23 +1855,14 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     alignment: 'center',
                     bold: true
                   }, {}, {}, {
-                    text: 'CUMPLE',
-                    rowSpan: 3,
-                    fontSize: 6,
-                    alignment: 'center',
-                    bold: true,
+                    text:'',
+                    border: [true, false, false, false]
                   }, {
-                    text: 'NO CUMPLE',
-                    rowSpan: 3,
-                    fontSize: 6,
-                    alignment: 'center',
-                    bold: true,
+                    text:'',
+                    border: [true, false, false, false]
                   }, {
-                    text: 'UI',
-                    rowSpan: 3,
-                    fontSize: 6,
-                    alignment: 'center',
-                    bold: true
+                    text:'',
+                    border: [true, false, false, false]
                   }, {
                     text: 'PROFECO',
                     rowSpan: 2,
@@ -1872,40 +1870,95 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     alignment: 'center',
                     bold: true
                   }],
-                  [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-                  [{}, {}, {}, {}, {}, {}, {}, {}, {}, {
-                    text: 'EXACTITUD',
+                  [{}, {}, {}, {}, {}, {}, {}, {
+                    text:'',
+                    border: [true, false, false, false]
+                  }, {
+                    text:'',
+                    border: [true, false, false, false]
+                  }, {}, {}, {}, {}, {}, {}, {
+                    text:'',
+                    border: [true, false, false, false]
+                  }, {
+                    text:'',
+                    border: [true, false, false, false]
+                  }, {
+                    text:'',
+                    border: [true, false, false, false]
+                  }, {}],
+                  [{}, {}, {}, {}, {}, {}, {}, {
+                    text:'CUMPLE',
+                    rowSpan: 1,
                     fontSize: 6,
                     alignment: 'center',
-                    bold: true
+                    bold: true,
+                    border: [true, false, false, false],
+                    margin: [0,30,0,30]
                   }, {
-                    text: 'REPETIBILIDAD',
-                    fontSize: 6.5,
-                    alignment: 'center',
-                    bold: true
-                  }, {
-                    text: 'EXCENTRICIDAD',
+                    text:'NO CUMPLE',
+                    rowSpan: 1,
                     fontSize: 6,
                     alignment: 'center',
+                    bold: true,
+                    border: [true, false, false, false],
+                    margin: [0,30,0,30]
+                  }, {
+                    text: 'EXACTITUD'.split('').join('\n'),
+                    fontSize: 5,
+                    alignment: 'center',
                     bold: true
                   }, {
-                    text: 'EXACTITUD',
+                    text: 'REPETIBILIDAD'.split('').join('\n'),
+                    fontSize: 5,
+                    alignment: 'center',
+                    bold: true
+                  }, {
+                    text: 'EXCENTRICIDAD'.split('').join('\n'),
+                    fontSize: 5,
+                    alignment: 'center',
+                    bold: true
+                  }, {
+                    text: 'EXACTITUD'.split('').join('\n'),
+                    fontSize: 5,
+                    alignment: 'center',
+                    bold: true
+                  }, {
+                    text: 'REPETIBILIDAD'.split('').join('\n'),
+                    fontSize: 5,
+                    alignment: 'center',
+                    bold: true
+                  }, {
+                    text: 'EXCENTRICIDAD'.split('').join('\n'),
+                    fontSize: 5,
+                    alignment: 'center',
+                    bold: true
+                  }, {
+                    text:'CUMPLE',
+                    rowSpan: 1,
                     fontSize: 6,
                     alignment: 'center',
-                    bold: true
+                    bold: true,
+                    border: [true, false, false, false],
+                    margin: [0,30,0,30]
                   }, {
-                    text: 'REPETIBILIDAD',
-                    fontSize: 6.5,
-                    alignment: 'center',
-                    bold: true
-                  }, {
-                    text: 'EXCENTRICIDAD',
+                    text:'NO\nCUMPLE',
+                    rowSpan: 1,
                     fontSize: 6,
                     alignment: 'center',
-                    bold: true
-                  }, {}, {}, {}, {
+                    bold: true,
+                    border: [true, false, false, false],
+                    margin: [0,30,0,30]
+                  }, {
+                    text:'UI',
+                    rowSpan: 1,
+                    fontSize: 8,
+                    alignment: 'center',
+                    bold: true,
+                    border: [true, false, false, false],
+                    margin: [0,30,0,30]
+                  }, {
                     text: infoResumen.prdfeco,
-                    fontSize: 6,
+                    fontSize: 5,
                     alignment: 'center',
                     bold: true
                   }],
@@ -1975,6 +2028,26 @@ export class GenerarReporteDesktopComponent implements OnInit {
                     fontSize: 8
                   }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
                 ]
+              },
+              layout: {
+                paddingTop: function (i, node) {
+                  return i === 0 ? 1 : 2; // Ajusta este valor para los títulos (primera fila)
+                },
+                paddingBottom: function (i, node) {
+                  return i === 0 ? 1 : 2; // Ajusta este valor para los títulos (primera fila)
+                },
+                paddingLeft: function (i, node) {
+                  return 2; // Espacio izquierdo
+                },
+                paddingRight: function (i, node) {
+                  return 2; // Espacio derecho
+                },
+                hLineWidth: function (i, node) {
+                  return 0.5; // Grosor de líneas horizontales
+                },
+                vLineWidth: function (i, node) {
+                  return 0.5; // Grosor de líneas verticales
+                }
               }
             },
             {
