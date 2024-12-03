@@ -60,6 +60,10 @@ const routes: Routes = [
     path: 'location',
     loadChildren: () => import('./location/location.module').then( m => m.LocationPageModule)
   },
+  {
+    path: 'vehi-equi',
+    loadChildren: () => import('./pages/vehi-equi/vehi-equi.module').then( m => m.VehiEquiPageModule)
+  },
 ];
 
 @NgModule({

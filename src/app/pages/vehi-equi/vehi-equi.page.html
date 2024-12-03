@@ -1,0 +1,67 @@
+<app-menu titulo="Vehiculos y equipos registrados"></app-menu>
+
+<ion-content [fullscreen]="true">
+  <div class="row">
+    <div class="col-md-6">
+      <ion-card>
+        <ion-card-header style="background-color: #211F20;">
+          <ion-card-title class="text-center" style="color: white;">
+            VEHICULOS
+            <div>
+              <ion-searchbar 
+              [debounce]="250" 
+              showCancelButton="always" 
+              mode="ios" color="light"
+              cancel-button-text="Borrar"
+              placeholder="Busca la placa de un vehiculo"
+              ></ion-searchbar>
+            </div>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="table-responsive">
+            
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="col-md-6">
+      <ion-card>
+        <ion-card-header style="background-color: #211F20;">
+          <ion-card-title class="text-center" style="color: white;">
+            EQUIPOS DE MEDICIÓN
+            <div>
+              <ion-searchbar 
+              [debounce]="250" 
+              showCancelButton="always" 
+              mode="ios" color="light"
+              cancel-button-text="Borrar"
+              placeholder="Busca un equipo"
+              ></ion-searchbar>
+            </div>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="table-responsive">
+            
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" color="primary">
+    <ion-fab-button color="primary">
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="primary" (click)="addNewCar()">
+        <ion-icon name="car-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="primary" (click)="addNewTool()">
+        <ion-icon name="construct-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>

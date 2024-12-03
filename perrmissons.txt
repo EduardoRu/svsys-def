@@ -1,0 +1,3 @@
+# PERMISOS QUE DEBO TENER PARA QUE CORRA EL PROMGRAMA DE MOMENTO SOLAMENTE HE UTILIZADO EL DE FILESISTEM
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

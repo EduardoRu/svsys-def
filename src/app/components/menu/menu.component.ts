@@ -54,6 +54,10 @@ export class MenuComponent  implements OnInit {
     this.router.navigate(['/mi-perfil'], {replaceUrl:true})
   }
 
+  rToVehEqui(){
+    this.router.navigate(['/vehi-equi'], {replaceUrl:true})
+  }
+
   logout(){
     this.auth.logout();
     this.router.navigate(['/login'], {replaceUrl:true});
