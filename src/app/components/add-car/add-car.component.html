@@ -10,3 +10,18 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+<ion-content>
+  <div>
+    <form (ngSubmit)="guardarAuto()" [formGroup]="auto">
+      <div>
+        <ion-textarea class="p-2" label="Ingresa la placa del vehiculo" labelPlacement="floating" fill="outline"
+        placeholder="Placa del vehiculo" [autoGrow]="true" formControlName="placa">
+      </ion-textarea>
+      </div>
+      <ion-button type="submit" expand="block" color="primary">Agregar</ion-button>
+      <hr>
+      <ion-button type="button" expand="block" (click)="cancel()" color="danger">Cancelar</ion-button>
+    </form>
+  </div>
+</ion-content>

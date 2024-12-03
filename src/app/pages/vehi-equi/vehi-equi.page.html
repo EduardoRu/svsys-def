@@ -20,7 +20,31 @@
         </ion-card-header>
         <ion-card-content>
           <div class="table-responsive">
-            
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">No. Vehiculo</th>
+                  <th scope="col">Placa</th>
+                  <th scope="col" class="text-center">Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of autos; let i = index">
+                  <ng-container *ngIf="i < 8">
+                    <th scope="row" class="center-elements-table" style="padding-top: 3%;">
+                      {{ i + 1 }}
+                    </th>
+                    <td class="center-elements-table" style="padding-top: 3%;">{{ item.placa }}</td>
+                    <td>
+                      <ion-button expand="block" color="primary" fill="clear"
+                        shape="round">
+                        Detalles
+                      </ion-button>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </ion-card-content>
       </ion-card>
