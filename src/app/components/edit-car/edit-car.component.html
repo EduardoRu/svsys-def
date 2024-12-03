@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Agrega un nuevo automovil - Placa
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <form (ngSubmit)="guardarAuto()" [formGroup]="auto">
+      <div>
+        <ion-textarea class="p-2" label="Ingresa la placa del vehiculo" labelPlacement="floating" fill="outline"
+        placeholder="Placa del vehiculo" [autoGrow]="true" formControlName="placa">
+      </ion-textarea>
+      </div>
+      <ion-button type="submit" expand="block" color="primary">Editar</ion-button>
+      <hr>
+      <ion-button type="button" expand="block" (click)="borrar()" color="danger">Borrar</ion-button>
+    </form>
+  </div>
+</ion-content>
