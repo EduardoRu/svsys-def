@@ -1,3 +1,127 @@
-<p>
-  add-tool works!
-</p>
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Agrega un nuevo equipo
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="row" style="margin: 1%; display: flex; align-items: stretch; height: 67vh;">
+    <div class="col-md-7" style="padding-right: 20px; border-right: 1px solid #000;">
+      <div>
+        <h5><b>Ingresa la información de un nuevo equipo (pesa)</b></h5>
+      </div>
+      <hr>
+      <div>
+        <form (ngSubmit)="agregarPesa()" [formGroup]="nuevaPesa">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatidentificacion" placeholder="ID del equipo"
+                  formControlName="identificacion">
+                <label for="floatidentificacion">Identificación</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floattipo_instrumento" placeholder="Tipo"
+                  formControlName="tipo_instrumento">
+                <label for="floattipo_instrumento">Tipo de instrumento</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatmarca" placeholder="Marca del equipo"
+                  formControlName="marca">
+                <label for="floatmarca">Marca</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatmodelo" placeholder="Modelo del equipo"
+                  formControlName="modelo">
+                <label for="floatmodelo">Modelo</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatno_serie" placeholder="Número de serie"
+                  formControlName="no_serie">
+                <label for="floatno_serie">Número de serie</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatcapacidad" placeholder="Capacidad del equipo"
+                  formControlName="capacidad">
+                <label for="floatcapacidad">Capacidad</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatclase_exactitud" placeholder="Clase del equipo"
+                  formControlName="clase_exactitud">
+                <label for="floatclase_exactitud">Clase de exactitud</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Escribe las observaciones del equipo"
+              id="floatingTextareaobservaciones" formControlName="observaciones" style="height: 100px"></textarea>
+            <label for="floatingTextareaobservaciones">Observaciones</label>
+          </div>
+
+          <hr>
+          <div>
+            <ion-button type="submit" expand="block" color="primary">Agregar equipo</ion-button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Columna derecha -->
+    <div class="col-md-5" style="padding-left: 20px;">
+      <div>
+        <h5><b>Ingresa tu archivo Excel (lista maestra)</b></h5>
+      </div>
+      <hr>
+      <div>
+        Para subir el contenido de varios equipos, verifica que antes de subir tu archivo Excel (lista maestra) las
+        columnas esten acomodadas de la siguiente manera:
+      </div>
+      <div class="mt-2 mb-2">
+        <img src="assets/orden_tabla.png" alt="">
+      </div>
+      <div class="mb-2">
+        Una vez estes seguro de haber colocado tus elementos correctamente, arrastra el archivo a la siguiente zona:
+      </div>
+      <div class="file-drop-area" (drop)="onFileDropped($event)" (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)">
+        <p *ngIf="!selectedFileName">Arrastra y suelta archivos aquí o <span>haz clic para seleccionarlos</span></p>
+        <p *ngIf="selectedFileName">Has seleccionado el archivo: <strong>{{ selectedFileName }}</strong></p>
+        <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+      </div>
+
+      <div class="mt-2">
+        Ahora da click en el boton para agregar la información:
+      </div>
+      <hr>
+      <div>
+        <ion-button type="button" expand="block" color="primary" (click)="agregarTodosLosDatos()">Agregar todos los datos</ion-button>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

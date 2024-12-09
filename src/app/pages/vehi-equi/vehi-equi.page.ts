@@ -47,7 +47,8 @@ export class VehiEquiPage implements OnInit {
 
   async addNewTool(){
     const modalTool = await this.modalController.create({
-      component: AddToolComponent
+      component: AddToolComponent,
+      cssClass: 'modalCitas'
     });
 
     modalTool.present();
