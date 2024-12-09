@@ -3,6 +3,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/firebase/auth/auth.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class LoginPage implements OnInit {
 		private loadingController: LoadingController,
 		private alertController: AlertController,
 		private authService: AuthService,
-		private router: Router
+		private router: Router,
+		private storageSerive:StorageService
   ) { }
 
   get email() {
@@ -38,12 +40,8 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-		const loading = await this.loadingController.create();
-		await loading.present();
 
 		const user = await this.authService.login(this.credenciales.value);
-		await loading.dismiss();
-
 		if (user) {
 			this.router.navigateByUrl('/panel-control', { replaceUrl: true });
 		} else {

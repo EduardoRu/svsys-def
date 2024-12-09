@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from 'src/app/services/firebase/auth/auth.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
   selector: 'app-menu',
@@ -22,12 +23,24 @@ export class MenuComponent  implements OnInit {
 
   @Input() titulo: string;
 
+  public userRole: string;
+
   constructor(
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private storageService: StorageService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    setTimeout(() => {
+      this.getUser();
+    }, 1000);
+  }
+
+  async getUser(){
+    const user = await this.storageService.getValue('usuario');
+    this.userRole = user.role;
+  }
 
 
   rToControlInformacion(){

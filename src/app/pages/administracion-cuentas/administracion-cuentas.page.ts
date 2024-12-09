@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/firebase/auth/auth.service';
 import { DetalleCuentaComponent } from 'src/app/components/adminCuentas/detalle-cuenta/detalle-cuenta.component';
 import { AgregarCuentaComponent } from 'src/app/components/adminCuentas/agregar-cuenta/agregar-cuenta.component';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -13,16 +13,29 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 export class AdministracionCuentasPage implements OnInit {
 
   public usuariosRegistrados:any = [];
+  public usuarioDetalles:any = [];
 
   constructor(
     private authService: AuthService,
     private modalController: ModalController,
     private alertController: AlertController,
-    private loadController: LoadingController
+    private loadController: LoadingController,
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {
     this.getInformacion();
+  }
+
+  async presentToast(mesage: string, position: 'top' | 'middle' | 'bottom', cl: "danger" | "success" | "warning") {
+    const toast = await this.toastController.create({
+      message: mesage,
+      duration: 1500,
+      position: position,
+      color: cl
+    });
+
+    await toast.present();
   }
 
   async getInformacion(){
@@ -46,15 +59,25 @@ export class AdministracionCuentasPage implements OnInit {
   }
 
   async detailUser(usuario:any){
-    const modalUserUpdate = await this.modalController.create({
-      component: DetalleCuentaComponent,
-      componentProps: {
-        usuario
-      },
-      cssClass: 'modalUsuarios'
-    });
+    this.usuarioDetalles = usuario;
+    console.log(this.usuarioDetalles);
+  }
 
-    modalUserUpdate.present();
+  async editUser(usuario:any){
+    if(usuario.length != 0){
+      const modalUserUpdate = await this.modalController.create({
+        component: DetalleCuentaComponent,
+        componentProps: {
+          usuario
+        },
+        cssClass: 'modalUsuarios'
+      });
+  
+      modalUserUpdate.present();
+    }else{
+      this.presentToast('Favor de seleccionar un usuario' , 'bottom', 'warning');
+    }
+    
   }
 
 

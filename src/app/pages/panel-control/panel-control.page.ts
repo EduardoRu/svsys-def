@@ -1,8 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { AgregarCitaComponent } from 'src/app/components/panel-control/agregar-cita/agregar-cita.component';
 import { DetalleCitaComponent } from 'src/app/components/panel-control/detalle-cita/detalle-cita.component';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
+import { AuthService } from 'src/app/services/firebase/auth/auth.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 declare var google: any;
 
@@ -13,22 +15,32 @@ declare var google: any;
 })
 export class PanelControlPage implements OnInit {
 
-  public citas:any;
-  public results:any
+  public citas: any;
+  public results: any
 
   constructor(
     private zone: NgZone,
     private citasService: CitasService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loadingController: LoadingController,
+    private authservice: AuthService,
+    private storageSerive: StorageService
   ) { }
 
   ngOnInit() {
-    this.getInformacion();
-    this.generarChart();
+    setTimeout(async () => {
+      const loagin = await this.loadingController.create({
+        message: "Cargando infocmaicón",
+        duration: 1000
+      });
+      loagin.present();
+      this.getInformacion();
+      this.generarChart();
+    }, 1500);
   }
 
   async generarChart() {
-    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.load('current', { 'packages': ['corechart'] });
     google.charts.setOnLoadCallback(() => {
       this.zone.run(() => {
         this.drawChart();
@@ -42,7 +54,7 @@ export class PanelControlPage implements OnInit {
     });
     observer.observe(document.getElementById('chart_div'));
   }
-  
+
   async drawChart() {
     const monthlyActivityData = [
       ['Mes', 'Actividad'],
@@ -59,38 +71,46 @@ export class PanelControlPage implements OnInit {
       ['Noviembre', 700],
       ['Diciembre', 850]
     ];
-  
+
     // Crear un DataTable de Google Charts
     var data = await new google.visualization.DataTable();
     data?.addColumn('string', 'Mes');
     data?.addColumn('number', 'Actividad');
     data?.addRows(monthlyActivityData.slice(1)); // Usar los datos de ejemplo, excluyendo la primera fila de encabezados
-  
+
     // Configuración del gráfico
     var options = {
       legend: { position: 'bottom' },  // Posición de la leyenda
       width: '200%',  // Ancho del gráfico
       height: 250     // Altura del gráfico
     };
-  
+
     // Dibujar el gráfico de línea en un elemento HTML específico
     var chartLine = new google.visualization.LineChart(document.getElementById('chart_div'));
     chartLine.draw(data, options);
-  
+
     // Dibujar el gráfico de pastel en otro elemento HTML específico
     var chartPie = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
     chartPie.draw(data, options);
   }
-  
 
-  getInformacion(){
+
+  async getInformacion() {
     this.citasService.getCitaProgramada().subscribe((data) => {
       this.citas = data;
       this.results = data;
     });
+    (await this.authservice.getUser()).subscribe({
+      next: (user) => {
+        this.storageSerive.addValue('usuario', user)
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
-  async addCita(){
+  async addCita() {
     const modalAgregarCita = await this.modalController.create({
       component: AgregarCitaComponent,
       cssClass: "modalCitas"
@@ -101,10 +121,10 @@ export class PanelControlPage implements OnInit {
 
   handleInput(event) {
     const query = event.target.value.toLowerCase();
-    this.results = this.citas.filter((d:any) => d.nombre_razon_social.toLowerCase().indexOf(query) > -1);
+    this.results = this.citas.filter((d: any) => d.nombre_razon_social.toLowerCase().indexOf(query) > -1);
   }
 
-  async mostrarDetalles(cita:any){
+  async mostrarDetalles(cita: any) {
     const modalDetallesCita = await this.modalController.create({
       component: DetalleCitaComponent,
       componentProps: {

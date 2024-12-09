@@ -1,44 +1,117 @@
 <app-menu titulo="Cuentas"></app-menu>
 
 <ion-content [fullscreen]="true">
-  <ion-card class="mx-5">
-    <ion-card-header style="background-color: #211F20;">
-      <ion-card-title class="text-center" style="color: white;">
-        LISTA DE USUARIOS
-      </ion-card-title>
-      <ion-card-subtitle>
-        <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
-      </ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
+  <div class="row">
+    <div class="col-md-6">
+      <ion-card class="mx-2">
+        <ion-card-header style="background-color: #211F20;">
+          <ion-card-title class="text-center" style="color: white;">
+            LISTA DE USUARIOS
+          </ion-card-title>
+          <ion-card-subtitle>
+            <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Nombre de usuario</th>
+              <th scope="col">Correo eléctronico</th>
+              <th scope="col">Tipo de usuario</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of usuariosRegistrados; let i = index">
+              <ng-container *ngIf="i < 10">
+                <th scope="row" class="center-elements-table pt-3">{{ item.usuario }}</th>
+                <td class="center-elements-table pt-3">{{ item.email }}</td>
+                <td class="center-elements-table pt-3">{{ item.role }}</td>
+                <td>
+                  <ion-button (click)="detailUser(item)" expand="block" color="primary" fill="clear"
+                    shape="round">
+                    Detalles
+                  </ion-button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="col-md-6">
+      <div class="row d-flex align-items-stretch">
+        <div class="col-md-6">
+          <ion-card class="mx-2 custom-card">
+            <ion-card-header style="background-color: #211F20;">
+              <ion-card-title class="text-center" style="color: white;">
+                INFO PERSONAL
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item lines="">
+                <ion-label style="font-size: small;">
+                  <b>Nombre:</b>  {{ usuarioDetalles.usuario }}
+                </ion-label>
+              </ion-item>
+              <ion-item lines="">
+                <ion-label style="font-size: small;">
+                  <b>Correo:</b> {{ usuarioDetalles.email }}
+                </ion-label>
+              </ion-item>
+              <ion-item lines="">
+                <ion-label style="font-size: small;">
+                  <b>Tipo de usuario:</b>  {{ usuarioDetalles.role }}
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label>
+                  <ion-button (click)="editUser(usuarioDetalles)" expand="block" color="primary" fill="clear"
+                    shape="round">
+                    Editar usuario
+                  </ion-button>
+                </ion-label>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </div>
+        <div class="col-md-6">
+          <ion-card class="mx-2 custom-card">
+            <ion-card-header style="background-color: #211F20;">
+              <ion-card-title class="text-center" style="color: white;">
+                VEHÍCULO
+              </ion-card-title>
+              <ion-card-subtitle>
+                <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
       
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Nombre de usuario</th>
-          <th scope="col">Correo eléctronico</th>
-          <th scope="col">Tipo de usuario</th>
-          <th scope="col" class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of usuariosRegistrados; let i = index">
-          <ng-container *ngIf="i < 10">
-            <th scope="row" class="center-elements-table pt-3">{{ item.usuario }}</th>
-            <td class="center-elements-table pt-3">{{ item.email }}</td>
-            <td class="center-elements-table pt-3">{{ item.role }}</td>
-            <td>
-              <ion-button (click)="detailUser(item)" expand="block" color="primary" fill="clear"
-                shape="round">
-                Detalles
-              </ion-button>
-            </td>
-          </ng-container>
-        </tr>
-      </tbody>
-    </table>
-    </ion-card-content>
-  </ion-card>
+      <div>
+        <ion-card class="mt-4">
+          <ion-card-header style="background-color: #211F20;">
+            <ion-card-title class="text-center" style="color: white;">
+                EQUIPO ASIGNADO AL PERSONAL
+              </ion-card-title>
+              <ion-card-subtitle>
+                <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+              </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            Awesome content
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" color="primary">
     <ion-fab-button color="primary">
