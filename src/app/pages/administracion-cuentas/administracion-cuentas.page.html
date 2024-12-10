@@ -25,7 +25,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of usuariosRegistrados; let i = index">
-              <ng-container *ngIf="i < 10">
+              <ng-container *ngIf="i < 7">
                 <th scope="row" class="center-elements-table pt-3">{{ item.usuario }}</th>
                 <td class="center-elements-table pt-3">{{ item.email }}</td>
                 <td class="center-elements-table pt-3">{{ item.role }}</td>
@@ -89,7 +89,7 @@
               </ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              
+              <h5>Aún no se asigna auto</h5>
             </ion-card-content>
           </ion-card>
         </div>
@@ -106,7 +106,7 @@
               </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            Awesome content
+            <h5>Aún no se asigna equipo</h5>
           </ion-card-content>
         </ion-card>
       </div>

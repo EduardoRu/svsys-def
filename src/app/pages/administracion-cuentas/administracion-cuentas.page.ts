@@ -60,7 +60,6 @@ export class AdministracionCuentasPage implements OnInit {
 
   async detailUser(usuario:any){
     this.usuarioDetalles = usuario;
-    console.log(this.usuarioDetalles);
   }
 
   async editUser(usuario:any){
