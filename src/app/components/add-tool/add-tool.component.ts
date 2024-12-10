@@ -159,10 +159,33 @@ export class AddToolComponent  implements OnInit {
   
       // `sheetData` es un array de arrays (cada fila es un array de celdas)
       for (let i = 1; i < sheetData.length; i++) {
-        const element = sheetData[i];
-        console.log(element);
+        const element:any = sheetData[i];
+
+        this.nuevaPesa.get('identificacion').setValue(element[1])
+        this.nuevaPesa.get('tipo_instrumento').setValue(element[2])
+        this.nuevaPesa.get('marca').setValue(element[3])
+        this.nuevaPesa.get('modelo').setValue(element[4])
+        this.nuevaPesa.get('no_serie').setValue(element[5])
+        this.nuevaPesa.get('capacidad').setValue(element[6])
+        this.nuevaPesa.get('clase_exactitud').setValue(element[7])
+        this.nuevaPesa.get('observaciones').setValue(element[8])
+        this.nuevaPesa.get('estado').setValue('Disponible')
+
+        console.log(this.nuevaPesa.value);
+
+        setTimeout(() => {
+          try {
+            this.toolService.addTool(this.nuevaPesa.value).then((e:any) => {
+              this.presentToast('Pesa agregada exitosamente', 'bottom','success');
+              this.modalController.dismiss();
+              this.nuevaPesa.reset();
+            })
+          } catch (error) {
+            this.presentToast('Error: ' + error.message, 'bottom', 'danger');
+          }
+        }, 1000);
       }
-      //console.log(sheetData);
+      
     };
   
     reader.onerror = (error) => {
