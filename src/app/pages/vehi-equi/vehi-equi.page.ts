@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { AddCarComponent } from 'src/app/components/add-car/add-car.component';
 import { AddToolComponent } from 'src/app/components/add-tool/add-tool.component';
 import { AddCarService } from 'src/app/services/actividades/addCar/add-car.service';
 import { EditCarComponent } from 'src/app/components/edit-car/edit-car.component';
 import { EditToolComponent } from 'src/app/components/edit-tool/edit-tool.component';
+import { AddToolService } from 'src/app/services/actividades/addTool/add-tool.service';
 
 @Component({
   selector: 'app-vehi-equi',
@@ -14,15 +15,29 @@ import { EditToolComponent } from 'src/app/components/edit-tool/edit-tool.compon
 export class VehiEquiPage implements OnInit {
 
   public autos:any = []
+  public herramientas:any = [];
 
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
-    private carService: AddCarService
+    private carService: AddCarService,
+    private toolService: AddToolService,
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {
     this.getInformacion();
+  }
+
+  async presentToast(msg: string, position: 'top' | 'middle' | 'bottom', color: "danger" | "dark" | "light" | "success" | "warning") {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 1500,
+      position: position,
+      color: color
+    });
+
+    await toast.present();
   }
 
   async getInformacion(){
@@ -31,7 +46,16 @@ export class VehiEquiPage implements OnInit {
         this.autos = car
       },
       error: (error) => {
-        console.error(error);
+        this.presentToast('Error: '+ error.message, 'bottom', 'danger');
+      }
+    });
+
+    this.toolService.getTool().subscribe({
+      next: (data) => {
+        this.herramientas = data;
+      },
+      error: (error) => {
+        this.presentToast('Error: '+ error.message, 'bottom', 'danger');
       }
     })
   }
@@ -65,6 +89,18 @@ export class VehiEquiPage implements OnInit {
     });
 
     modalEditarAuto.present();
+  }
+
+  async editarHerramienta(tool:any) {
+    const modalEditarHerramienta = await this.modalController.create({
+      component: EditToolComponent,
+      componentProps: {
+        toolEditar: tool
+      },
+      cssClass: 'modalCitas'
+    });
+
+    modalEditarHerramienta.present();
   }
 
 }

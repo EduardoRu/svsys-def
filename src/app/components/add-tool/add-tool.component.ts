@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { AddCarService } from 'src/app/services/actividades/addCar/add-car.service';
+import { AddToolService } from 'src/app/services/actividades/addTool/add-tool.service';
 import * as XLSX from 'xlsx';
 
 
@@ -23,6 +24,7 @@ export class AddToolComponent  implements OnInit {
   public nuevaPesa: FormGroup;
   selectedFile: File | null = null; // Archivo completo
   selectedFileName: string | null = null;
+  public herramientas:any = []
 
 
   constructor(
@@ -30,7 +32,8 @@ export class AddToolComponent  implements OnInit {
     private fb: FormBuilder,
     private addCarService: AddCarService,
     private toastController: ToastController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private toolService: AddToolService
   ) { }
 
   ngOnInit() {
@@ -69,7 +72,16 @@ export class AddToolComponent  implements OnInit {
     await loading.present();
 
     if(this.nuevaPesa.valid){
-
+      try {
+        this.toolService.addTool(this.nuevaPesa.value).then((e:any) => {
+          loading.dismiss();
+          this.presentToast('Pesa agregada exitosamente', 'bottom','success');
+          this.modalController.dismiss();
+          this.nuevaPesa.reset();
+        })
+      } catch (error) {
+        this.presentToast('Error: ' + error.message, 'bottom', 'danger');
+      }
     }else{
       this.presentToast('Favor de completar todos los campos', 'bottom', 'warning');
     }
@@ -146,7 +158,11 @@ export class AddToolComponent  implements OnInit {
       const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   
       // `sheetData` es un array de arrays (cada fila es un array de celdas)
-      console.log(sheetData);
+      for (let i = 1; i < sheetData.length; i++) {
+        const element = sheetData[i];
+        console.log(element);
+      }
+      //console.log(sheetData);
     };
   
     reader.onerror = (error) => {
