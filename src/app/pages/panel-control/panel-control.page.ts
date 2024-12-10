@@ -1,8 +1,9 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { AgregarCitaComponent } from 'src/app/components/panel-control/agregar-cita/agregar-cita.component';
 import { DetalleCitaComponent } from 'src/app/components/panel-control/detalle-cita/detalle-cita.component';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
+import { FilesService } from 'src/app/services/files-sistema/files.service';
 import { AuthService } from 'src/app/services/firebase/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
@@ -24,7 +25,9 @@ export class PanelControlPage implements OnInit {
     private modalController: ModalController,
     private loadingController: LoadingController,
     private authservice: AuthService,
-    private storageSerive: StorageService
+    private storageSerive: StorageService,
+    private fileService: FilesService,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -36,7 +39,43 @@ export class PanelControlPage implements OnInit {
       loagin.present();
       this.getInformacion();
       this.generarChart();
+      this.generarCarpeta();
     }, 1500);
+  }
+
+
+  async generarCarpeta() {
+    const alert = await this.alertController.create({
+      header: 'Bienvenido a SVSYS - Administración',
+      subHeader: 'Descarga de inforamción',
+      message: 'Antes de continuar deseamos que tu experimiencia sea excelente con o sin interenet, por lo que para esta ocasión te solicitamos descargar la informaicón de la base de datos.',
+      buttons: [
+        {
+          text: 'En otro momento',
+          role: 'cancel',
+          handler: () => {
+            console.log('Alert canceled');
+          },
+        },
+        {
+          text: '¡Descargar!',
+          role: 'confirm',
+          handler: () => {
+            console.log('Alert confirmed');
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+
+    try {
+      this.fileService.createCarpeta('svsys-directorio').then((e: any) => {
+        console.log(e)
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   async generarChart() {

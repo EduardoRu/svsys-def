@@ -21,9 +21,9 @@ export class FilesService {
       console.log('Carpeta creada correctamente');
     } catch(error){
       if(error.message == 'Folder already exists'){
-        console.log('Carpeta existente');
+        return error.message;
       }else{
-        console.error('Error al crear carpeta', error);
+        return error
       }
     }
   }

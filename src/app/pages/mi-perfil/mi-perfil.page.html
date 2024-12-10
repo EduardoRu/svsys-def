@@ -1,63 +1,68 @@
 <app-menu titulo="Mi perfil"></app-menu>
 
 <ion-content [fullscreen]="true">
-  
-<ion-card>
-  <ion-card-content>
-    <div class="text-center">
-      <img src="/assets/user.png" alt="" srcset="" style="max-width: 200px;">
-      <h1>Nombre de usuario</h1>
+  <div class="row mx-5">
+    <div class="col-md-6">
+      <ion-card>
+        <ion-card-header class="text-center">
+          <ion-card-title>Usuario</ion-card-title>
+          <hr>
+          <ion-card-subtitle>
+            <img src="/assets/user_sys.png" alt="" srcset="" style="max-width: 200px;">
+            <hr>
+            <h5>{{ usuario.usuario }}</h5>
+          </ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
     </div>
-
-    <hr>
-
-    <div class="text-center">
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="6">
-            <h1>CORREO ELÉCTRONICO</h1>
-          </ion-col>
-          <ion-col size="6">
-            <h1>admin&#64;svsys.com</h1>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="6">
-            <h1>Tipo de trabajador</h1>
-          </ion-col>
-          <ion-col size="6">
-            <h1>Adminstrador</h1>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <div class="col-md-6">
+      <ion-card class="custom-card">
+        <ion-card-header class="text-center">
+          <ion-card-title>Mi informaicón</ion-card-title>
+          <hr>
+          <ion-card-subtitle>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <b>Nombre:</b> <br> {{ usuario.usuario }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <b>Email:</b> <br> {{ usuario.email }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <b>Rol de usuario:</b> <br> {{ usuario.role == 'PA' ? 'Personal de apoyo': usuario.role }}
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
     </div>
+  </div>
 
-    <hr>
-
-    <div>
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="4">
-            <h1 class="pt-3">Cambio de contraseña</h1>
-          </ion-col>
-          <ion-col size="6">
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="floatingInput" placeholder="Nueva contraseña">
-              <label for="floatingInput">Nueva contraseña</label>
-            </div>
-          </ion-col>
-          <ion-col size="2">
-            <div class="text-center">
-              <button type="button" class="btn btn-success btn-lg mt-1">Cambiar</button>
-            </div>
-          </ion-col>
-        </ion-row>
-        
-      </ion-grid>
-    </div>
-  </ion-card-content>
-</ion-card>
+  <hr>
+  <div class="mx-5">
+    <ion-card>
+      <ion-card-header>
+        <div class="row">
+          <div class="col-md-9">
+            <ion-card-title>Descarga los contenidos del sistema</ion-card-title>
+            <ion-card-subtitle>
+              En caso de que se te solicite descarga los siguientes contenidos para trabajar de manera offline o fuera
+              de red de internet
+            </ion-card-subtitle>
+          </div>
+          <div class="col-md-3">
+            <ion-button fill="clear" class="btn btn-primary" (click)="crearCarpeta()">
+              Descargar
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-header>
+    </ion-card>
+  </div>
 </ion-content>
