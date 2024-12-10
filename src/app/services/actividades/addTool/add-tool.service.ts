@@ -50,7 +50,15 @@ export class AddToolService {
   updateTool(reporte: any): Promise<any> {
     const registroRef = doc(this.firestore, `tools/${reporte.id}`);
     return updateDoc(registroRef, {
-      'placa': reporte.placa,
+      'identificacion': reporte.identificacion,
+      'tipo_instrumento': reporte.tipo_instrumento,
+      'marca': reporte.marca,
+      'modelo': reporte.modelo,
+      'no_serie': reporte.no_serie,
+      'capacidad': reporte.capacidad,
+      'clase_exactitud': reporte.clase_exactitud,
+      'observaciones': reporte.observaciones,
+      'estado': reporte.estado
     });
   }
 }
