@@ -36,7 +36,8 @@
         <div class="row">
           <div class="col-md-8">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingnombre_razon_social" formControlName="nombre_razon_social">
+              <input type="text" class="form-control" id="floatingnombre_razon_social"
+                formControlName="nombre_razon_social">
               <label for="floatingnombre_razon_social">Razón Social y/o Nombre</label>
             </div>
           </div>
@@ -193,13 +194,13 @@
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputtipo_servicio" formControlName="no_serie" >
+              <input type="text" class="form-control" id="floatingInputtipo_servicio" formControlName="no_serie">
               <label for="floatingInputtipo_servicio">No. Serie</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputtipo_servicio" formControlName="clase" >
+              <input type="text" class="form-control" id="floatingInputtipo_servicio" formControlName="clase">
               <label for="floatingInputtipo_servicio">Clase de exactitud</label>
             </div>
           </div>
@@ -209,13 +210,15 @@
         <div class="row">
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="divi_max" (input)="clasifiacionbasculas($event,'divi_max')">
+              <input type="text" class="form-control" id="floatingtelefono" formControlName="divi_max"
+                (input)="clasifiacionbasculas($event,'divi_max')">
               <label for="floatingtelefono">Divisón maxima</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputfecha" formControlName="alcance_max" (input)="clasifiacionbasculas($event,'alcance_max')">
+              <input type="text" class="form-control" id="floatingInputfecha" formControlName="alcance_max"
+                (input)="clasifiacionbasculas($event,'alcance_max')">
               <label for="floatingInputfecha">Alcance maximo</label>
             </div>
           </div>
@@ -498,32 +501,32 @@
           <div class="col-md-3">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingtelefono" formControlName="alc_max">
-              <label for="floatingtelefono" >Alcance Máximo</label>
+              <label for="floatingtelefono">Alcance Máximo</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingtelefono" formControlName="divi_max">
-              <label for="floatingtelefono" >Divisón máxima</label>
+              <label for="floatingtelefono">Divisón máxima</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingtelefono" formControlName="clase_ex">
-              <label for="floatingtelefono" >Clase de exactitud</label>
+              <label for="floatingtelefono">Clase de exactitud</label>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingtelefono" formControlName="precarga">
-              <label for="floatingtelefono" >Precarga 100% de Máx</label>
+              <label for="floatingtelefono">Precarga 100% de Máx</label>
             </div>
           </div>
         </div>
         <hr>
         <h1 class="text-center">Repetibilidad</h1>
         <div>
-          <table class="table table-striped table-hover" >
+          <table class="table table-striped table-hover">
             <thead>
               <tr class="text-center">
                 <th></th>
@@ -556,7 +559,8 @@
                 <td><input type="number" class="form-control" id="floatingInput" formControlName="diferenciaUno"></td>
                 <td><input type="number" class="form-control" id="floatingInput" formControlName="diferenciaDos"></td>
                 <td><input type="number" class="form-control" id="floatingInput" formControlName="diferenciaTres"></td>
-                <td><input type="number" class="form-control" id="floatingInput" formControlName="diferenciaCuatro"></td>
+                <td><input type="number" class="form-control" id="floatingInput" formControlName="diferenciaCuatro">
+                </td>
                 <td><input type="number" class="form-control" id="floatingInput" formControlName="emt13den"></td>
               </tr>
             </tbody>
@@ -596,34 +600,43 @@
                   <tr *ngFor="let item of ejemplo1.controls; let i = index" [formGroupName]="i">
                     <th>{{ i + 1 }}</th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="carga"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="carga"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="emt"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="emt"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="errASC"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="errASC"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="errDSC"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="errDSC"></ion-input>
                     </th>
                     <th>
-                      
+
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="num50"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="num50"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="num100"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="num100"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="den50"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="den50"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="den100"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="den100"></ion-input>
                     </th>
                     <th>
-                      <ion-input type="number" class="form-control" id="floatingInput" formControlName="emt13"></ion-input>
+                      <ion-input type="number" class="form-control" id="floatingInput"
+                        formControlName="emt13"></ion-input>
                     </th>
                   </tr>
 
@@ -632,24 +645,24 @@
             </div>
           </div>
           <ion-textarea label="Observaciones del inspector" labelPlacement="floating" fill="outline"
-                placeholder="Observaciones del inspector" [autoGrow]="true" formControlName="observaciones">
-              </ion-textarea>
-              <hr>
-              <div class="row text-center m-3">
-                <div class="col-md-6 d-grid gap-2">
-                  <ion-button fill="clear" class="btn btn-secondary">
-                    Limpiar Formulario
-                  </ion-button>
-                </div>
-                <div class="col-md-6 d-grid gap-2">
-                  <ion-button type="submit" fill="clear" class="btn btn-success">
-                    Guardar
-                  </ion-button>
-                </div>
-              </div>
+            placeholder="Observaciones del inspector" [autoGrow]="true" formControlName="observaciones">
+          </ion-textarea>
+          <hr>
+          <div class="row text-center m-3">
+            <div class="col-md-6 d-grid gap-2">
+              <ion-button fill="clear" class="btn btn-secondary">
+                Limpiar Formulario
+              </ion-button>
+            </div>
+            <div class="col-md-6 d-grid gap-2">
+              <ion-button type="submit" fill="clear" class="btn btn-success">
+                Guardar
+              </ion-button>
+            </div>
+          </div>
         </div>
         <hr>
-        
+
       </form>
     </ng-container>
 
@@ -826,34 +839,29 @@
           <h5 class="text-center"> Firmas </h5>
           <div style="margin-left: 90px;">
             <div class="row m-5 text-center" style="margin-left: 5%;">
-              <div class="col-md-3 border border-dark" style="height: 250px;">
-
+              <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
+                <!--PRIMER FIRMA-->
+                <canvas #canvas style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
-              <div class="col-md-1" style="height: 250px;">
-
+              <div class="col-md-1" style="height: 250px;"></div>
+              <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
+                <!--SEGUNDA FIRMA-->
+                <canvas #canvas style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
-              <div class="col-md-3 border border-dark" style="height: 250px;">
-
-              </div>
-              <div class="col-md-1" style="height: 250px;">
-
-              </div>
-              <div class="col-md-3 border border-dark" style="height: 250px;">
-
+              <div class="col-md-1" style="height: 250px;"></div>
+              <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
+                <!--TERCER FIRMA-->
+                <canvas #canvas style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
 
               <div class="col-md-3 border">
                 Nombre y Firma del cliente
               </div>
-              <div class="col-md-1 ">
-
-              </div>
+              <div class="col-md-1"></div>
               <div class="col-md-3 border">
                 Nombre y Firma del inspector
               </div>
-              <div class="col-md-1 ">
-
-              </div>
+              <div class="col-md-1"></div>
               <div class="col-md-3 border">
                 Nombre y Firma del personal de apoyo
               </div>

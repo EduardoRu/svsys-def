@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, FormGroup, Validators, FormArray } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController, ModalController } from '@ionic/angular';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
@@ -23,6 +23,8 @@ import proj4 from 'proj4';
 
 })
 export class GenerarReporteDesktopComponent implements OnInit {
+
+  @ViewChild('canvas') canvases!: QueryList<ElementRef<HTMLCanvasElement>>;
 
   public citasProgramadas: any = [];
 
@@ -316,11 +318,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
       });
       loagin.present();
       await this.onSegementChanged({ detail: { value: this.segment } });
-    }, 1000); // Espera 1 segundo antes de ejecutar la función
+    }, 0); // Espera 1 segundo antes de ejecutar la función
   }
-
-
-
 
   async infoClientes() {
     return this.citasService.getCitaProgramada().subscribe({
@@ -359,7 +358,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
     if (this.segment === 'infoClientes') {
       const res: any = await this.storageService.getValue('infoClientes').then(res => { return res });
-      console.log(res)
       if (res != undefined) {
         this.clienteInformacion.get('nombre_razon_social').setValue(res.nombre_razon_social)
         this.clienteInformacion.get('rfc').setValue(res.rfc)
