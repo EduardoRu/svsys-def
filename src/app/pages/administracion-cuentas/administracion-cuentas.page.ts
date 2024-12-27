@@ -16,7 +16,8 @@ export class AdministracionCuentasPage implements OnInit {
 
   public usuariosRegistrados:any = [];
   public usuarioDetalles:any = [];
-  public autos:any = []
+  public autos:any = [];
+  public editarUsuaio:boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -67,6 +68,7 @@ export class AdministracionCuentasPage implements OnInit {
   }
 
   async editUser(usuario:any){
+    /*
     if(usuario.length != 0){
       const modalUserUpdate = await this.modalController.create({
         component: DetalleCuentaComponent,
@@ -80,6 +82,14 @@ export class AdministracionCuentasPage implements OnInit {
     }else{
       this.presentToast('Favor de seleccionar un usuario' , 'bottom', 'warning');
     }
+    */
+
+    this.editarUsuaio = true;
+  }
+
+  async guardarDetallesUsuario() {
+    this.editarUsuaio = false;
+    this.presentToast('Detalles actualizados correctamente' , 'bottom','success');
   }
 
   async buscarAutoModal(){

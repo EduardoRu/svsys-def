@@ -18,3 +18,8 @@ ion-fab-button {
 .row {
   display: flex;
 }
+
+.custom-card-height-usuarios {
+  height: 605px; /* Ajusta la altura según tu necesidad */
+  overflow-y: auto; /* Permite scroll si el contenido excede la altura */
+}
