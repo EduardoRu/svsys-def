@@ -36,7 +36,7 @@ export class PanelControlPage implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.initializePage();
-    }, 1000);
+    }, 500);
   }
 
   // ============================================================
@@ -44,7 +44,7 @@ export class PanelControlPage implements OnInit {
   // ============================================================
 
   private async initializePage() {
-    await this.showLoadingMessage('Cargando información', 1000);
+    await this.showLoadingMessage('Cargando información', 1700);
     this.getInformacion();
     this.generateCharts();
   }

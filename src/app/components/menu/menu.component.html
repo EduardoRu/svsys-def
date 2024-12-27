@@ -1,14 +1,14 @@
 <div>
-  <ion-menu contentId="main-content">
+  <ion-menu contentId="main-content" mode="ios">
 
-    <ion-content style="--background: #ffffff;">
+    <ion-content style="--background: #ffff;">
 
-      <div class="text-center pt-5">
-        <img src="/assets/logo_bg1.png" alt="" srcset="" style="max-width: 50%;">
+      <div class="text-center pt-5" style="background-color: #ffff;">
+        <img src="/assets/logo_bg1.png" alt="" srcset="" style="max-width: 50%; background-color: #ffff;">
         <h5 class="mt-3" style="color: white;"><b>Administrador</b></h5>
       </div>
 
-      <ion-list style="background: #ffffff;">
+      <ion-list style="background: #ffff;">
         <ion-item  (click)="rToPanelControl()" lines="none" slot="header" color="light" button>
           <ion-label>Panel de Control</ion-label>
         </ion-item>
@@ -36,11 +36,8 @@
         
       </ion-list>
     </ion-content>
-    <ion-footer style="background-color: #ffffff;">
+    <ion-footer style="background-color: #ffff;">
     <div class="d-grid gap-2"> <button type="button" class="btn btn-danger " id="cerrar-sesion" (click)="logout()">Cerrar Sesión</button></div>
-       
-   
-    
      </ion-footer>
   </ion-menu>
 
