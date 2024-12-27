@@ -28,7 +28,9 @@ export class EditCarComponent  implements OnInit {
   ngOnInit() {
     this.auto = this.fb.group({
       placa: [this.autoEditar.placa, Validators.required],
-      id: [this.autoEditar.id, Validators.required]
+      id: [this.autoEditar.id, Validators.required],
+      estado: [this.autoEditar.estado],
+      usuario: [this.autoEditar.usuario]
     });
   }
 

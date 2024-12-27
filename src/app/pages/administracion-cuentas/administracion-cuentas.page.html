@@ -85,7 +85,11 @@
                 VEHÍCULO
               </ion-card-title>
               <ion-card-subtitle>
-                <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+                <div class="d-grid gap-2">
+                  <ion-button expand="block" class="btn btn-success" fill="clear" (click)="buscarAutoModal()">
+                    Agregar un auto
+                  </ion-button>
+                </div>
               </ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -102,7 +106,11 @@
                 EQUIPO ASIGNADO AL PERSONAL
               </ion-card-title>
               <ion-card-subtitle>
-                <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250" showCancelButton="always"></ion-searchbar>
+                <div class="d-grid gap-2">
+                  <ion-button expand="block" class="btn btn-success" fill="clear" (click)="buscarAutoModal()">
+                    Agregar equipo
+                  </ion-button>
+                </div>
               </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>

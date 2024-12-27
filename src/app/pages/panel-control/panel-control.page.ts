@@ -3,6 +3,7 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { AgregarCitaComponent } from 'src/app/components/panel-control/agregar-cita/agregar-cita.component';
 import { DetalleCitaComponent } from 'src/app/components/panel-control/detalle-cita/detalle-cita.component';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
+import { FSubidaService } from 'src/app/services/actividades/f_subida/f-subida.service';
 import { FilesService } from 'src/app/services/files-sistema/files.service';
 import { AuthService } from 'src/app/services/firebase/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -15,164 +16,181 @@ declare var google: any;
   styleUrls: ['./panel-control.page.scss'],
 })
 export class PanelControlPage implements OnInit {
-
-  public citas: any;
-  public results: any
+  public citas: any = [];
+  public results: any = [];
+  private infoClientes: any = [];
+  public topClientes: [string, number][] = []; // Almacena los nombres y conteos del top 10
 
   constructor(
     private zone: NgZone,
     private citasService: CitasService,
     private modalController: ModalController,
     private loadingController: LoadingController,
-    private authservice: AuthService,
-    private storageSerive: StorageService,
+    private authService: AuthService,
+    private storageService: StorageService,
     private fileService: FilesService,
-    private alertController: AlertController
-  ) { }
+    private alertController: AlertController,
+    private fsubidaService: FSubidaService
+  ) {}
 
   ngOnInit() {
-    setTimeout(async () => {
-      const loagin = await this.loadingController.create({
-        message: "Cargando infocmaicón",
-        duration: 1000
-      });
-      loagin.present();
-      this.getInformacion();
-      this.generarChart();
-      this.generarCarpeta();
-    }, 1500);
+    setTimeout(() => {
+      this.initializePage();
+    }, 1000);
   }
 
+  // ============================================================
+  // Initialization Methods
+  // ============================================================
 
-  async generarCarpeta() {
-    const alert = await this.alertController.create({
-      header: 'Bienvenido a SVSYS - Administración',
-      subHeader: 'Descarga de inforamción',
-      message: 'Antes de continuar deseamos que tu experimiencia sea excelente con o sin interenet, por lo que para esta ocasión te solicitamos descargar la informaicón de la base de datos.',
-      buttons: [
-        {
-          text: 'En otro momento',
-          role: 'cancel',
-          handler: () => {
-            console.log('Alert canceled');
-          },
-        },
-        {
-          text: '¡Descargar!',
-          role: 'confirm',
-          handler: () => {
-            console.log('Alert confirmed');
-          },
-        },
-      ],
-    });
-
-    await alert.present();
-
-    try {
-      this.fileService.createCarpeta('svsys-directorio').then((e: any) => {
-        console.log(e)
-      })
-    } catch (error) {
-      console.log(error.message)
-    }
+  private async initializePage() {
+    await this.showLoadingMessage('Cargando información', 1000);
+    this.getInformacion();
+    this.generateCharts();
   }
 
-  async generarChart() {
-    google.charts.load('current', { 'packages': ['corechart'] });
+  private async showLoadingMessage(message: string, duration: number) {
+    const loading = await this.loadingController.create({ message, duration });
+    await loading.present();
+  }
+
+  // ============================================================
+  // Chart Methods
+  // ============================================================
+
+  private generateCharts() {
+    google.charts.load('current', { packages: ['corechart'] });
     google.charts.setOnLoadCallback(() => {
       this.zone.run(() => {
-        this.drawChart();
+        this.updateTopClientes(); // Calcular el top 10
+        this.drawTopClientesPieChart(); // Dibujar gráfico de pastel
       });
     });
-    // Observador para redibujar el gráfico en caso de cambio de tamaño
+
     const observer = new ResizeObserver(() => {
       this.zone.run(() => {
-        this.drawChart();
+        this.drawTopClientesPieChart(); // Redibujar gráfico de pastel si el contenedor cambia de tamaño
       });
     });
-    observer.observe(document.getElementById('chart_div'));
+
+    const pieChartDiv = document.getElementById('chart_div_pie');
+    if (pieChartDiv) observer.observe(pieChartDiv);
   }
 
-  async drawChart() {
-    const monthlyActivityData = [
-      ['Mes', 'Actividad'],
-      ['Enero', 300],
-      ['Febrero', 450],
-      ['Marzo', 600],
-      ['Abril', 700],
-      ['Mayo', 550],
-      ['Junio', 800],
-      ['Julio', 900],
-      ['Agosto', 750],
-      ['Septiembre', 850],
-      ['Octubre', 950],
-      ['Noviembre', 700],
-      ['Diciembre', 850]
-    ];
+  private updateTopClientes() {
+    if (!this.infoClientes || this.infoClientes.length === 0) return;
 
-    // Crear un DataTable de Google Charts
-    var data = await new google.visualization.DataTable();
-    data?.addColumn('string', 'Mes');
-    data?.addColumn('number', 'Actividad');
-    data?.addRows(monthlyActivityData.slice(1)); // Usar los datos de ejemplo, excluyendo la primera fila de encabezados
+    this.topClientes = this.getTopClientesCounts(this.infoClientes);
+  }
 
-    // Configuración del gráfico
-    var options = {
-      legend: { position: 'bottom' },  // Posición de la leyenda
-      width: '200%',  // Ancho del gráfico
-      height: 250     // Altura del gráfico
+  private async drawTopClientesPieChart() {
+    if (!this.topClientes || this.topClientes.length === 0) return;
+
+    const chartData = [['Cliente', 'Actividades'], ...this.topClientes];
+    const data = new google.visualization.DataTable();
+
+    data.addColumn('string', 'Cliente');
+    data.addColumn('number', 'Actividades');
+    data.addRows(chartData.slice(1));
+
+    const options = {
+      title: 'Top 10 Clientes Frecuentes (Gráfico de Pastel)',
+      pieHole: 0.4, // Gráfico de dona, opcional
+      height: 400,
+      width: '100%',
     };
 
-    // Dibujar el gráfico de línea en un elemento HTML específico
-    var chartLine = new google.visualization.LineChart(document.getElementById('chart_div'));
-    chartLine.draw(data, options);
-
-    // Dibujar el gráfico de pastel en otro elemento HTML específico
-    var chartPie = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
-    chartPie.draw(data, options);
+    const chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
+    chart.draw(data, options);
   }
 
+  private getTopClientesCounts(data: any[]): [string, number][] {
+    const counts = data.reduce((acc, cliente) => {
+      const key = cliente.nombre_razon_social;
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
 
-  async getInformacion() {
+    return Object.entries(counts)
+      .sort((a: any, b: any) => b[1] - a[1]) // Orden descendente
+      .slice(0, 10) as [string, number][];
+  }
+
+  // ============================================================
+  // Data Fetching Methods
+  // ============================================================
+
+  private getInformacion() {
+    this.loadCitasProgramadas();
+    this.loadUserInfo();
+    this.loadClientInfo();
+  }
+
+  private loadCitasProgramadas() {
     this.citasService.getCitaProgramada().subscribe((data) => {
       this.citas = data;
       this.results = data;
     });
-    (await this.authservice.getUser()).subscribe({
-      next: (user) => {
-        this.storageSerive.addValue('usuario', user)
+  }
+
+  private async loadUserInfo() {
+    (await this.authService.getUser()).subscribe({
+      next: (user) => this.storageService.addValue('usuario', user),
+      error: (error) => console.error(error),
+    });
+  }
+
+  private loadClientInfo() {
+    this.fsubidaService.getInformacion().subscribe({
+      next: (data) => {
+        this.infoClientes = data.Sheet1 || data;
+        this.updateTopClientes(); // Calcular el top 10 al cargar los datos
       },
-      error: (error) => {
-        console.error(error);
-      }
-    })
+      error: (error) => console.error(error),
+    });
+  }
+
+  // ============================================================
+  // User Interaction Methods
+  // ============================================================
+
+  async generarCarpeta() {
+    const alert = await this.alertController.create({
+      header: 'Bienvenido a SVSYS - Administración',
+      subHeader: 'Descarga de información',
+      message: 'Te solicitamos descargar la información de la base de datos para una experiencia óptima.',
+      buttons: [
+        { text: 'En otro momento', role: 'cancel' },
+        { text: '¡Descargar!', role: 'confirm', handler: () => this.fileService.createCarpeta('svsys-directorio') }
+      ],
+    });
+
+    await alert.present();
   }
 
   async addCita() {
-    const modalAgregarCita = await this.modalController.create({
+    const modal = await this.modalController.create({
       component: AgregarCitaComponent,
-      cssClass: "modalCitas"
+      cssClass: 'modalCitas',
     });
 
-    modalAgregarCita.present();
+    await modal.present();
   }
 
-  handleInput(event) {
+  handleInput(event: any) {
     const query = event.target.value.toLowerCase();
-    this.results = this.citas.filter((d: any) => d.nombre_razon_social.toLowerCase().indexOf(query) > -1);
+    this.results = this.citas.filter((d: any) =>
+      d.nombre_razon_social.toLowerCase().includes(query)
+    );
   }
 
   async mostrarDetalles(cita: any) {
-    const modalDetallesCita = await this.modalController.create({
+    const modal = await this.modalController.create({
       component: DetalleCitaComponent,
-      componentProps: {
-        cita
-      },
-      cssClass: "modalCitas"
+      componentProps: { cita },
+      cssClass: 'modalCitas',
     });
 
-    modalDetallesCita.present();
+    await modal.present();
   }
-
 }

@@ -50,6 +50,8 @@ export class AddCarService {
     const registroRef = doc(this.firestore, `cars/${reporte.id}`);
     return updateDoc(registroRef, {
       'placa': reporte.placa,
+      'estado': reporte.estado ,
+      'usuario': reporte.usuario
     });
   }
 }

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Busca y agrega un auto
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-searchbar 
+    [debounce]="25" 
+    showCancelButton="always" 
+    mode="ios" 
+    color="light"
+    cancel-button-text="Borrar"
+    placeholder="Busca un auto"
+    (ionInput)="buscarAuto($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item button *ngFor="let item of results" (click)="asignarAuto(item)">
+      <ion-label>{{ item.placa }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

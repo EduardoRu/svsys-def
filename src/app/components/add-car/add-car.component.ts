@@ -25,7 +25,9 @@ export class AddCarComponent  implements OnInit {
 
   ngOnInit() {
     this.auto = this.fb.group({
-      placa: ['', Validators.required]
+      placa: ['', Validators.required],
+      estado: ['disponible'],
+      usuario: ['']
     });
   }
 

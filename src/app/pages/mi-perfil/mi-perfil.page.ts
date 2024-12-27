@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { FilesService } from 'src/app/services/files-sistema/files.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FSubidaService } from 'src/app/services/actividades/f_subida/f-subida.service';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -11,13 +12,15 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 export class MiPerfilPage implements OnInit {
 
   public usuario: any = [];
+  public data:any = []
 
   constructor(
     private storageSerive: StorageService,
     private alertController: AlertController,
     private toastController: ToastController,
     private loadController: LoadingController,
-    private fileService: FilesService
+    private fileService: FilesService,
+    private fSubidaService: FSubidaService
   ) { }
 
   ngOnInit() {
@@ -49,6 +52,16 @@ export class MiPerfilPage implements OnInit {
   async getInformacion() {
     const usuario = await this.storageSerive.getValue('usuario');
     this.usuario = usuario;
+
+    this.fSubidaService.getInformacion().subscribe({
+      next: (data) => {
+        this.data = data.Sheet1;
+        console.log(this.data);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
   async crearCarpeta() {
@@ -84,6 +97,15 @@ export class MiPerfilPage implements OnInit {
 
       loadData.dismiss();
     }, 2000);
+  }
+
+
+  async ingresarInfo(){
+    for (let index = 0; index < this.data.length; index++) {
+      setTimeout(() => {
+        this.fSubidaService.ingresarInfo(this.data[index]).then((res) => console.log(res))
+      }, index * 1200);
+    }
   }
 
 }

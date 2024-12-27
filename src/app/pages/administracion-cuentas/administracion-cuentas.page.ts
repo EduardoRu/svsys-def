@@ -3,6 +3,8 @@ import { AuthService } from 'src/app/services/firebase/auth/auth.service';
 import { DetalleCuentaComponent } from 'src/app/components/adminCuentas/detalle-cuenta/detalle-cuenta.component';
 import { AgregarCuentaComponent } from 'src/app/components/adminCuentas/agregar-cuenta/agregar-cuenta.component';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { AddCarService } from 'src/app/services/actividades/addCar/add-car.service';
+import { AutosComponent } from 'src/app/components/modales-usuario/autos/autos.component';
 
 
 @Component({
@@ -14,13 +16,15 @@ export class AdministracionCuentasPage implements OnInit {
 
   public usuariosRegistrados:any = [];
   public usuarioDetalles:any = [];
+  public autos:any = []
 
   constructor(
     private authService: AuthService,
     private modalController: ModalController,
     private alertController: AlertController,
     private loadController: LoadingController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private autoService: AddCarService
   ) { }
 
   ngOnInit() {
@@ -46,7 +50,7 @@ export class AdministracionCuentasPage implements OnInit {
       error: (error) => {
         console.error(error);
       }
-    })
+    });
   }
 
   async addUser(){
@@ -76,6 +80,16 @@ export class AdministracionCuentasPage implements OnInit {
     }else{
       this.presentToast('Favor de seleccionar un usuario' , 'bottom', 'warning');
     }
+  }
+
+  async buscarAutoModal(){
+    const modalCarSearch = await this.modalController.create({
+      component: AutosComponent,
+      cssClass:'modalCarSearch'
+    });
+
+    modalCarSearch.present();
+
     
   }
 

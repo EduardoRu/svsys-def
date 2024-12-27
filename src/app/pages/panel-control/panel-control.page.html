@@ -3,17 +3,23 @@
 <ion-content [fullscreen]="true">
   <ion-grid style="padding: 1%;">
     <ion-row>
-      <ion-col size="12" size-sm="6">
-        <ion-card>
+      <ion-col size="12" size-sm="12">
+        <ion-card class="custom-card-height-cliente">
           <ion-card-header style="background-color: #211F20;">
             <ion-card-title class="text-center" style="color: white;">
               CITAS PROGRAMADAS
             </ion-card-title>
+            <ion-card-subtitle>
+              <ion-searchbar 
+              [debounce]="250" 
+              showCancelButton="always" 
+              mode="ios" color="light"
+              cancel-button-text="Borrar"
+              placeholder="Busca un equipo"
+              ></ion-searchbar>
+            </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <ion-searchbar placeholder="Buscar cita" type="decimal" [debounce]="250" showCancelButton="always"
-              (ionInput)="handleInput($event)"></ion-searchbar>
-
             <div class="table-responsive dispositivos-busqueda">
               <table class="table table-striped">
                 <thead>
@@ -44,29 +50,34 @@
               </table>
             </div>
           </ion-card-content>
-
         </ion-card>
       </ion-col>
-      <ion-col size="12" size-sm="6">
+      <ion-col size="12" size-sm="12">
         <ion-card>
           <ion-card-header class="text-center" style="background-color: #211F20;">
             <ion-card-title style="color: white;">ESTADISTICAS</ion-card-title>
           </ion-card-header>
           <ion-grid>
-            <ion-row>
-              <ion-col size="12">
-                <div>
-                  <h5>Clientes frecuentes</h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div>
+                      <h5>Clientes frecuentes (Top 10)</h5>
+                      <ol style="margin-top: 5%;">
+                        <!-- Mostramos los nombres de los clientes en un top 10 -->
+                        <li *ngFor="let cliente of topClientes" style="font-size: medium;">
+                          {{ cliente[0] }} ({{ cliente[1] }} actividades)
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div>
+                      <h5>Clientes Frecuentes (Gráfico de Pastel)</h5>
+                    </div>
+                    <!-- Aquí muestra el gráfico de pastel -->
+                    <div id="chart_div_pie"></div>
+                  </div>
                 </div>
-                <div id="chart_div_pie"></div>
-              </ion-col>
-              <ion-col size="12">
-                <div>
-                  <h5>Actividad mensual</h5>
-                </div>
-                <div id="chart_div"></div>
-              </ion-col>
-            </ion-row>
           </ion-grid>
         </ion-card>
       </ion-col>
