@@ -5,6 +5,7 @@ import { AgregarCuentaComponent } from 'src/app/components/adminCuentas/agregar-
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { AddCarService } from 'src/app/services/actividades/addCar/add-car.service';
 import { AutosComponent } from 'src/app/components/modales-usuario/autos/autos.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -13,6 +14,8 @@ import { AutosComponent } from 'src/app/components/modales-usuario/autos/autos.c
   styleUrls: ['./administracion-cuentas.page.scss'],
 })
 export class AdministracionCuentasPage implements OnInit {
+
+  informacionUsuario: FormGroup;
 
   public usuariosRegistrados:any = [];
   public usuarioDetalles:any = [];
@@ -25,11 +28,22 @@ export class AdministracionCuentasPage implements OnInit {
     private alertController: AlertController,
     private loadController: LoadingController,
     private toastController: ToastController,
-    private autoService: AddCarService
+    private autoService: AddCarService,
+    private formbuilder: FormBuilder
   ) { }
 
   ngOnInit() {
     this.getInformacion();
+
+    // AQUÍ comienza el formulario para la edición de un usuario
+    this.informacionUsuario = this.formbuilder.group({
+      usuario: ['', Validators.required],
+      apellido: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      telefono: ['', Validators.required]
+    });
+
+
   }
 
   async presentToast(mesage: string, position: 'top' | 'middle' | 'bottom', cl: "danger" | "success" | "warning") {

@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true">
   <div class="row">
     <div class="col-md-6">
-      <ion-card class="custom-card-height-usuarios"  style="border-radius: 15px;">
+      <ion-card class="custom-card-height-usuarios" style="border-radius: 15px;">
         <ion-card-header style="background-color: #211F20;">
           <ion-card-title class="text-center" style="color: white;">
             LISTA DE USUARIOS
@@ -98,60 +98,73 @@
       </ion-card>
     </div>
 
+    <!-- AQUI COMIENZA LA EDITADA -->
+
     <div class="col-md-6" *ngIf="editarUsuaio == true">
       <ion-card style="border-radius: 15px;">
         <ion-card-header style="background-color: #211F20;">
-          <ion-card-title class="text-center" style="color: white;">Editando al empleado: <b>{{ usuarioDetalles.usuario }}</b>
+          <ion-card-title class="text-center" style="color: white;">Editando al empleado: <b>{{ usuarioDetalles.usuario
+              }}</b>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <h2 style="text-align: center; margin-top: 2%;">Informaicón Personal</h2>
-          <ion-list>
-            <ion-item>
-              <ion-input label="Nombre" labelPlacement="fixed" placeholder="Ingresa el nombre"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-input label="Correo" labelPlacement="fixed" placeholder="ejemplo@svsys.com"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-select label="Tipo de usuario:" placeholder="Rol del usuario" label-placement="floating">
-                <ion-select-option value="Gerente">Gerente</ion-select-option>
-                <ion-select-option value="Supervisor">Supervisor</ion-select-option>
-                <ion-select-option value="Inspector">Inspector</ion-select-option>
-                <ion-select-option value="PA">Peronsal de apoyo</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-          <h2 style="text-align: center; margin-top: 2%;">Vehicuo usado</h2>
-          <ion-list>
-            <ion-item lines="" button>
-              <ion-label style="font-size: medium;">
-                <b>Da clik aquí para seleccionar ó eliminar su auto</b>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-          <h2 style="text-align: center; margin-top: 2%;">Equipo</h2>
-          <ion-list>
-            <ion-item lines="">
-              <ion-label style="font-size: medium;">
-                <b>El usuario utiliza el conjunto:</b>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-          <h2 style="text-align: center; margin-top: 2%;">Documentos</h2>
-          <ion-item lines="">
-            <ion-label style="font-size: medium;">
-              <b>Conuslta el formato de equipo:</b>
-            </ion-label>
-          </ion-item>
+          <form (ngSubmit)="guardarDetallesUsuario()" [formGroup]="informacionUsuario">
+            <ion-list>
+              <ion-item>
+                <ion-input label="Nombre" labelPlacement="fixed" placeholder="Ingresa el nombre" formControlName="usuario"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input label="Contraseña" labelPlacement="fixed" placeholder="********" formControlName="password"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-select label="Tipo de usuario:" placeholder="Rol del usuario" label-placement="floating" formControlName="">
+                  <ion-select-option value="Gerente">Gerente</ion-select-option>
+                  <ion-select-option value="Supervisor">Supervisor</ion-select-option>
+                  <ion-select-option value="Inspector">Inspector</ion-select-option>
+                  <ion-select-option value="PA">Peronsal de apoyo</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
 
-          <ion-list>
+            <h2 style="text-align: center; margin-top: 2%;">Vehicuo usado</h2>
+            <ion-list>
+              <ion-item lines="" button>
+                <ion-label style="font-size: medium;">
+                  <b>Da clik aquí para seleccionar ó eliminar su auto</b>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <h2 style="text-align: center; margin-top: 2%;">Equipo</h2>
+            <ion-list>
+              <ion-item lines="">
+                <ion-label style="font-size: medium;">
+                  <b>El usuario utiliza el conjunto:</b>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <h2 style="text-align: center; margin-top: 2%;">Documentos</h2>
             <ion-item lines="">
-              <ion-button (click)="guardarDetallesUsuario()" expand="block" color="primary" fill="clear" shape="round">
-                Editar usuario
-              </ion-button>
+              <ion-label style="font-size: medium;">
+                <b>Conuslta el formato de equipo:</b>
+              </ion-label>
             </ion-item>
-          </ion-list>
+
+            <ion-list style="text-align: center;">
+              <div class="row" text>
+                <div class="col-md-6">
+                  <ion-button type="submit" expand="block" color="primary" fill="clear" shape="round">
+                    Editar usuario
+                  </ion-button>
+                </div>
+                <div class="col-md-6">
+                  <ion-button expand="block" color="danger" fill="clear" shape="round">
+                    Eliminar usuario
+                  </ion-button>
+                </div>
+              </div>
+            </ion-list>
+          </form>
         </ion-card-content>
       </ion-card>
     </div>

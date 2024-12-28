@@ -29,7 +29,8 @@ export class FSubidaService {
   ) { }
 
   getInformacion(): Observable<any>{
-    if(navigator.onLine){
+    // Simulacion con Firestore navigator.onLine
+    if(false){
       const registroRef = collection(this.firestore, 'infoClientes');
       return collectionData(registroRef, {idField: 'id'}) as Observable<any[]>;
     }else{
