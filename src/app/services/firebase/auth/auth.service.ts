@@ -9,19 +9,25 @@ import {
 	signOut,
 	updateEmail,
 	updatePassword,
-	verifyBeforeUpdateEmail
+	verifyBeforeUpdateEmail,
+	getAuth
 } from '@angular/fire/auth'
-import { doc, docData, Firestore, setDoc, collectionData, collection } from '@angular/fire/firestore';
+import { doc, docData, Firestore, setDoc, collectionData, collection, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
+	private apiUrl = environment.apiUrl;
 
-	constructor(private auth: Auth, private firestore: Firestore) { }
 
-	async register({ usuario, email, password, role }: { usuario: string, email: string, password: string, role: string }) {
+	constructor(private auth: Auth, private firestore: Firestore, private http: HttpClient) { }
+
+	async register({ usuario, email, password, role, autos, herramientas }: { usuario: string, email: string, password: string, role: string, autos: any, herramientas: any }) {
 		try {
 			const user = await createUserWithEmailAndPassword(this.auth, email, password);
 			const userInfo = user.user;
@@ -31,7 +37,9 @@ export class AuthService {
 			await setDoc(userDocRef, {
 				usuario,
 				email,
-				role
+				role,
+				autos,
+				herramientas
 			});
 
 			return user;
@@ -95,30 +103,18 @@ export class AuthService {
 		}
 	}
 
-	async updateUser(updatedData: { uid?:string, usuario?: string, email?: string, password?: string, role?: string }) {
+	async updateUser(updatedData: { id?: string, usuario?: string, email?: string, role?: string, autos?: any, herramientas?: any }):Promise<any> {
 		try {
-			const user = this.auth.currentUser;
-			if (user) {
-				const userDocRef = doc(this.firestore, `users/${updatedData.uid}`);
 
-				// Actualizar los datos del usuario en Firestore
-				await setDoc(userDocRef, updatedData, { merge: true });
+			const registroRef = doc(this.firestore, `users/${updatedData.id}`);
+			return updateDoc(registroRef, {
+				'usuario': updatedData.usuario,
+				'email': updatedData.email,
+				'role': updatedData. role,
+				'autos': updatedData.autos,
+				'herramientas': updatedData.herramientas
+			});
 
-				// Si el email fue actualizado, actualizamos también en la autenticación
-				if (updatedData.email && updatedData.email !== "" && updatedData.email !== undefined ) {
-					await updateEmail(user, updatedData.email);
-				}
-
-				// Si la contraseña fue actualizada, la actualizamos también
-				if (updatedData.password && updatedData.password != "" && updatedData.password !== undefined) {
-					console.log('Se actualizo la contraseña')
-					//await updatePassword(user, updatedData.password);
-				}
-
-				return { success: true };
-			} else {
-				throw new Error('No hay un usuario autenticado');
-			}
 		} catch (error) {
 			console.error('Error al actualizar la información del usuario:', error);
 			return { success: false, error };

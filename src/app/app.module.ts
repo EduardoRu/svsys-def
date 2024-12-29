@@ -17,6 +17,8 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
+//import { initializeApp as adminInitlice } from 'firebase-admin/app'
+
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],

@@ -8,5 +8,6 @@ export const environment = {
     messagingSenderId: "21721868793",
     appId: "1:21721868793:web:124a8cfaa64ea7e94ef528",
     measurementId: "G-V837CF4KDP"
-  }
+  },
+  apiUrl: 'https://svsysdb.web.app'
 };

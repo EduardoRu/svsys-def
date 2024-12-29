@@ -38,9 +38,8 @@ export class AdministracionCuentasPage implements OnInit {
     // AQUÍ comienza el formulario para la edición de un usuario
     this.informacionUsuario = this.formbuilder.group({
       usuario: ['', Validators.required],
-      apellido: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telefono: ['', Validators.required]
+      password: ['', Validators.required],
+      role: ['', Validators.required]
     });
 
 
@@ -82,23 +81,11 @@ export class AdministracionCuentasPage implements OnInit {
   }
 
   async editUser(usuario:any){
-    /*
-    if(usuario.length != 0){
-      const modalUserUpdate = await this.modalController.create({
-        component: DetalleCuentaComponent,
-        componentProps: {
-          usuario
-        },
-        cssClass: 'modalUsuarios'
-      });
-  
-      modalUserUpdate.present();
+    if(this.usuarioDetalles.length != 0){
+      this.editarUsuaio = true;
     }else{
-      this.presentToast('Favor de seleccionar un usuario' , 'bottom', 'warning');
+      this.presentToast('Favor de seleccionar un usuario (DETALLES)' , 'bottom','warning');
     }
-    */
-
-    this.editarUsuaio = true;
   }
 
   async guardarDetallesUsuario() {
@@ -115,6 +102,24 @@ export class AdministracionCuentasPage implements OnInit {
     modalCarSearch.present();
 
     
+  }
+
+  async administrarAutosUsuarios(){
+    const modalAutosUsuario = await this.modalController.create({
+      component: AutosComponent,
+      cssClass:'modalAutosUsuario',
+      componentProps: {
+        detallesUsuario: this.usuarioDetalles
+      }
+    });
+
+    modalAutosUsuario.present();
+
+    modalAutosUsuario.onDidDismiss().then((data) => {
+      if(data.data){
+        this.autos = data.data;
+      }
+    });
   }
 
 

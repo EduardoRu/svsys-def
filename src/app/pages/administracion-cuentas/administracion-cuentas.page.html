@@ -118,7 +118,7 @@
                 <ion-input label="Contraseña" labelPlacement="fixed" placeholder="********" formControlName="password"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-select label="Tipo de usuario:" placeholder="Rol del usuario" label-placement="floating" formControlName="">
+                <ion-select label="Tipo de usuario:" placeholder="Rol del usuario" label-placement="floating" formControlName="role">
                   <ion-select-option value="Gerente">Gerente</ion-select-option>
                   <ion-select-option value="Supervisor">Supervisor</ion-select-option>
                   <ion-select-option value="Inspector">Inspector</ion-select-option>
@@ -129,7 +129,7 @@
 
             <h2 style="text-align: center; margin-top: 2%;">Vehicuo usado</h2>
             <ion-list>
-              <ion-item lines="" button>
+              <ion-item lines="" button (click)="administrarAutosUsuarios()">
                 <ion-label style="font-size: medium;">
                   <b>Da clik aquí para seleccionar ó eliminar su auto</b>
                 </ion-label>

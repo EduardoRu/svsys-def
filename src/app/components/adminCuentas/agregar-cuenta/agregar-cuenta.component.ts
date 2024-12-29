@@ -33,7 +33,9 @@ export class AgregarCuentaComponent implements OnInit {
       usuario: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.required]],
-      role: ['', [Validators.required, Validators.required]]
+      role: ['', [Validators.required, Validators.required]],
+      autos: [[]],
+      herramientas: [[]]
     })
   }
 
