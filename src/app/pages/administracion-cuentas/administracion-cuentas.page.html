@@ -69,26 +69,58 @@
           </ion-list>
           <h2 style="text-align: center; margin-top: 2%;">Vehicuo usado</h2>
           <ion-list>
-            <ion-item lines="">
-              <ion-label style="font-size: medium;">
-                <b>El usuario utiliza el auto: </b> <span *ngFor="let item of usuarioDetalles.autos">{{item.placa}} </span>
-              </ion-label>
-            </ion-item>
+            <ng-container *ngIf="tieneAutos(usuarioDetalles.autos); else elseAuto">
+              <ion-item lines="">
+                <ion-label style="font-size: medium;">
+                  <b>El usuario utiliza el auto: </b> <span *ngFor="let item of usuarioDetalles.autos">{{item.placa}} </span>
+                </ion-label>
+              </ion-item>
+            </ng-container>
+            <ng-template #elseAuto>
+              <ion-item lines="">
+                <ion-label style="font-size: medium;">
+                  <b>Aún no se han asignado un auto</b>
+                </ion-label>
+              </ion-item>
+            </ng-template>
+            
+
+
           </ion-list>
           <h2 style="text-align: center; margin-top: 2%;">Equipo</h2>
           <ion-list>
-            <ion-item lines="">
-              <ion-label style="font-size: medium;">
-                <b>El usuario utiliza el conjunto:</b>
-              </ion-label>
-            </ion-item>
+            <ng-container *ngIf="tieneHerramientas(usuarioDetalles.herramientas); else elseEquipo">
+              <ion-item lines="" button (click)="consultarEquipo()">
+                <ion-label style="font-size: medium;">
+                  <b>Presiona aquí para consultar el equipo dle usuario: {{usuarioDetalles.usuario}}</b>
+                </ion-label>
+              </ion-item>
+            </ng-container>
+            
+            <ng-template #elseEquipo>
+              <ion-item lines="">
+                <ion-label style="font-size: medium;">
+                  <b>Aún no se han asignado equipo</b>
+                </ion-label>
+              </ion-item>
+            </ng-template>
+
           </ion-list>
           <h2 style="text-align: center; margin-top: 2%;">Documentos</h2>
-          <ion-item lines="">
-            <ion-label style="font-size: medium;">
-              <b>Conuslta el formato de equipo:</b>
-            </ion-label>
-          </ion-item>
+          <ng-container *ngIf="tieneHerramientas(usuarioDetalles.herramientas); else elseEquipoDocumentos">
+            <ion-item lines="">
+              <ion-label style="font-size: medium;">
+                <b>Conuslta el formato de equipo</b>
+              </ion-label>
+            </ion-item>
+          </ng-container>
+          <ng-template #elseEquipoDocumentos>
+            <ion-item lines="">
+              <ion-label style="font-size: medium;">
+                <b>Debes asignar y subir el vale de equipo del usuario {{usuarioDetalles.usuario}}</b>
+              </ion-label>
+            </ion-item>
+          </ng-template>
           <ion-list>
             <ion-button (click)="editUser(usuarioDetalles)" color="primary" expand="block">
               Presiona aquí para editar su inforamción
@@ -137,7 +169,7 @@
             </ion-list>
             <h2 style="text-align: center; margin-top: 2%;">Equipo</h2>
             <ion-list>
-              <ion-item button lines="">
+              <ion-item button lines="" (click)="administrarEquipo()">
                 <ion-label style="font-size: medium;">
                   <b>Da clik aquí para seleccionar ó eliminar el equipo</b>
                 </ion-label>

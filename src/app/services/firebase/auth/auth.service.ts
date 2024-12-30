@@ -12,7 +12,7 @@ import {
 	verifyBeforeUpdateEmail,
 	getAuth
 } from '@angular/fire/auth'
-import { doc, docData, Firestore, setDoc, collectionData, collection, updateDoc } from '@angular/fire/firestore';
+import { doc, docData, Firestore, setDoc, collectionData, collection, updateDoc,UpdateData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -27,7 +27,7 @@ export class AuthService {
 
 	constructor(private auth: Auth, private firestore: Firestore, private http: HttpClient) { }
 
-	async register({ usuario, email, password, role, autos, herramientas }: { usuario: string, email: string, password: string, role: string, autos: any, herramientas: any }) {
+	async register({ usuario, email, password, role, autos, herramientas, documentos, reportes }: { usuario: string, email: string, password: string, role: string, autos: any, herramientas: any, documentos:any, reportes:any }) {
 		try {
 			const user = await createUserWithEmailAndPassword(this.auth, email, password);
 			const userInfo = user.user;
@@ -39,7 +39,9 @@ export class AuthService {
 				email,
 				role,
 				autos,
-				herramientas
+				herramientas,
+				documentos,
+                reportes
 			});
 
 			return user;
@@ -105,7 +107,6 @@ export class AuthService {
 
 	async updateUser(updatedData: { id?: string, usuario?: string, email?: string, role?: string, autos?: any, herramientas?: any }):Promise<any> {
 		try {
-
 			const registroRef = doc(this.firestore, `users/${updatedData.id}`);
 			return updateDoc(registroRef, {
 				'usuario': updatedData.usuario,
@@ -118,6 +119,22 @@ export class AuthService {
 		} catch (error) {
 			console.error('Error al actualizar la información del usuario:', error);
 			return { success: false, error };
+		}
+	}
+
+	async updateUserFields(id: string, usuario: string, role: string){
+		const docRef = doc(this.firestore, 'users', id);
+
+		// Define el objeto de actualización usando UpdateData
+		const updatedData: UpdateData<{ usuario: string; role: string }> = {
+		  usuario,
+		  role,
+		};
+	
+		try {
+		  await updateDoc(docRef, updatedData);
+		} catch (error) {
+		  console.error('Error al actualizar usuario y role: ', error);
 		}
 	}
 }

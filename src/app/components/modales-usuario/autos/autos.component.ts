@@ -78,9 +78,6 @@ export class AutosComponent  implements OnInit {
         console.log(res);
       });
 
-
-      this.autosSeleccionados = []
-
     } catch (error) {
       console.error('El error ha sido: ', error)
     }

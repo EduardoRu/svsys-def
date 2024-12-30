@@ -6,6 +6,8 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 import { AddCarService } from 'src/app/services/actividades/addCar/add-car.service';
 import { AutosComponent } from 'src/app/components/modales-usuario/autos/autos.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EquiposComponent } from 'src/app/components/modales-usuario/equipos/equipos.component';
+import { VerEquipoComponent } from 'src/app/components/modales-usuario/ver-equipo/ver-equipo/ver-equipo.component';
 
 
 @Component({
@@ -81,7 +83,6 @@ export class AdministracionCuentasPage implements OnInit {
   async detailUser(usuario:any){
     if(this.editarUsuaio == false){
       this.usuarioDetalles = usuario;
-      console.log(this.usuarioDetalles)
 
       this.informacionUsuario.get('id').setValue(this.usuarioDetalles.id)
 
@@ -90,8 +91,6 @@ export class AdministracionCuentasPage implements OnInit {
       this.informacionUsuario.get('role').setValue(this.usuarioDetalles.role)
 
       // Autos y herraminetas
-      this.informacionUsuario.get('autos').setValue(this.usuarioDetalles.autos)
-      this.informacionUsuario.get('herramientas').setValue(this.usuarioDetalles.herramientas)
     }else{
       this.presentToast('Se esta editando un usuario', 'bottom', 'warning')
     }
@@ -109,9 +108,13 @@ export class AdministracionCuentasPage implements OnInit {
     this.editarUsuaio = false;
     try {
       if(this.informacionUsuario.valid){
-        this.authService.updateUser(this.informacionUsuario.value);
-        this.usuarioDetalles = this.informacionUsuario.value;
+        const id = this.informacionUsuario.get('id').value;
+        const user = this.informacionUsuario.get('usuario').value;
+        const role = this.informacionUsuario.get('role').value
 
+        this.authService.updateUserFields(id,user,role);
+        this.getInformacion()
+        
         this.presentToast('Detalles actualizados correctamente' , 'bottom','success');
       }else{
         this.presentToast('Todos los campos son obligatorios', 'bottom','danger');
@@ -150,6 +153,48 @@ export class AdministracionCuentasPage implements OnInit {
         this.autos = data.data;
       }
     });
+  }
+
+  // Seección de herramientas
+  async administrarEquipo(){
+    const modalHerramientas = await this.modalController.create({
+      component: EquiposComponent,
+      cssClass:'modalHerramientas',
+      componentProps: {
+        detallesUsuario: this.usuarioDetalles
+      }
+    });
+
+    modalHerramientas.present();
+  }
+
+  // Consultar las herramientas del usuario
+  async consultarEquipo(){
+    const modalVerEquipo = await this.modalController.create({
+      component: VerEquipoComponent,
+      cssClass:'modalVerEquipo',
+      componentProps: {
+        detallesUsuario: this.usuarioDetalles
+      }
+    });
+
+    modalVerEquipo.present();
+  }
+
+  tieneHerramientas(tools:any){
+    if(tools != undefined){
+      return tools.length != 0 ? true: false;
+    }else{
+      return false;
+    }
+  }
+
+  tieneAutos(auto:any):boolean{
+    if(auto!= undefined){
+      return auto.length != 0 ? true: false;
+    }else{
+      return false;
+    }
   }
 
 
