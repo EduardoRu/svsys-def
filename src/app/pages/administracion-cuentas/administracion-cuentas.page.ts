@@ -197,5 +197,9 @@ export class AdministracionCuentasPage implements OnInit {
     }
   }
 
+  funcionDePrueba(){
+    console.log('Funcion de prueba');
+  }
+
 
 }
