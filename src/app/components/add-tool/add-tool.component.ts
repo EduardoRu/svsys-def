@@ -19,12 +19,12 @@ import * as XLSX from 'xlsx';
     ReactiveFormsModule
   ]
 })
-export class AddToolComponent  implements OnInit {
-  
+export class AddToolComponent implements OnInit {
+
   public nuevaPesa: FormGroup;
   selectedFile: File | null = null; // Archivo completo
   selectedFileName: string | null = null;
-  public herramientas:any = []
+  public herramientas: any = []
 
 
   constructor(
@@ -61,28 +61,28 @@ export class AddToolComponent  implements OnInit {
     await toast.present();
   }
 
-  async cancel(){
+  async cancel() {
     await this.modalController.dismiss();
   }
 
-  async agregarPesa(){
+  async agregarPesa() {
     const loading = await this.loadingController.create({
       message: 'Agregando pesa...'
     });
     await loading.present();
 
-    if(this.nuevaPesa.valid){
+    if (this.nuevaPesa.valid) {
       try {
-        this.toolService.addTool(this.nuevaPesa.value).then((e:any) => {
+        this.toolService.addTool(this.nuevaPesa.value).then((e: any) => {
           loading.dismiss();
-          this.presentToast('Pesa agregada exitosamente', 'bottom','success');
+          this.presentToast('Pesa agregada exitosamente', 'bottom', 'success');
           this.modalController.dismiss();
           this.nuevaPesa.reset();
         })
       } catch (error) {
         this.presentToast('Error: ' + error.message, 'bottom', 'danger');
       }
-    }else{
+    } else {
       this.presentToast('Favor de completar todos los campos', 'bottom', 'warning');
     }
   }
@@ -95,7 +95,7 @@ export class AddToolComponent  implements OnInit {
       const file = event.dataTransfer.files[0];
       if (this.isValidFileType(file)) {
         this.selectedFileName = file.name; // Guarda el nombre del archivo
-        
+
       } else {
         alert('Solo se permiten archivos Excel (.xlsx, .xls)');
       }
@@ -143,55 +143,56 @@ export class AddToolComponent  implements OnInit {
       console.error('No se ha seleccionado ningún archivo.');
       return;
     }
-  
+
     const reader = new FileReader();
-    
+
     reader.onload = (e: any) => {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
-  
+
       // Asumimos que estamos procesando la primera hoja
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
-  
+
       // Convertir la hoja en formato JSON
       const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-  
+
       // `sheetData` es un array de arrays (cada fila es un array de celdas)
       for (let i = 1; i < sheetData.length; i++) {
-        const element:any = sheetData[i];
 
-        this.nuevaPesa.get('identificacion').setValue(element[1])
-        this.nuevaPesa.get('tipo_instrumento').setValue(element[2])
-        this.nuevaPesa.get('marca').setValue(element[3])
-        this.nuevaPesa.get('modelo').setValue(element[4])
-        this.nuevaPesa.get('no_serie').setValue(element[5])
-        this.nuevaPesa.get('capacidad').setValue(element[6])
-        this.nuevaPesa.get('clase_exactitud').setValue(element[7])
-        this.nuevaPesa.get('observaciones').setValue(element[8])
-        this.nuevaPesa.get('estado').setValue('Disponible')
-
-        console.log(this.nuevaPesa.value);
 
         setTimeout(() => {
+          const element: any = sheetData[i];
+
+          this.nuevaPesa.get('identificacion').setValue(element[1])
+          this.nuevaPesa.get('tipo_instrumento').setValue(element[2])
+          this.nuevaPesa.get('marca').setValue(element[3])
+          this.nuevaPesa.get('modelo').setValue(element[4])
+          this.nuevaPesa.get('no_serie').setValue(element[5])
+          this.nuevaPesa.get('capacidad').setValue(element[6])
+          this.nuevaPesa.get('clase_exactitud').setValue(element[7])
+          this.nuevaPesa.get('observaciones').setValue(element[8])
+          this.nuevaPesa.get('estado').setValue('Disponible')
+
+          console.log(this.nuevaPesa.value);
           try {
-            this.toolService.addTool(this.nuevaPesa.value).then((e:any) => {
-              this.presentToast('Pesa agregada exitosamente', 'bottom','success');
+            this.toolService.addTool(this.nuevaPesa.value).then((e: any) => {
+              this.presentToast('Pesa agregada exitosamente', 'bottom', 'success');
               this.modalController.dismiss();
               this.nuevaPesa.reset();
             })
           } catch (error) {
             this.presentToast('Error: ' + error.message, 'bottom', 'danger');
           }
-        }, 1000);
+        }, 500*i);
       }
-      
+
     };
-  
+
     reader.onerror = (error) => {
       console.error('Error leyendo el archivo:', error);
     };
-  
+
     reader.readAsArrayBuffer(this.selectedFile);
   }
 }

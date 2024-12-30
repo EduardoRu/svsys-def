@@ -76,7 +76,11 @@ export class AutosComponent  implements OnInit {
       
       this.authservice.updateUser(this.detallesUsuario).then((res) => {
         console.log(res);
-      })
+      });
+
+
+      this.autosSeleccionados = []
+
     } catch (error) {
       console.error('El error ha sido: ', error)
     }

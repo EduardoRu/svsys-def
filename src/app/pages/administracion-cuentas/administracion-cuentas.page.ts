@@ -37,12 +37,14 @@ export class AdministracionCuentasPage implements OnInit {
 
     // AQUÍ comienza el formulario para la edición de un usuario
     this.informacionUsuario = this.formbuilder.group({
-      usuario: ['', Validators.required],
-      password: ['', Validators.required],
-      role: ['', Validators.required]
+      id: ['', Validators.required],
+      usuario: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [''],
+      role: ['', [Validators.required, Validators.required]],
+      autos: [[]],
+      herramientas: [[]]
     });
-
-
   }
 
   async presentToast(mesage: string, position: 'top' | 'middle' | 'bottom', cl: "danger" | "success" | "warning") {
@@ -77,7 +79,22 @@ export class AdministracionCuentasPage implements OnInit {
   }
 
   async detailUser(usuario:any){
-    this.usuarioDetalles = usuario;
+    if(this.editarUsuaio == false){
+      this.usuarioDetalles = usuario;
+      console.log(this.usuarioDetalles)
+
+      this.informacionUsuario.get('id').setValue(this.usuarioDetalles.id)
+
+      this.informacionUsuario.get('usuario').setValue(this.usuarioDetalles.usuario)
+      this.informacionUsuario.get('email').setValue(this.usuarioDetalles.email)
+      this.informacionUsuario.get('role').setValue(this.usuarioDetalles.role)
+
+      // Autos y herraminetas
+      this.informacionUsuario.get('autos').setValue(this.usuarioDetalles.autos)
+      this.informacionUsuario.get('herramientas').setValue(this.usuarioDetalles.herramientas)
+    }else{
+      this.presentToast('Se esta editando un usuario', 'bottom', 'warning')
+    }
   }
 
   async editUser(usuario:any){
@@ -90,7 +107,20 @@ export class AdministracionCuentasPage implements OnInit {
 
   async guardarDetallesUsuario() {
     this.editarUsuaio = false;
-    this.presentToast('Detalles actualizados correctamente' , 'bottom','success');
+    try {
+      if(this.informacionUsuario.valid){
+        this.authService.updateUser(this.informacionUsuario.value);
+        this.usuarioDetalles = this.informacionUsuario.value;
+
+        this.presentToast('Detalles actualizados correctamente' , 'bottom','success');
+      }else{
+        this.presentToast('Todos los campos son obligatorios', 'bottom','danger');
+        return;
+      }
+    } catch (error) {
+      this.presentToast('Algo ha salido mal, revisa la informaicón' , 'bottom','danger');
+    }
+    
   }
 
   async buscarAutoModal(){

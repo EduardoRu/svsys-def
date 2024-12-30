@@ -71,7 +71,7 @@
           <ion-list>
             <ion-item lines="">
               <ion-label style="font-size: medium;">
-                <b>El usuario utiliza el auto:</b>
+                <b>El usuario utiliza el auto: </b> <span *ngFor="let item of usuarioDetalles.autos">{{item.placa}} </span>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -137,29 +137,31 @@
             </ion-list>
             <h2 style="text-align: center; margin-top: 2%;">Equipo</h2>
             <ion-list>
-              <ion-item lines="">
+              <ion-item button lines="">
                 <ion-label style="font-size: medium;">
-                  <b>El usuario utiliza el conjunto:</b>
+                  <b>Da clik aquí para seleccionar ó eliminar el equipo</b>
                 </ion-label>
               </ion-item>
             </ion-list>
             <h2 style="text-align: center; margin-top: 2%;">Documentos</h2>
-            <ion-item lines="">
+            <ion-item button lines="">
               <ion-label style="font-size: medium;">
-                <b>Conuslta el formato de equipo:</b>
+                <b>Conuslta el formato de equipo</b>
               </ion-label>
             </ion-item>
 
             <ion-list style="text-align: center;">
               <div class="row" text>
-                <div class="col-md-6">
-                  <ion-button type="submit" expand="block" color="primary" fill="clear" shape="round">
-                    Editar usuario
-                  </ion-button>
-                </div>
+                
                 <div class="col-md-6">
                   <ion-button expand="block" color="danger" fill="clear" shape="round">
                     Eliminar usuario
+                  </ion-button>
+                </div>
+
+                <div class="col-md-6">
+                  <ion-button type="submit" expand="block" color="primary" fill="clear" shape="round">
+                    Editar usuario
                   </ion-button>
                 </div>
               </div>

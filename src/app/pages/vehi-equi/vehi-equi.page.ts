@@ -17,6 +17,10 @@ export class VehiEquiPage implements OnInit {
   public autos:any = []
   public herramientas:any = [];
 
+  // Resultados de autos y herraminetas
+  public carResult: any = [];
+  public toolResult: any = [];
+
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
@@ -44,6 +48,7 @@ export class VehiEquiPage implements OnInit {
     this.carService.getCar().subscribe({
       next: (car) => {
         this.autos = car
+        this.carResult = car
       },
       error: (error) => {
         this.presentToast('Error: '+ error.message, 'bottom', 'danger');
@@ -53,6 +58,7 @@ export class VehiEquiPage implements OnInit {
     this.toolService.getTool().subscribe({
       next: (data) => {
         this.herramientas = data;
+        this.toolResult = data
       },
       error: (error) => {
         this.presentToast('Error: '+ error.message, 'bottom', 'danger');
@@ -101,6 +107,17 @@ export class VehiEquiPage implements OnInit {
     });
 
     modalEditarHerramienta.present();
+  }
+  // METODOS DE BUSQUEDA
+  async handleSearchTool(e:any){
+    const query = e.target.value.toLowerCase();
+
+    this.toolResult = this.herramientas.filter((d: any) =>  d.identificacion.toLowerCase().indexOf(query) > -1);
+  }
+
+  async handleSearchCar(e:any){
+    const query = e.target.value.toLowerCase();
+    this.carResult = this.autos.filter((d: any) => d.placa.toLowerCase().indexOf(query) > -1);
   }
 
 }
