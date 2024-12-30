@@ -22,8 +22,6 @@ import { HttpClient } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class AuthService {
-	private apiUrl = environment.apiUrl;
-
 
 	constructor(private auth: Auth, private firestore: Firestore, private http: HttpClient) { }
 
