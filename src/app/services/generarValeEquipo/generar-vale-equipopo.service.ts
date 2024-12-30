@@ -57,7 +57,7 @@ export class GenerarValeEquipopoService {
 
     var dd = {
       pageSize: 'A4',
-      pageMargins: [10, 10, 20, 20], // Márgenes generales
+      pageMargins: [20, 20, 20, 20], // Márgenes generales
       defaultStyle: {
         font: 'Times', // Usa Times New Roman como fuente predeterminada
       },
@@ -208,13 +208,13 @@ export class GenerarValeEquipopoService {
                         margin: [0,5,0,5]
                       }],
                       [{
-                        margin: [0, 15, 0, 130],
+                        margin: [0, 15, 0, 120],
                         border: [1, 0, 1, 1],
                         columns: [
                           {
-                            text: 'Datos del Deudor:\nNombre:____________________________________________\nDomicilio:___________________________________________\nTeléfono: ___________________________________________\nFecha:______________________________________________',
+                            text: 'Datos del Deudor:\nNombre:_____________________________________________\nDomicilio:___________________________________________\nTeléfono: ___________________________________________\nFecha:______________________________________________',
                             fontSize: 10,
-
+                            margin: [0,5,0,5]
                           },
                           {
                             table: {
@@ -224,14 +224,16 @@ export class GenerarValeEquipopoService {
                                   text: 'Acepto:\n\n\n',
                                   fontSize: 10,
                                   alignment: 'center',
-                                  border: [1, 1, 1, 0]
+                                  border: [1, 1, 1, 0],
+                                  font: 'Roboto'
                                 }],
                                 [{
-                                  text: 'Firma____________________',
+                                  text: 'Firma _______________________',
                                   fontSize: 10,
                                   alignment: 'center',
                                   border: [1, 0, 1, 1],
-                                  margin: [0,5,0,5]
+                                  margin: [0,5,0,5],
+                                  font: 'Roboto'
                                 }]
                               ]
                             },
@@ -285,7 +287,7 @@ export class GenerarValeEquipopoService {
             hLineColor: () => 'black', // Color de las líneas horizontales
             vLineColor: () => 'black', // Color de las líneas verticales
           },
-          margin: [450, 0, 0, 20],
+          margin: [470, 2, 50, 20],
         }
       ]
     };
