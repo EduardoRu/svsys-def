@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, FormGroup, Validators, FormArray } from '@angular/forms';
-import { AlertController, IonicModule, LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { CitasService } from 'src/app/services/actividades/citas/citas.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { EncuestaSatifaccionComponent } from '../encuesta-satifaccion/encuesta-satifaccion.component';
@@ -12,6 +12,7 @@ import { QrModalComponent } from 'src/app/qr-modal/qr-modal.component';
 import { Geolocation } from '@capacitor/geolocation';
 import proj4 from 'proj4';
 import { GenerarDictamenService } from 'src/app/services/generarDictamen/generar-dictamen.service';
+import { ReportesService } from 'src/app/services/actividades/reportes/reportes.service';
 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
@@ -31,6 +32,9 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
 
   public segment = "infoClientes";
+
+  // Datos finales
+  dicamenFinal: FormGroup;
 
   // Información del cliente
   clienteInformacion: FormGroup;
@@ -75,7 +79,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
     private alertController: AlertController,
     private citasService: CitasService,
     private modalController: ModalController,
-    private almacenamientoService: AlmacenamientoService,
+    private toastController: ToastController,
+    private dictamenSerivce: ReportesService,
     private generarReporteService: GenerarDictamenService
   ) { }
 
@@ -313,6 +318,21 @@ export class GenerarReporteDesktopComponent implements OnInit {
       firma_inspector: [],
       firma_apoto: []
     });
+
+    this.dicamenFinal = this.fb.group({
+      idUsuario: ['', Validators.required],
+      nombreUsuario:['', Validators.required],
+      infoCliente: [[], Validators.required],
+      infoPago: [[], Validators.required],
+      infoVisuales: [[], Validators.required],
+      encuesta: [[], Validators.required],
+      infoBasculas: [[], Validators.required],
+      estudioMtro: [[], Validators.required],
+      infoResumen: [[], Validators.required]
+    })
+
+
+
     setTimeout(async () => {
       const loagin = await this.loadingController.create({
         message: "Cargando infocmaicón",
@@ -733,6 +753,17 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
+  async presentToast(mesage: string, position: 'top' | 'middle' | 'bottom', cl: "danger" | "success" | "warning") {
+    const toast = await this.toastController.create({
+      message: mesage,
+      duration: 1500,
+      position: position,
+      color: cl
+    });
+
+    await toast.present();
+  }
+
 
   async encuestaSatifaccion() {
     // GUARDAR INFORMAICÓN
@@ -747,11 +778,61 @@ export class GenerarReporteDesktopComponent implements OnInit {
       });
 
       modalEncuestaSatisfied.present();
+
+      modalEncuestaSatisfied.onDidDismiss().then((result) => {
+        if (navigator.onLine) {
+          this.subirInformacion();
+        } else {
+          this.presentToast('No hay conexión WiFi, sube tu reporte cuando tengas internet', "bottom", "warning")
+        }
+      })
     }
-
-
-
   }
+
+  async subirInformacion() {
+    const infoCliente:any = await this.storageService.getValue('infoClientes');
+    const infoPago:any = await this.storageService.getValue('infoPago');
+    const infoVisuales:any = await this.storageService.getValue('inspeccionVisual');
+    const encuesta:any = await this.storageService.getValue('encuesta_satisfaccion');
+    const infoBasculas:any = await this.storageService.getValue('infoBasculas');
+    const estudioMtro:any = await this.storageService.getValue('estudioMtro');
+    const infoResumen:any = await this.storageService.getValue('resumen');
+
+    const user:any = await this.storageService.getValue('usuario');
+
+    if (
+      infoCliente != undefined &&
+      infoPago != undefined &&
+      infoVisuales != undefined &&
+      encuesta != undefined &&
+      infoBasculas != undefined &&
+      estudioMtro != undefined &&
+      infoResumen != undefined
+    ) {
+      this.dicamenFinal.get('infoCliente').setValue(infoCliente);
+      this.dicamenFinal.get('infoPago').setValue(infoPago);
+      this.dicamenFinal.get('infoVisuales').setValue(infoVisuales);
+      this.dicamenFinal.get('encuesta').setValue(encuesta);
+      this.dicamenFinal.get('infoBasculas').setValue(infoBasculas);
+      this.dicamenFinal.get('estudioMtro').setValue(estudioMtro);
+      this.dicamenFinal.get('infoResumen').setValue(infoResumen);
+      this.dicamenFinal.get('idUsuario').setValue(user.id);
+      this.dicamenFinal.get('nombreUsuario').setValue(user.usuario);
+
+      if(this.dicamenFinal.valid){
+        try {
+          this.dictamenSerivce.addReporte(this.dicamenFinal.value).then((res) => {
+            this.presentToast('Reporte guardado correctamente', "bottom", "success")
+          })
+        } catch (error) {
+          this.presentToast('Error al guardar el reporte:'+ error.message, "bottom", "danger")
+        }
+      }
+    }else{
+      console.log("No hay información para guardar")
+    }
+  }
+
 
   infoBasculaResumen(e: any) {
     this.basculaResumen = e.detail.value;
@@ -822,48 +903,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
       infoBasculas,
       estudioMtro,
       infoResumen
-    ).then((res:any) => {
+    ).then((res: any) => {
       console.log(res);
     })
-  }
-
-
-  
-
-  async obtenerUbicacion() {
-    try {
-      // Definir el sistema de referencia UTM (Ejemplo: WGS84 zona 13N)
-      const utmZone13N = "+proj=utm +zone=13 +datum=WGS84 +units=m +no_defs";
-
-      // Función para convertir latitud/longitud a UTM con redondeo
-      const latLongToUtm = (lat: number, long: number) => {
-        const utmCoords = proj4(proj4.WGS84, utmZone13N, [long, lat]);
-        return {
-          easting: Math.round(utmCoords[0]), // Coordenada Este redondeada
-          northing: Math.round(utmCoords[1]), // Coordenada Norte redondeada
-        };
-      };
-
-      // Obtener la ubicación actual
-      const position = await Geolocation.getCurrentPosition();
-
-      /*
-      console.log("Latitud y Longitud actuales:", {
-        latitud: position.coords.latitude,
-        longitud: position.coords.longitude,
-      });
-      */
-
-      // Convertir latitud y longitud a UTM con redondeo
-      const utmCoords = latLongToUtm(position.coords.latitude, position.coords.longitude);
-
-      //console.log("Coordenadas UTM (redondeadas):", utmCoords);
-
-      // Retornar los datos en caso de que necesites usarlos más adelante
-      return utmCoords
-    } catch (error) {
-      console.error("Error al obtener la ubicación:", error);
-      throw error; // Lanza el error para manejarlo donde se llame esta función
-    }
   }
 }

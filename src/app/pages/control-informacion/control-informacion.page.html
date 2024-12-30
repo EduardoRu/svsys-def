@@ -44,15 +44,33 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col"># Cita</th>
+            <th scope="col">Inspector</th>
             <th scope="col">Nombre / Razón Social</th>
             <th scope="col">Domicilio</th>
-            <th scope="col">Tipo de servicio</th>
+            <th scope="col">Tipo de inspección</th>
             <th scope="col">Administración</th>
           </tr>
         </thead>
         <tbody>
-
+          <tr *ngFor="let item of reportes; let i = index">
+            <td style="padding-top: 1.2%;">
+              {{item.nombreUsuario}}
+            </td>
+            <td style="padding-top: 1.2%;">
+              {{item.infoCliente.nombre_razon_social}}
+            </td>
+            <td style="padding-top: 1.2%;">
+              {{item.infoCliente.domicilio}} {{item.infoCliente.colonia}} {{item.infoCliente.num_dom}}
+            </td>
+            <td style="padding-top: 1.2%;">
+              {{item.infoBasculas.tipo_inspeccion}}
+            </td>
+            <td>
+              <ion-button expand="block" fill="clear" shape="round">
+                Detalles
+              </ion-button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </ion-card-content>

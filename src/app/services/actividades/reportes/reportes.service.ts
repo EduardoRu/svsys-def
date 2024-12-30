@@ -27,28 +27,32 @@ export class ReportesService {
   ) { }
 
   getReporte(): Observable<any[]> {
-    const registroRef = collection(this.firestore, 'reportes');
+    const registroRef = collection(this.firestore, 'dictamenFinal');
     return collectionData(registroRef, {idField: 'id'}) as Observable<any[]>;
   }
 
   getReporteById(id: string): Observable<any> {
-    const registroRef = doc(this.firestore, `reportes/${id}`);
+    const registroRef = doc(this.firestore, `dictamenFinal/${id}`);
     return docData(registroRef) as Observable<any>;
   }
 
   addReporte(reporte: any): Promise<any> {
-    return addDoc(collection(this.firestore, 'reportes'), reporte);
+    return addDoc(collection(this.firestore, 'dictamenFinal'), reporte);
   }
 
   deleteReporte(id:string){
-    const registroRef = doc(this.firestore, `reportes/${id}`);
+    const registroRef = doc(this.firestore, `dictamenFinal/${id}`);
     return deleteDoc(registroRef);
   }
 
   updateReporte(reporte: any): Promise<any> {
-    const registroRef = doc(this.firestore, `reportes/${reporte.id}`);
+    const fechaMexico = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
+
+
+    const registroRef = doc(this.firestore, `dictamenFinal/${reporte.id}`);
     return updateDoc(registroRef, {
-      //PENDIENTE
+      idUsuario: reporte.idUsuario,
+      updatedAt: fechaMexico
     });
   }
 }
