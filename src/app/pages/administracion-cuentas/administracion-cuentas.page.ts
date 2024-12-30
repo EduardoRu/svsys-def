@@ -202,11 +202,7 @@ export class AdministracionCuentasPage implements OnInit {
 
   funcionDePrueba(){
     this.valeService.generarJSON().then((res) => {
-      const dd = res;
-
-      //const pdfDocGenerator = pdfMake.createPdf(dd);
-
-      pdfMake.createPdf(dd).open();
+      console.log(res)
     })
   }
 
