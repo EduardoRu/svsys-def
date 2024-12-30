@@ -8,7 +8,9 @@ import { AutosComponent } from 'src/app/components/modales-usuario/autos/autos.c
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EquiposComponent } from 'src/app/components/modales-usuario/equipos/equipos.component';
 import { VerEquipoComponent } from 'src/app/components/modales-usuario/ver-equipo/ver-equipo/ver-equipo.component';
-
+import { GenerarValeEquipopoService } from 'src/app/services/generarValeEquipo/generar-vale-equipopo.service';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 @Component({
   selector: 'app-administracion-cuentas',
@@ -31,7 +33,8 @@ export class AdministracionCuentasPage implements OnInit {
     private loadController: LoadingController,
     private toastController: ToastController,
     private autoService: AddCarService,
-    private formbuilder: FormBuilder
+    private formbuilder: FormBuilder,
+    private valeService: GenerarValeEquipopoService
   ) { }
 
   ngOnInit() {
@@ -198,7 +201,13 @@ export class AdministracionCuentasPage implements OnInit {
   }
 
   funcionDePrueba(){
-    console.log('Funcion de prueba');
+    this.valeService.generarJSON().then((res) => {
+      const dd = res;
+
+      //const pdfDocGenerator = pdfMake.createPdf(dd);
+
+      pdfMake.createPdf(dd).open();
+    })
   }
 
 
