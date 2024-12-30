@@ -2606,6 +2606,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
   async presentQrModal(qrCodeUrl: string) {
     const modal = await this.modalController.create({
       component: QrModalComponent,
+      cssClass: 'modalQrCss',
       componentProps: { qrCodeUrl },
     });
     await modal.present();
