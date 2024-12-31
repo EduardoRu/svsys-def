@@ -982,7 +982,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
         }
       }
     } else {
-      console.log("No hay información para guardar")
+      console.log("No hay información para guardar por ahora")
     }
   }
 
