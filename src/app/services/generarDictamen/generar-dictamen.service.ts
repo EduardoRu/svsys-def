@@ -19,6 +19,24 @@ export class GenerarDictamenService {
     private modalController: ModalController
   ) { }
 
+  convertirImagenABase64(url:string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = url
+      img.crossOrigin = 'Anonymous'; // Esto es necesario para evitar problemas de CORS en algunos casos
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      };
+      img.onerror = (error) => reject(error);
+    });
+  }
+
   async obtenerUbicacion() {
     try {
       // Definir el sistema de referencia UTM (Ejemplo: WGS84 zona 13N)
@@ -99,7 +117,7 @@ export class GenerarDictamenService {
     estudioMtro: any,
     infoResumen: any
   ) {
-
+    
     var estudioMtroDatos: any = [];
 
     for (let i = 0; i < estudioMtro.ejemplo1.length; i++) {

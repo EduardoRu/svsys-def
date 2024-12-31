@@ -52,7 +52,30 @@ export class GenerarValeEquipopoService {
     return btoa(binary);
   }
 
+  convertirImagenABase64(url:string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = url
+      img.crossOrigin = 'Anonymous'; // Esto es necesario para evitar problemas de CORS en algunos casos
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      };
+      img.onerror = (error) => reject(error);
+    });
+  }
+
   async generarJSON() {
+    
+    const logoBase64 = await this.convertirImagenABase64(
+      'assets/logo_bg1.png'
+    );
+
     await this.cargarFuentes();
 
     var dd = {
@@ -82,7 +105,7 @@ export class GenerarValeEquipopoService {
                               bold: true,
                               border: [1, 1, 1, 1],
                               fillColor: '#FFDAB9',
-                            }]
+                            }],
                           ]
                         },
                         layout: {
