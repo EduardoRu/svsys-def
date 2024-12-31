@@ -13,6 +13,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import proj4 from 'proj4';
 import { GenerarDictamenService } from 'src/app/services/generarDictamen/generar-dictamen.service';
 import { ReportesService } from 'src/app/services/actividades/reportes/reportes.service';
+import { ListaClientesComponent } from '../lista-clientes/lista-clientes.component';
 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
@@ -352,6 +353,32 @@ export class GenerarReporteDesktopComponent implements OnInit {
         console.error(error);
       }
     })
+  }
+
+  async buscarClientes(){
+    const modalBuscarCliente = await this.modalController.create({
+      component: ListaClientesComponent,
+      cssClass:'my-custom-class'
+    });
+
+    modalBuscarCliente.present();
+
+    const {data, role} = await modalBuscarCliente.onWillDismiss();
+
+    if (role === 'confirm') {
+      this.clienteInformacion.get('nombre_razon_social').setValue(data.nombre_razon_social != null ? data.nombre_razon_social : '')
+      this.clienteInformacion.get('rfc').setValue(data.rfc != null ? data.rfc : '')
+      this.clienteInformacion.get('telefono').setValue(data.telefono != null ? data.telefono : '')
+      this.clienteInformacion.get('Fecha').setValue(data.fecha != null ? data.fecha : '')
+      this.clienteInformacion.get('tipo_servicio').setValue(data.tipo_servicio != null ? data.tipo_servicio : '')
+      this.clienteInformacion.get('cp').setValue(data.cp != null ? data.cp : '')
+      this.clienteInformacion.get('giro_empresarial').setValue(data.giro != null ? data.giro : '')
+      this.clienteInformacion.get('colonia').setValue(data.colonia != null ? data.colonia : '')
+      this.clienteInformacion.get('domicilio').setValue(data.domicilio != null ? data.domicilio : '')
+      this.clienteInformacion.get('num_dom').setValue(data.num_dom != null ? data.num_dom : '')
+      this.clienteInformacion.get('municipio').setValue(data.municipio != null ? data.municipio : '')
+      this.clienteInformacion.get('estado').setValue(data.estado != null ? data.estado : '')
+    }
   }
 
   citaProgramada(e: any) {

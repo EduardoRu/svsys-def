@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Buscar clientes
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-searchbar
+      [debounce]="25"
+      showCancelButton="always"
+      mode="ios"
+      color="light"
+      cancel-button-text="Borrar"
+      placeholder="Busca el nombre/razón social de un cliente"
+      (ionInput)="buscarCliente($event)">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-accordion-group [multiple]="true">
+    <ion-accordion *ngFor="let item of paginatedResults">
+      <ion-item slot="header" color="light">
+        <ion-label>{{ item.nombre_razon_social }}</ion-label>
+      </ion-item>
+      <ion-card slot="content" class="cliente-card">
+        <ion-card-content>
+          <div>
+            <strong>RFC:</strong> {{ item.rfc }}
+          </div>
+          <div>
+            <strong>DOMICILIO:</strong> {{ item.domicilio }}
+          </div>
+          <div>
+            <strong>COLONIA:</strong> {{ item.colonia }}
+          </div>
+          <div>
+            <strong>Num.:</strong> {{ item.num_dom }}
+          </div>
+          <div>
+            <strong>GIRO EMPRESARIAL:</strong> {{ item.giro_empresarial }}
+          </div>
+          <div>
+            <ion-button (click)="confirm(item)" expand="block" fill="clear" shape="round">
+              Seleccionar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="cargarMasDatos($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más clientes...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
