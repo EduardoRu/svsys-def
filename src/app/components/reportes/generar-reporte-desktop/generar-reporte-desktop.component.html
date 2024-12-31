@@ -25,12 +25,14 @@
 
   <ion-card-content>
     <ng-container *ngIf="segment == 'infoClientes'">
+      
       <ion-item>
         <ion-select placeholder="Seleccione a un cliente" (ionChange)="citaProgramada($event)">
           <ion-select-option *ngFor="let item of citasProgramadas"
             [value]="item">{{item.nombre_razon_social}}</ion-select-option>
         </ion-select>
       </ion-item>
+
       <hr>
       <form (ngSubmit)="getinfoCliente()" [formGroup]="clienteInformacion">
         <div class="row">

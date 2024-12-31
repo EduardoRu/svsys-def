@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from 'src/app/services/storage/storage.service';
-import { SqliteService } from 'src/app/services/sqlite/sqlite.service';
+import { FSubidaService } from 'src/app/services/actividades/f_subida/f-subida.service';
 
 @Component({
   selector: 'app-pruebassql',
@@ -9,32 +8,40 @@ import { SqliteService } from 'src/app/services/sqlite/sqlite.service';
 })
 export class PruebassqlPage implements OnInit {
 
-  items:any[] = [];
-
   constructor(
-    private storageService: StorageService,
-    private sqliteService: SqliteService
+    private fSubidaService: FSubidaService
   ) { }
 
   async ngOnInit() {
+    this.getInformacion();
   }
 
-  async pruebaRegistro(){
-    const key = 'pruebassql2';
-    const value = {
-      'pruebassql': 'pr',
-      'pruebass': 'pr'
-    };
+  async getInformacion() {
+    this.fSubidaService.organizarInformacion().subscribe({
+      next: (info) => {
+        const datosUnicos = this.filtrarInformacionUnica(info.Sheet1);
+        console.log(datosUnicos);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
 
-    await this.storageService.addValue(key, value).then((res) => {
-      console.log(res);
+
+  filtrarInformacionUnica(datos:any[]){
+    const mapa = new Map<string, any>();
+
+    datos.forEach((item) => {
+      const identificador = `${item.rfc}|${item.nombre_razon_social}|${item.domicilio}|${item.colonia}|${item.num_dom}|${item.giro_empresarial}`;
+  
+      if (!mapa.has(identificador)) {
+        mapa.set(identificador, item);
+      }
     });
-  }
+  
+    return Array.from(mapa.values());
 
-  async pruebaConsulta(){
-    const key = 'pruebassql';
-    const value = await this.storageService.getValue(key);
-    console.log('Item recuperado:', value);
-  }
 
+  }
 }

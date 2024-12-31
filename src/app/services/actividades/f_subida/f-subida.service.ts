@@ -38,7 +38,14 @@ export class FSubidaService {
     }
   }
 
+
   ingresarInfo(cliente:any){
     return addDoc(collection(this.firestore, 'infoClientes'), cliente);
+  }
+
+  organizarInformacion(): Observable<any>{
+    var registros:any = this.http.get('assets/resultado.json');
+
+    return registros;
   }
 }

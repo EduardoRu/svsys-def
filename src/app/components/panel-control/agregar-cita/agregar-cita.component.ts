@@ -117,10 +117,10 @@ export class AgregarCitaComponent  implements OnInit {
       message: 'Generando cita...'
     });
     await loading.present();
-    const fechaActual: Date = new Date();
+    const fechaMexico = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
 
     if(this.citaInformacion.valid){
-      this.citaInformacion.get('creado_en').setValue(fechaActual.toLocaleString());
+      this.citaInformacion.get('creado_en').setValue(fechaMexico);
 
       this.citasService.addCita(this.citaInformacion.value);
 

@@ -49,6 +49,7 @@ export class CitasService {
     const registroRef = doc(this.firestore, `citas_programadas/${cita.id}`);
     return updateDoc(registroRef, {
       'nombre_razon_social': cita.nombre_razon_social,
+      'rfc': cita.rfc,
       'telefono': cita.telefono,
       'fecha': cita.fecha,
       'tipo_servicio':cita.tipo_servicio,
