@@ -322,7 +322,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
     this.dicamenFinal = this.fb.group({
       idUsuario: ['', Validators.required],
-      nombreUsuario:['', Validators.required],
+      nombreUsuario: ['', Validators.required],
       infoCliente: [[], Validators.required],
       infoPago: [[], Validators.required],
       infoVisuales: [[], Validators.required],
@@ -344,6 +344,78 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }, 0); // Espera 1 segundo antes de ejecutar la función
   }
 
+  enableDrawing(canvasId: string): void {
+    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error(`No se pudo obtener el contexto del canvas ${canvasId}`);
+      return;
+    }
+
+    // Configurar el tamaño del canvas
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    let isDrawing = false;
+
+    // Eventos de mouse
+    canvas.addEventListener('mousedown', (e: MouseEvent) => {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mousemove', (e: MouseEvent) => {
+      if (isDrawing) {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+      }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      isDrawing = false;
+      ctx.closePath();
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      isDrawing = false;
+      ctx.closePath();
+    });
+
+    // Eventos táctiles para dispositivos móviles
+    canvas.addEventListener('touchstart', (e: TouchEvent) => {
+      isDrawing = true;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      ctx.beginPath();
+      ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+    });
+
+    canvas.addEventListener('touchmove', (e: TouchEvent) => {
+      if (isDrawing) {
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        ctx.stroke();
+      }
+    });
+
+    canvas.addEventListener('touchend', () => {
+      isDrawing = false;
+      ctx.closePath();
+    });
+
+    canvas.addEventListener('touchcancel', () => {
+      isDrawing = false;
+      ctx.closePath();
+    });
+
+    // Configuración de estilo de dibujo
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+  }
+
   async infoClientes() {
     return this.citasService.getCitaProgramada().subscribe({
       next: (data) => {
@@ -355,15 +427,15 @@ export class GenerarReporteDesktopComponent implements OnInit {
     })
   }
 
-  async buscarClientes(){
+  async buscarClientes() {
     const modalBuscarCliente = await this.modalController.create({
       component: ListaClientesComponent,
-      cssClass:'my-custom-class'
+      cssClass: 'my-custom-class'
     });
 
     modalBuscarCliente.present();
 
-    const {data, role} = await modalBuscarCliente.onWillDismiss();
+    const { data, role } = await modalBuscarCliente.onWillDismiss();
 
     if (role === 'confirm') {
       this.clienteInformacion.get('nombre_razon_social').setValue(data.nombre_razon_social != null ? data.nombre_razon_social : '')
@@ -457,6 +529,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
         }
       })
     } else if (this.segment == 'Firma') {
+      setTimeout(() => {
+        this.enableDrawing('firmaCliente');
+        this.enableDrawing('firmaInspector');
+        this.enableDrawing('firmaApoyo');
+      }, 0);
       this.storageService.getValue('infoPago').then(res => {
         if (res != undefined) {
           this.infoPago.get('cantidad').setValue(res.cantidad)
@@ -469,6 +546,15 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
+  borrarFirma(canvasId: string): void {
+    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+  
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpia todo el contenido del canvas
+    }
+  }
+  
   getControl(controlName: string) {
     return this.basculaInformacion.get(controlName);
   }
@@ -817,15 +903,15 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
 
   async subirInformacion() {
-    const infoCliente:any = await this.storageService.getValue('infoClientes');
-    const infoPago:any = await this.storageService.getValue('infoPago');
-    const infoVisuales:any = await this.storageService.getValue('inspeccionVisual');
-    const encuesta:any = await this.storageService.getValue('encuesta_satisfaccion');
-    const infoBasculas:any = await this.storageService.getValue('infoBasculas');
-    const estudioMtro:any = await this.storageService.getValue('estudioMtro');
-    const infoResumen:any = await this.storageService.getValue('resumen');
+    const infoCliente: any = await this.storageService.getValue('infoClientes');
+    const infoPago: any = await this.storageService.getValue('infoPago');
+    const infoVisuales: any = await this.storageService.getValue('inspeccionVisual');
+    const encuesta: any = await this.storageService.getValue('encuesta_satisfaccion');
+    const infoBasculas: any = await this.storageService.getValue('infoBasculas');
+    const estudioMtro: any = await this.storageService.getValue('estudioMtro');
+    const infoResumen: any = await this.storageService.getValue('resumen');
 
-    const user:any = await this.storageService.getValue('usuario');
+    const user: any = await this.storageService.getValue('usuario');
 
     if (
       infoCliente != undefined &&
@@ -846,16 +932,16 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.dicamenFinal.get('idUsuario').setValue(user.id);
       this.dicamenFinal.get('nombreUsuario').setValue(user.usuario);
 
-      if(this.dicamenFinal.valid){
+      if (this.dicamenFinal.valid) {
         try {
           this.dictamenSerivce.addReporte(this.dicamenFinal.value).then((res) => {
             this.presentToast('Reporte guardado correctamente', "bottom", "success")
           })
         } catch (error) {
-          this.presentToast('Error al guardar el reporte:'+ error.message, "bottom", "danger")
+          this.presentToast('Error al guardar el reporte:' + error.message, "bottom", "danger")
         }
       }
-    }else{
+    } else {
       console.log("No hay información para guardar")
     }
   }

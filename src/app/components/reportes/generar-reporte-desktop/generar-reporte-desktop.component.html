@@ -25,10 +25,10 @@
 
   <ion-card-content>
     <ng-container *ngIf="segment == 'infoClientes'">
-      <ion-button (click)="buscarClientes()" expand="block"  shape="round">
+      <ion-button (click)="buscarClientes()" expand="block" shape="round">
         Presiona aquí para buscar un cliente
       </ion-button>
-      
+
       <!--ion-item>
         <ion-select placeholder="Seleccione a un cliente" (ionChange)="citaProgramada($event)">
           <ion-select-option *ngFor="let item of citasProgramadas"
@@ -841,45 +841,49 @@
               </tr>
             </tbody>
           </table>
-          <h5 class="text-center"> Firmas </h5>
-          <div style="margin-left: 90px;">
-            <div class="row m-5 text-center" style="margin-left: 5%;">
-              <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
-                <!--PRIMER FIRMA-->
-                <canvas style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
-              </div>
-              <div class="col-md-1" style="height: 250px;">
 
-              </div>
+          <h5 class="text-center">Firmas</h5>
+          <div style="margin-left: 90px; overflow: hidden;">
+            <div class="row text-center" style="margin-left: 0%;">
               <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
-                <!--SEGUNDA FIRMA-->
-                <canvas style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
+                <!-- PRIMER FIRMA -->
+                <canvas id="firmaCliente" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
-              <div class="col-md-1" style="height: 250px;">
-
-              </div>
+              <div class="col-md-1" style="height: 250px;"></div>
               <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
-                <!--TERCER FIRMA-->
-                <canvas style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
+                <!-- SEGUNDA FIRMA -->
+                <canvas id="firmaInspector" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
-
+              <div class="col-md-1" style="height: 250px;"></div>
+              <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
+                <!-- TERCER FIRMA -->
+                <canvas id="firmaApoyo" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
+              </div>
+            </div>
+            <div class="row text-center">
               <div class="col-md-3 border">
                 Nombre y Firma del cliente
+                <br>
+                <button class="btn btn-danger mt-2" (click)="borrarFirma('firmaCliente')">Borrar Firma</button>
               </div>
-              <div class="col-md-1 ">
-
-              </div>
+              <div class="col-md-1"></div>
               <div class="col-md-3 border">
                 Nombre y Firma del inspector
+                <br>
+                <button class="btn btn-danger mt-2" (click)="borrarFirma('firmaInspector')">Borrar Firma</button>
               </div>
-              <div class="col-md-1 ">
-
-              </div>
+              <div class="col-md-1"></div>
               <div class="col-md-3 border">
                 Nombre y Firma del personal de apoyo
+                <br>
+                <button class="btn btn-danger mt-2" (click)="borrarFirma('firmaApoyo')">Borrar Firma</button>
               </div>
             </div>
           </div>
+          
+
+
+
         </div>
         <div class="row text-center ">
           <div class="col-md-6 d-grid gap-2">
