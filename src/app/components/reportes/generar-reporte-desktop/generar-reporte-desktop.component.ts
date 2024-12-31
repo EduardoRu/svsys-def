@@ -329,7 +329,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
       encuesta: [[], Validators.required],
       infoBasculas: [[], Validators.required],
       estudioMtro: [[], Validators.required],
-      infoResumen: [[], Validators.required]
+      infoResumen: [[], Validators.required],
+      firmaInspector: ['', Validators.required],
+      firmaCliente: ['', Validators.required],
+      firmaPa: ['', Validators.required],
     })
 
 
@@ -549,12 +552,41 @@ export class GenerarReporteDesktopComponent implements OnInit {
   borrarFirma(canvasId: string): void {
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
-  
+
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpia todo el contenido del canvas
     }
   }
-  
+
+  convertirCanvasABase64(canvasId: string): string | null {
+    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+
+    if (!canvas) {
+      console.error(`No se encontró el canvas con id ${canvasId}`);
+      return null;
+    }
+
+    // Convierte el contenido del canvas a una URL en formato base64
+    const base64Image = canvas.toDataURL('image/png'); // Formato PNG
+    return base64Image;
+  }
+
+
+  guardarFirmas(): void {
+    const firmaClienteBase64 = this.convertirCanvasABase64('firmaCliente');
+    const firmaInspectorBase64 = this.convertirCanvasABase64('firmaInspector');
+    const firmaApoyoBase64 = this.convertirCanvasABase64('firmaApoyo');
+
+    if (firmaClienteBase64 && firmaInspectorBase64 && firmaApoyoBase64) {
+
+      this.storageService.addValue('firmaClienteBase64', firmaClienteBase64);
+      this.storageService.addValue('firmaInspectorBase64', firmaInspectorBase64);
+      this.storageService.addValue('firmaApoyoBase64', firmaApoyoBase64);
+    } else {
+      console.error('Ocurrió un problema al convertir las firmas.');
+    }
+  }
+
   getControl(controlName: string) {
     return this.basculaInformacion.get(controlName);
   }
@@ -883,7 +915,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     if (this.infoPago.valid) {
 
       this.storageService.addValue('infoPago', this.infoPago.value);
-
+      this.guardarFirmas();
       // ABRIR ENCUESTA
       const modalEncuestaSatisfied = await this.modalController.create({
         component: EncuestaSatifaccionComponent,
@@ -911,6 +943,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
     const estudioMtro: any = await this.storageService.getValue('estudioMtro');
     const infoResumen: any = await this.storageService.getValue('resumen');
 
+    const firmaInspector: any = await this.storageService.getValue('firmaInspectorBase64');
+    const firmaCliente: any = await this.storageService.getValue('firmaClienteBase64');
+    const firmaPa: any = await this.storageService.getValue('firmaApoyoBase64');
+
     const user: any = await this.storageService.getValue('usuario');
 
     if (
@@ -931,6 +967,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.dicamenFinal.get('infoResumen').setValue(infoResumen);
       this.dicamenFinal.get('idUsuario').setValue(user.id);
       this.dicamenFinal.get('nombreUsuario').setValue(user.usuario);
+
+      this.dicamenFinal.get('firmaInspector').setValue(firmaInspector);
+      this.dicamenFinal.get('firmaCliente').setValue(firmaCliente);
+      this.dicamenFinal.get('firmaPa').setValue(firmaPa);
 
       if (this.dicamenFinal.valid) {
         try {
