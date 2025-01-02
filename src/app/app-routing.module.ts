@@ -64,6 +64,10 @@ const routes: Routes = [
     path: 'vehi-equi',
     loadChildren: () => import('./pages/vehi-equi/vehi-equi.module').then( m => m.VehiEquiPageModule)
   },
+  {
+    path: 'certificados',
+    loadChildren: () => import('./pages/certificados/certificados.module').then( m => m.CertificadosPageModule)
+  },
 ];
 
 @NgModule({

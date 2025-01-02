@@ -25,16 +25,9 @@
 
   <ion-card-content>
     <ng-container *ngIf="segment == 'infoClientes'">
-      <ion-button (click)="buscarClientes()" expand="block" shape="round">
-        Presiona aquí para buscar un cliente
-      </ion-button>
 
-      <!--ion-item>
-        <ion-select placeholder="Seleccione a un cliente" (ionChange)="citaProgramada($event)">
-          <ion-select-option *ngFor="let item of citasProgramadas"
-            [value]="item">{{item.nombre_razon_social}}</ion-select-option>
-        </ion-select>
-      </ion-item-->
+      <ion-searchbar [debounce]="25" cancel-button-text="Borrar"
+        placeholder="Busca un cliente" showCancelButton="focus" (click)="buscarClientes()"></ion-searchbar>
 
       <hr>
       <form (ngSubmit)="getinfoCliente()" [formGroup]="clienteInformacion">
@@ -134,7 +127,7 @@
           </div>
           <div class="col-md-6 d-grid gap-2">
             <ion-button type="submit" expand="block" class="btn btn-success" fill="clear">
-              Guardar
+              Guardar y Continuar
             </ion-button>
           </div>
         </div>
@@ -847,17 +840,20 @@
             <div class="row text-center" style="margin-left: 0%;">
               <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
                 <!-- PRIMER FIRMA -->
-                <canvas id="firmaCliente" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
+                <canvas id="firmaCliente"
+                  style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
               <div class="col-md-1" style="height: 250px;"></div>
               <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
                 <!-- SEGUNDA FIRMA -->
-                <canvas id="firmaInspector" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
+                <canvas id="firmaInspector"
+                  style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
               <div class="col-md-1" style="height: 250px;"></div>
               <div class="col-md-3 border border-dark" style="height: 250px; position: relative;">
                 <!-- TERCER FIRMA -->
-                <canvas id="firmaApoyo" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
+                <canvas id="firmaApoyo"
+                  style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></canvas>
               </div>
             </div>
             <div class="row text-center">

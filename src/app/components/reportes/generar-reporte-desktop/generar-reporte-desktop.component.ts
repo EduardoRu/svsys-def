@@ -85,18 +85,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
     private generarReporteService: GenerarDictamenService
   ) { }
 
-  async presentAlert(msj: string) {
-    const alert = await this.alertController.create({
-      message: msj
-    });
-
-    await alert.present();
-  }
-
-  get ejemplo1(): FormArray {
-    return this.estudioMtro.get('ejemplo1') as FormArray;
-  }
-
   async ngOnInit() {
     this.infoClientes();
 
@@ -347,6 +335,46 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }, 0); // Espera 1 segundo antes de ejecutar la función
   }
 
+  get ejemplo1(): FormArray {
+    return this.estudioMtro.get('ejemplo1') as FormArray;
+  }
+
+  // FUNCIÓNES DE APOYO PARA GUIAR AL USUARIO
+  async presentToast(mesage: string, position: 'top' | 'middle' | 'bottom', cl: "danger" | "success" | "warning") {
+    const toast = await this.toastController.create({
+      message: mesage,
+      duration: 1500,
+      position: position,
+      color: cl
+    });
+
+    await toast.present();
+  }
+
+  async presentAlert(msj: string) {
+    const alert = await this.alertController.create({
+      message: msj
+    });
+
+    await alert.present();
+  }
+
+
+  // FUNCIONES DE UTILIDAD GENERAL
+  convertirCanvasABase64(canvasId: string): string | null {
+    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+
+    if (!canvas) {
+      console.error(`No se encontró el canvas con id ${canvasId}`);
+      return null;
+    }
+
+    // Convierte el contenido del canvas a una URL en formato base64
+    const base64Image = canvas.toDataURL('image/png'); // Formato PNG
+    return base64Image;
+  }
+
+
   enableDrawing(canvasId: string): void {
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
@@ -419,42 +447,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     ctx.lineWidth = 2;
   }
 
-  async infoClientes() {
-    return this.citasService.getCitaProgramada().subscribe({
-      next: (data) => {
-        this.citasProgramadas = data;
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    })
-  }
-
-  async buscarClientes() {
-    const modalBuscarCliente = await this.modalController.create({
-      component: ListaClientesComponent,
-      cssClass: 'my-custom-class'
-    });
-
-    modalBuscarCliente.present();
-
-    const { data, role } = await modalBuscarCliente.onWillDismiss();
-
-    if (role === 'confirm') {
-      this.clienteInformacion.get('nombre_razon_social').setValue(data.nombre_razon_social != null ? data.nombre_razon_social : '')
-      this.clienteInformacion.get('rfc').setValue(data.rfc != null ? data.rfc : '')
-      this.clienteInformacion.get('telefono').setValue(data.telefono != null ? data.telefono : '')
-      this.clienteInformacion.get('Fecha').setValue(data.fecha != null ? data.fecha : '')
-      this.clienteInformacion.get('tipo_servicio').setValue(data.tipo_servicio != null ? data.tipo_servicio : '')
-      this.clienteInformacion.get('cp').setValue(data.cp != null ? data.cp : '')
-      this.clienteInformacion.get('giro_empresarial').setValue(data.giro != null ? data.giro : '')
-      this.clienteInformacion.get('colonia').setValue(data.colonia != null ? data.colonia : '')
-      this.clienteInformacion.get('domicilio').setValue(data.domicilio != null ? data.domicilio : '')
-      this.clienteInformacion.get('num_dom').setValue(data.num_dom != null ? data.num_dom : '')
-      this.clienteInformacion.get('municipio').setValue(data.municipio != null ? data.municipio : '')
-      this.clienteInformacion.get('estado').setValue(data.estado != null ? data.estado : '')
-    }
-  }
+  
 
   citaProgramada(e: any) {
     console.log(e.detail.value)
@@ -558,20 +551,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  convertirCanvasABase64(canvasId: string): string | null {
-    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-
-    if (!canvas) {
-      console.error(`No se encontró el canvas con id ${canvasId}`);
-      return null;
-    }
-
-    // Convierte el contenido del canvas a una URL en formato base64
-    const base64Image = canvas.toDataURL('image/png'); // Formato PNG
-    return base64Image;
-  }
-
-
   guardarFirmas(): void {
     const firmaClienteBase64 = this.convertirCanvasABase64('firmaCliente');
     const firmaInspectorBase64 = this.convertirCanvasABase64('firmaInspector');
@@ -587,11 +566,44 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  getControl(controlName: string) {
-    return this.basculaInformacion.get(controlName);
+  // SECCIÓN DE LOS CLIENTES
+  async infoClientes() {
+    return this.citasService.getCitaProgramada().subscribe({
+      next: (data) => {
+        this.citasProgramadas = data;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
-  // OBTENER Y ELEIMINAR LA INFORMACIÓN DE LOS CLIENTES
+  async buscarClientes() {
+    const modalBuscarCliente = await this.modalController.create({
+      component: ListaClientesComponent,
+      cssClass: 'my-custom-class'
+    });
+
+    modalBuscarCliente.present();
+
+    const { data, role } = await modalBuscarCliente.onWillDismiss();
+
+    if (role === 'confirm') {
+      this.clienteInformacion.get('nombre_razon_social').setValue(data.nombre_razon_social != null ? data.nombre_razon_social : '')
+      this.clienteInformacion.get('rfc').setValue(data.rfc != null ? data.rfc : '')
+      this.clienteInformacion.get('telefono').setValue(data.telefono != null ? data.telefono : '')
+      this.clienteInformacion.get('Fecha').setValue(data.fecha != null ? data.fecha : '')
+      this.clienteInformacion.get('tipo_servicio').setValue(data.tipo_servicio != null ? data.tipo_servicio : '')
+      this.clienteInformacion.get('cp').setValue(data.cp != null ? data.cp : '')
+      this.clienteInformacion.get('giro_empresarial').setValue(data.giro != null ? data.giro : '')
+      this.clienteInformacion.get('colonia').setValue(data.colonia != null ? data.colonia : '')
+      this.clienteInformacion.get('domicilio').setValue(data.domicilio != null ? data.domicilio : '')
+      this.clienteInformacion.get('num_dom').setValue(data.num_dom != null ? data.num_dom : '')
+      this.clienteInformacion.get('municipio').setValue(data.municipio != null ? data.municipio : '')
+      this.clienteInformacion.get('estado').setValue(data.estado != null ? data.estado : '')
+    }
+  }
+
   async getinfoCliente() {
     const loading = await this.loadingController.create({
       message: 'Guardando información...'
@@ -602,16 +614,15 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
       this.storageService.addValue('infoClientes', this.clienteInformacion.value);
       loading.dismiss();
-      this.presentAlert('Información guardada exitosamente');
+      this.presentToast('Información del cliente guardada exitosamente', 'bottom', 'success');
+      this.segment = 'Basculas'
     } else {
-      this.presentAlert('Todos los campos son obligatorios');
+      this.presentToast('Todos los campos son obligatorios','bottom','warning');
       loading.dismiss();
       return;
     }
 
   }
-
-
 
   limpiarInfoCliente() {
     //Limpiar la infromación del formulario
@@ -619,7 +630,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
 
   // OBTENER LA INFORMACIÓN DE LAS BASCULAS
-
+  /*
+  getControl(controlName: string) {
+    return this.basculaInformacion.get(controlName);
+  }
+  */
   limpiarFormularioBasculas() {
     this.basculaInformacion.reset();
     this.basculas = []
@@ -684,7 +699,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.presentAlert('Todos los campos son obligatorios para generar un registro de las basculas');
     }
   }
-
 
   async infoBasculaMtro(e: any) {
     const datos: any = await this.storageService.getValue('estudioMtro').then(res => res)
@@ -801,6 +815,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   }
 
+
+  // OBTENER LA INFORMACIÓN METROLOGICA
   async getestudioMetro() {
     const load = await this.loadingController.create({
       message: 'Cargando estudio metrológico...'
@@ -816,7 +832,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
       load.dismiss();
     }
   }
-
 
   // OBTENER INSPECCIÓN VISUAL
   async getInspeccionVisual() {
@@ -898,17 +913,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  async presentToast(mesage: string, position: 'top' | 'middle' | 'bottom', cl: "danger" | "success" | "warning") {
-    const toast = await this.toastController.create({
-      message: mesage,
-      duration: 1500,
-      position: position,
-      color: cl
-    });
-
-    await toast.present();
-  }
-
+  // SECCIÓN ENCUESTA DE SATISFACCIÓN
 
   async encuestaSatifaccion() {
     // GUARDAR INFORMAICÓN
@@ -934,6 +939,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
+  // SECCIÓN DE GUARDAR EL DICTAMEN EN FIREBASE
   async subirInformacion() {
     const infoCliente: any = await this.storageService.getValue('infoClientes');
     const infoPago: any = await this.storageService.getValue('infoPago');
@@ -986,7 +992,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-
+  // SECCCIÓN DEL DICTAMEN
   infoBasculaResumen(e: any) {
     this.basculaResumen = e.detail.value;
     console.log(e.detail.value)
@@ -1037,7 +1043,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-
+  // IMPRIMIR Y/O GENERAR PDF
   async imprimirReporte() {
 
     const infoCliente = await this.storageService.getValue('infoClientes');
@@ -1060,4 +1066,5 @@ export class GenerarReporteDesktopComponent implements OnInit {
       console.log(res);
     })
   }
+
 }
