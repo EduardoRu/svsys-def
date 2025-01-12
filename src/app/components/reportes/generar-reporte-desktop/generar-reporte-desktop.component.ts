@@ -581,7 +581,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
   async buscarClientes() {
     const modalBuscarCliente = await this.modalController.create({
       component: ListaClientesComponent,
-      cssClass: 'my-custom-class'
+      cssClass: 'my-custom-class-lista-clientes'
     });
 
     modalBuscarCliente.present();

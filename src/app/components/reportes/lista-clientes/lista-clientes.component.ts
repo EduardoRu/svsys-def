@@ -11,61 +11,49 @@ import { FSubidaService } from 'src/app/services/actividades/f_subida/f-subida.s
   imports: [IonicModule, CommonModule],
 })
 export class ListaClientesComponent implements OnInit {
-
   public datosUnicosClientes: any[] = [];
-  public results: any[] = [];
-  public paginatedResults: any[] = [];
-  private pageSize: number = 50;
-  private currentPage: number = 0;
+  public resultadosFiltrados: any[] = [];
+  public resultadosAgrupados: any[] = [];
+  public estados: string[] = [];
+  public municipios: string[] = [];
+  public colonias: string[] = [];
+  private todosLosClientes: any[] = [];
+  private filtros: { estado: string; municipio: string; colonia: string } = { estado: '', municipio: '', colonia: '' };
 
-  public alertButtons = [
-    {
-      text: 'Cancel',
-      role: 'cancel',
-      handler: () => {
-        console.log('Alert canceled');
-      },
-    },
-    {
-      text: 'OK',
-      role: 'confirm',
-      handler: () => {
-        console.log('Alert confirmed');
-      },
-    },
-  ];
+  private pageSize = 50; // Tamaño de la página para paginación
+  private currentPage = 0; // Página actual
 
   constructor(
     private modalController: ModalController,
     private fSubidaService: FSubidaService,
     private loadController: LoadingController,
     private alertController: AlertController
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.getInformacion();
   }
 
   async getInformacion() {
-    const loadClientes = this.loadController.create({
+    const loading = await this.loadController.create({
       message: 'Cargando clientes...',
       spinner: 'crescent',
       backdropDismiss: false,
     });
 
-    (await loadClientes).present();
+    await loading.present();
 
     this.fSubidaService.organizarInformacion().subscribe({
       next: async (info) => {
-        const datosUnicos = this.filtrarInformacionUnica(info.Sheet1);
-        this.datosUnicosClientes = datosUnicos;
-        this.results = datosUnicos;
-        this.paginatedResults = this.cargarPagina();
-        (await loadClientes).dismiss();
+        this.todosLosClientes = this.filtrarInformacionUnica(info.Sheet1);
+        this.resultadosFiltrados = [...this.todosLosClientes]; // Inicialmente, los filtrados son todos
+        this.actualizarFiltros(this.resultadosFiltrados); // Actualiza filtros basados en los datos iniciales
+        this.resultadosAgrupados = this.agruparPorRazonSocial(this.cargarPagina());
+        await loading.dismiss();
       },
       error: async (error) => {
         console.error(error);
-        (await loadClientes).dismiss();
+        await loading.dismiss();
       },
     });
   }
@@ -81,42 +69,84 @@ export class ListaClientesComponent implements OnInit {
     return Array.from(mapa.values());
   }
 
-  cargarPagina() {
+  buscarCliente(event: any) {
+    const query = event.target.value.toLowerCase();
+    this.resultadosFiltrados = this.todosLosClientes.filter((cliente) =>
+      cliente.nombre_razon_social.toLowerCase().includes(query)
+    );
+    this.aplicarFiltros(); // Ajusta los resultados agrupados y los filtros dinámicos
+  }
+
+  cargarPagina(datos?: any[]) {
+    const dataToPaginate = datos || this.resultadosFiltrados;
     const start = this.currentPage * this.pageSize;
     const end = start + this.pageSize;
-    const newPage = this.results.slice(start, end);
+    const pagina = dataToPaginate.slice(start, end);
     this.currentPage++;
-    return [...this.paginatedResults, ...newPage];
+    return pagina;
   }
 
   cargarMasDatos(event: any) {
     const nuevosDatos = this.cargarPagina();
-    this.paginatedResults = [...this.paginatedResults, ...nuevosDatos];
+    this.resultadosAgrupados = [...this.resultadosAgrupados, ...this.agruparPorRazonSocial(nuevosDatos)];
     event.target.complete();
 
-    if (this.paginatedResults.length === this.results.length) {
+    // Deshabilita la carga infinita si ya no hay más datos
+    if (this.currentPage * this.pageSize >= this.resultadosFiltrados.length) {
       event.target.disabled = true;
     }
   }
 
-  buscarCliente(e: any) {
-    const query = e.target.value.toLowerCase();
-  
-    if (query.trim() === '') {
-      // Si no hay búsqueda, restaura los datos paginados
-      this.currentPage = 0;
-      this.paginatedResults = this.cargarPagina();
-    } else {
-      // Filtra los resultados basados en el texto de búsqueda
-      const filtered = this.datosUnicosClientes.filter((item: any) =>
-        item.nombre_razon_social.toLowerCase().includes(query)
-      );
-      this.paginatedResults = filtered; // Mostrar directamente los resultados filtrados
-    }
+  filtrarPorEstado(event: any) {
+    this.filtros.estado = event.detail.value;
+    this.aplicarFiltros();
   }
 
-  cancel() {
-    return this.modalController.dismiss(null, 'cancel');
+  filtrarPorMunicipio(event: any) {
+    this.filtros.municipio = event.detail.value;
+    this.aplicarFiltros();
+  }
+
+  filtrarPorColonia(event: any) {
+    this.filtros.colonia = event.target.value.toLowerCase();
+    this.aplicarFiltros();
+  }
+
+  aplicarFiltros() {
+    let resultados = this.resultadosFiltrados;
+
+    if (this.filtros.estado) {
+      resultados = resultados.filter((c) => c.estado === this.filtros.estado);
+    }
+    if (this.filtros.municipio) {
+      resultados = resultados.filter((c) => c.municipio === this.filtros.municipio);
+    }
+    if (this.filtros.colonia) {
+      resultados = resultados.filter((c) =>
+        c.colonia.toLowerCase().includes(this.filtros.colonia)
+      );
+    }
+
+    this.currentPage = 0; // Reinicia la paginación
+    this.resultadosAgrupados = this.agruparPorRazonSocial(this.cargarPagina(resultados));
+    this.actualizarFiltros(resultados); // Actualiza las opciones de filtros dinámicamente
+  }
+
+  agruparPorRazonSocial(datos: any[]) {
+    const mapa = new Map<string, any>();
+    datos.forEach((item) => {
+      if (!mapa.has(item.nombre_razon_social)) {
+        mapa.set(item.nombre_razon_social, { nombre_razon_social: item.nombre_razon_social, registros: [] });
+      }
+      mapa.get(item.nombre_razon_social).registros.push(item);
+    });
+    return Array.from(mapa.values());
+  }
+
+  actualizarFiltros(datos: any[]) {
+    this.estados = [...new Set(datos.map((c) => c.estado))];
+    this.municipios = [...new Set(datos.map((c) => c.municipio))];
+    this.colonias = [...new Set(datos.map((c) => c.colonia))];
   }
 
   async confirm(item: any) {
@@ -128,21 +158,19 @@ export class ListaClientesComponent implements OnInit {
           text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-            console.log('Selección cancelada');
-          },
         },
         {
           text: 'Confirmar',
           handler: () => {
-            console.log('Cliente confirmado:', item);
             this.modalController.dismiss(item, 'confirm');
           },
         },
       ],
     });
-
     await alert.present();
   }
 
+  cancel() {
+    return this.modalController.dismiss(null, 'cancel');
+  }
 }

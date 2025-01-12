@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar style="--background: #757374; color: white;">
     <ion-title>
-      Buscar clientes
+      Buscar Clientes
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -16,37 +16,107 @@
       mode="ios"
       color="light"
       cancel-button-text="Borrar"
-      placeholder="Busca el nombre/razón social de un cliente"
+      placeholder="Buscar nombre o razón social"
       (ionInput)="buscarCliente($event)">
     </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
+  <!-- Filtros -->
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-sm="4">
+            <ion-select placeholder="Estado" (ionChange)="filtrarPorEstado($event)">
+              <ion-select-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <ion-select placeholder="Municipio" (ionChange)="filtrarPorMunicipio($event)">
+              <ion-select-option *ngFor="let municipio of municipios" [value]="municipio">{{ municipio }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <ion-input placeholder="Colonia" (ionInput)="filtrarPorColonia($event)"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de resultados -->
   <ion-accordion-group [multiple]="true">
-    <ion-accordion *ngFor="let item of paginatedResults">
+    <ion-accordion *ngFor="let grupo of resultadosAgrupados">
       <ion-item slot="header" color="light">
-        <ion-label>{{ item.nombre_razon_social }}</ion-label>
+        <ion-label>{{ grupo.nombre_razon_social }}</ion-label>
       </ion-item>
       <ion-card slot="content" class="cliente-card">
-        <ion-card-content>
-          <div>
-            <strong>RFC:</strong> {{ item.rfc }}
-          </div>
-          <div>
-            <strong>DOMICILIO:</strong> {{ item.domicilio }}
-          </div>
-          <div>
-            <strong>COLONIA:</strong> {{ item.colonia }}
-          </div>
-          <div>
-            <strong>Num.:</strong> {{ item.num_dom }}
-          </div>
-          <div>
-            <strong>GIRO EMPRESARIAL:</strong> {{ item.giro_empresarial }}
-          </div>
-          <div>
+        <ion-card-content *ngFor="let item of grupo.registros">
+          <ion-grid>
+            <ion-row>
+              <!-- Información Básica del Cliente -->
+              <ion-col size="12" size-sm="4">
+                <h3><strong>Información del Cliente</strong></h3>
+                <div>
+                  <strong>Razón Social:</strong> {{ item.nombre_razon_social }}
+                </div>
+                <div>
+                  <strong>RFC:</strong> {{ item.rfc }}
+                </div>
+                <div>
+                  <strong>Giro Empresarial:</strong> {{ item.giro_empresarial }}
+                </div>
+              </ion-col>
+
+              <!-- Ubicación -->
+              <ion-col size="12" size-sm="4">
+                <h3><strong>Ubicación</strong></h3>
+                <div>
+                  <strong>Domicilio:</strong> {{ item.domicilio }}
+                </div>
+                <div>
+                  <strong>Número:</strong> {{ item.num_dom }}
+                </div>
+                <div>
+                  <strong>Colonia:</strong> {{ item.colonia }}
+                </div>
+                <div>
+                  <strong>Municipio:</strong> {{ item.municipio }}
+                </div>
+                <div>
+                  <strong>Estado:</strong> {{ item.estado }}
+                </div>
+              </ion-col>
+
+              <!-- Información de Básculas -->
+              <ion-col size="12" size-sm="4">
+                <h3><strong>Información de Básculas</strong></h3>
+                <div>
+                  <strong>Marca:</strong> {{ item.marca }}
+                </div>
+                <div>
+                  <strong>Modelo:</strong> {{ item.modelo }}
+                </div>
+                <div>
+                  <strong>No. Serie:</strong> {{ item.serie }}
+                </div>
+                <div>
+                  <strong>Alcance:</strong> {{ item.alcance }}
+                </div>
+                <div>
+                  <strong>Clase de Exactitud:</strong> {{ item.clase_exatitud }}
+                </div>
+                <div>
+                  <strong>Aprobación:</strong> {{ item.num_aprobacion }} - {{ item.a_aprobacion }}
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <!-- Acción -->
+          <div class="text-center mt-2">
             <ion-button (click)="confirm(item)" expand="block" fill="clear" shape="round">
               Seleccionar
             </ion-button>
@@ -55,6 +125,8 @@
       </ion-card>
     </ion-accordion>
   </ion-accordion-group>
+
+  <!-- Scroll infinito -->
   <ion-infinite-scroll threshold="100px" (ionInfinite)="cargarMasDatos($event)">
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más clientes...">
     </ion-infinite-scroll-content>
