@@ -699,7 +699,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
   
     // Asignar los valores calculados al formulario
     this.registroBasculas.get('clase').setValue(claseFinal);
-    this.registroBasculas.get('precarga').setValue(pesoMinimo);
   
     console.log(`Clase asignada: ${claseFinal}`);
     console.log(`Peso mínimo: ${pesoMinimo} g`);
@@ -723,133 +722,162 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.presentAlert('Todos los campos son obligatorios para generar un registro de las basculas');
     }
   }
-
   async infoBasculaMtro(e: any) {
-    const basculaSeleccionada = e.detail.value; // Información de la báscula seleccionada
-    const tipoInspeccion: any = await this.storageService.getValue('infoBasculas').then(res => res);
-  
+    const basculaSeleccionada = e.detail.value;
     if (!basculaSeleccionada) {
       console.error("No se seleccionó una báscula.");
       return;
     }
   
-    const divisiones = basculaSeleccionada.divisiones; // Obtener divisiones de la báscula
-    if (!divisiones || divisiones.length === 0) {
-      console.error("La báscula seleccionada no tiene divisiones definidas.");
-      return;
-    }
+    const { alc_max, divi_min, clase } = basculaSeleccionada;
+    const alcances = alc_max.split('/').map(Number); // Alcances: n1, n2, n3
+    const divisiones = divi_min.split('/').map(Number); // Divisiones: n1, n2, n3
   
-    const tipoInspeccionSeleccionada = tipoInspeccion.tipo_inspeccion; // Inicial, Periódica o Extraordinaria
-    const claseExactitud = basculaSeleccionada.clase; // Clase de exactitud
+    const tipoInspeccion: any = await this.storageService.getValue('infoBasculas').then(res => res);
+    const tipoInspeccionSeleccionada = tipoInspeccion.tipo_inspeccion;
   
-    // Ajuste de multiplicador según el tipo de inspección
     const multiplicador =
       tipoInspeccionSeleccionada === "Inicial" ? 1 :
       tipoInspeccionSeleccionada === "Periódica" ? 2 :
       tipoInspeccionSeleccionada === "Extraordinaria" ? 3 : 1;
   
+    // Peso mínimo
+    const pesoMinimo = (20 * divisiones[0]) / 1000; // Siempre usa n1 de la división mínima en kg
+    const precarga = alcances[alcances.length - 1]; // Máximo alcance (último valor de alcances)
+  
     let arrayCargas: number[] = [];
     let arrayEMTs: number[] = [];
-    let alcanceMaximoGeneral: string = ""; // Campo alcance máximo general
-    let divisionMinimaGeneral: string = ""; // Campo división mínima general
-    let precarga: number | null = null; // Precarga actualizada
   
-    divisiones.forEach((division: any, index: number) => {
-      const [alcNumerador, alcDenominador] = division.alcance_max.split('/').map(Number);
-      const [divNumerador, divDenominador] = division.division_min.split('/').map(Number);
+    // Función para redondear a múltiplos de 10 o 100 (excepto para la primera carga)
+    const redondearCarga = (carga: number, isPrimeraCarga: boolean = false): number => {
+      if (isPrimeraCarga) {
+        return carga; // No redondear la primera carga
+      }
+      if (precarga <= 1000) {
+        return Math.round(carga / 10) * 10; // Múltiplos de 10
+      } else {
+        return Math.round(carga / 100) * 100; // Múltiplos de 100
+      }
+    };
   
-      if (index === 0) {
-        // Guardar la primera división mínima como referencia
-        divisionMinimaGeneral = `${divNumerador}/${divDenominador}`;
+    // Función para calcular EMT según la escala activa
+    const calcularEMT = (carga: number, division: number): number => {
+      let escala1, escala2, escala3, emt1, emt2, emt3;
+  
+      if (clase === "2") {
+        escala1 = division * 5000;
+        escala2 = division * 20000;
+        escala3 = division * 100000;
+        emt1 = division * 0.5 * multiplicador;
+        emt2 = division * 1 * multiplicador;
+        emt3 = division * 1.5 * multiplicador;
+      } else if (clase === "3") {
+        escala1 = division * 500;
+        escala2 = division * 2000;
+        escala3 = division * 10000;
+        emt1 = division * 0.5 * multiplicador;
+        emt2 = division * 1 * multiplicador;
+        emt3 = division * 1.5 * multiplicador;
+      } else if (clase === "4") {
+        escala1 = division * 50;
+        escala2 = division * 200;
+        escala3 = division * 1000;
+        emt1 = division * 0.5 * multiplicador;
+        emt2 = division * 1 * multiplicador;
+        emt3 = division * 1.5 * multiplicador;
       }
   
-      if (index === divisiones.length - 1) {
-        // Guardar el alcance máximo de la última división
-        alcanceMaximoGeneral = `${alcNumerador}/${alcDenominador}`;
-        precarga = alcDenominador; // Precarga es el denominador del alcance máximo general
+      return carga * 1000 <= escala1 ? emt1 :
+             carga * 1000 <= escala2 ? emt2 : emt3;
+    };
+  
+    // Generar cargas y EMTs para 1 división
+    const casoUnaDivision = () => {
+      const step = (precarga - pesoMinimo) / 9; // Dividir en 9 pasos después del peso mínimo
+  
+      arrayCargas.push(redondearCarga(pesoMinimo, true)); // Primera carga sin redondear
+      for (let i = 1; i < 10; i++) {
+        const carga = pesoMinimo + step * i;
+        arrayCargas.push(redondearCarga(carga));
       }
   
-      // Calcular escalas y EMTs según clase de exactitud
-      let escala1: number, escala2: number, escala3: number;
-      let emt1: number, emt2: number, emt3: number;
+      arrayEMTs = arrayCargas.map((carga) => calcularEMT(carga, divisiones[0]));
+    };
   
-      if (claseExactitud === "2") {
-        escala1 = divDenominador * 5000;
-        escala2 = divDenominador * 20000;
-        escala3 = divDenominador * 100000;
-        emt1 = divDenominador * 0.5 * multiplicador;
-        emt2 = divDenominador * 1 * multiplicador;
-        emt3 = divDenominador * 1.5 * multiplicador;
-      } else if (claseExactitud === "3") {
-        escala1 = divDenominador * 500;
-        escala2 = divDenominador * 2000;
-        escala3 = divDenominador * 10000;
-        emt1 = divDenominador * 0.5 * multiplicador;
-        emt2 = divDenominador * 1 * multiplicador;
-        emt3 = divDenominador * 1.5 * multiplicador;
-      } else if (claseExactitud === "4") {
-        escala1 = divDenominador * 50;
-        escala2 = divDenominador * 200;
-        escala3 = divDenominador * 1000;
-        emt1 = divDenominador * 0.5 * multiplicador;
-        emt2 = divDenominador * 1 * multiplicador;
-        emt3 = divDenominador * 1.5 * multiplicador;
+    // Generar cargas y EMTs para 2 divisiones
+    const casoDosDivisiones = () => {
+      const step1 = (alcances[0] - pesoMinimo) / 5; // 5 pasos para n1
+      const step2 = (precarga - alcances[0]) / 4; // 4 pasos para n2
+  
+      arrayCargas.push(redondearCarga(pesoMinimo, true)); // Primera carga sin redondear
+      for (let i = 1; i <= 5; i++) {
+        const carga = pesoMinimo + step1 * i;
+        arrayCargas.push(redondearCarga(carga));
+      }
+      for (let i = 1; i <= 4; i++) {
+        const carga = alcances[0] + step2 * i;
+        arrayCargas.push(redondearCarga(carga));
       }
   
-      // Generar cargas dentro del rango de la división
-      const cargas = [];
-      const emts = [];
-      const step = alcDenominador / 10; // Generar 10 pasos hasta el alcance máximo (denominador)
+      arrayEMTs = arrayCargas.map((carga) => {
+        if (carga <= alcances[0]) return calcularEMT(carga, divisiones[0]);
+        return calcularEMT(carga, divisiones[1]);
+      });
+    };
   
-      for (let i = 0; i <= 10; i++) {
-        const carga = i === 10 ? alcDenominador : step * i; // Última carga es el alcance máximo (denominador)
-        const emt =
-          carga * 1000 <= escala1 ? emt1 :
-          carga * 1000 <= escala2 ? emt2 :
-          emt3;
+    // Generar cargas y EMTs para 3 divisiones
+    const casoTresDivisiones = () => {
+      const step1 = (alcances[0] - pesoMinimo) / 3; // 3 pasos para n1
+      const step2 = (alcances[1] - alcances[0]) / 3; // 3 pasos para n2
+      const step3 = (precarga - alcances[1]) / 3; // 3 pasos para n3
   
-        cargas.push(carga.toFixed(3)); // Redondear a 3 decimales
-        emts.push(emt);
+      arrayCargas.push(redondearCarga(pesoMinimo, true)); // Primera carga sin redondear
+      for (let i = 1; i <= 3; i++) {
+        const carga = pesoMinimo + step1 * i;
+        arrayCargas.push(redondearCarga(carga));
+      }
+      for (let i = 1; i <= 3; i++) {
+        const carga = alcances[0] + step2 * i;
+        arrayCargas.push(redondearCarga(carga));
+      }
+      for (let i = 1; i <= 3; i++) {
+        const carga = alcances[1] + step3 * i;
+        arrayCargas.push(redondearCarga(carga));
       }
   
-      arrayCargas = [...arrayCargas, ...cargas];
-      arrayEMTs = [...arrayEMTs, ...emts];
-    });
+      arrayEMTs = arrayCargas.map((carga) => {
+        if (carga <= alcances[0]) return calcularEMT(carga, divisiones[0]);
+        if (carga <= alcances[1]) return calcularEMT(carga, divisiones[1]);
+        return calcularEMT(carga, divisiones[2]);
+      });
+    };
+  
+    // Determinar el caso y generar las cargas y EMTs
+    if (alcances.length === 1) {
+      casoUnaDivision();
+    } else if (alcances.length === 2) {
+      casoDosDivisiones();
+    } else if (alcances.length === 3) {
+      casoTresDivisiones();
+    }
   
     // Asignar los valores al formulario
     const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
     for (let i = 0; i < arrayCargas.length; i++) {
       if (i >= arrayCargaUno.length) {
-        // Si hay más datos que campos en el formulario, agregar nuevos grupos
-        arrayCargaUno.push(
-          this.fb.group({
-            carga: [''],
-            emt: [''],
-            errASC: [''],
-            errDSC: [''],
-            num50: [''],
-            num100: [''],
-            den50: [''],
-            den100: [''],
-            emt13: [''],
-          })
-        );
+        arrayCargaUno.push(this.fb.group({ carga: [''], emt: [''] }));
       }
       const group = arrayCargaUno.at(i) as FormGroup;
       group.get('carga').setValue(arrayCargas[i]);
       group.get('emt').setValue(arrayEMTs[i]);
     }
   
-    // Asignar información general a los campos automáticos
-    this.estudioMtro.get('alc_max').setValue(alcanceMaximoGeneral);
-    this.estudioMtro.get('divi_max').setValue(divisionMinimaGeneral);
-    this.estudioMtro.get('clase_ex').setValue(claseExactitud);
-    this.estudioMtro.get('precarga').setValue(precarga);
-  
-    console.log("Cargas calculadas:", arrayCargas);
-    console.log("EMTs calculados:", arrayEMTs);
-    console.log("Precarga (alcance máximo denominador):", precarga);
+    console.log("Cargas calculadas (kg):", arrayCargas);
+    console.log("EMTs calculados (g):", arrayEMTs);
   }
+  
+  
+  
   
   
   
