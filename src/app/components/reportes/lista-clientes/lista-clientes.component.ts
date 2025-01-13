@@ -14,13 +14,14 @@ import { FSubidaService } from 'src/app/services/actividades/f_subida/f-subida.s
 export class ListaClientesComponent implements OnInit {
   public segment: string = 'clientes';
   public datosUnicosClientes: any[] = [];
+  public resultadosFiltradosClientes: any[] = [];
   public resultadosAgrupadosClientes: any[] = [];
   public estadosClientes: string[] = [];
   public municipiosClientes: string[] = [];
   public coloniasClientes: string[] = [];
   public datosCitas: any[] = [];
   public resultadosAgrupadosCitas: any[] = [];
-  private filtrosClientes = { estado: '', municipio: '', colonia: '' };
+  private filtrosClientes = { estado: '', municipio: '', colonia: '', query: '' };
   private pageSizeClientes = 20;
   private currentPageClientes = 0;
   private pageSizeCitas = 20;
@@ -45,8 +46,9 @@ export class ListaClientesComponent implements OnInit {
     this.fSubidaService.organizarInformacion().subscribe({
       next: (data) => {
         this.datosUnicosClientes = this.filtrarInformacionUnica(data.Sheet1);
-        this.resultadosAgrupadosClientes = this.agruparPorRazonSocial(this.cargarPaginaClientes());
+        this.resultadosFiltradosClientes = [...this.datosUnicosClientes]; // Copia inicial para filtrados
         this.actualizarFiltrosClientes(this.datosUnicosClientes);
+        this.resultadosAgrupadosClientes = this.agruparPorRazonSocial(this.cargarPaginaClientes());
         loading.dismiss();
       },
       error: () => loading.dismiss(),
@@ -73,7 +75,7 @@ export class ListaClientesComponent implements OnInit {
   cargarPaginaClientes() {
     const start = this.currentPageClientes * this.pageSizeClientes;
     const end = start + this.pageSizeClientes;
-    const paginated = this.datosUnicosClientes.slice(start, end);
+    const paginated = this.resultadosFiltradosClientes.slice(start, end);
     this.currentPageClientes++;
     return paginated;
   }
@@ -90,7 +92,7 @@ export class ListaClientesComponent implements OnInit {
     const nuevosClientes = this.cargarPaginaClientes();
     this.resultadosAgrupadosClientes = [...this.resultadosAgrupadosClientes, ...this.agruparPorRazonSocial(nuevosClientes)];
     event.target.complete();
-    if (this.currentPageClientes * this.pageSizeClientes >= this.datosUnicosClientes.length) {
+    if (this.currentPageClientes * this.pageSizeClientes >= this.resultadosFiltradosClientes.length) {
       event.target.disabled = true;
     }
   }
@@ -114,14 +116,10 @@ export class ListaClientesComponent implements OnInit {
   }
 
   agruparPorRazonSocial(datos: any[]) {
-    const mapa = new Map<string, any>();
-    datos.forEach((item) => {
-      if (!mapa.has(item.nombre_razon_social)) {
-        mapa.set(item.nombre_razon_social, { nombre_razon_social: item.nombre_razon_social, registros: [] });
-      }
-      mapa.get(item.nombre_razon_social).registros.push(item);
-    });
-    return Array.from(mapa.values());
+    return datos.map((item) => ({
+      nombre_razon_social: item.nombre_razon_social,
+      registros: datos.filter((c) => c.nombre_razon_social === item.nombre_razon_social),
+    }));
   }
 
   actualizarFiltrosClientes(datos: any[]) {
@@ -131,11 +129,8 @@ export class ListaClientesComponent implements OnInit {
   }
 
   buscarCliente(event: any) {
-    const query = event.target.value.toLowerCase();
-    const filtrados = this.datosUnicosClientes.filter((cliente) =>
-      cliente.nombre_razon_social.toLowerCase().includes(query)
-    );
-    this.resultadosAgrupadosClientes = this.agruparPorRazonSocial(filtrados);
+    this.filtrosClientes.query = event.target.value.toLowerCase();
+    this.aplicarFiltrosClientes();
   }
 
   buscarCita(event: any) {
@@ -164,18 +159,29 @@ export class ListaClientesComponent implements OnInit {
   aplicarFiltrosClientes() {
     let resultados = this.datosUnicosClientes;
 
+    if (this.filtrosClientes.query) {
+      resultados = resultados.filter((c) =>
+        c.nombre_razon_social.toLowerCase().includes(this.filtrosClientes.query)
+      );
+    }
+
     if (this.filtrosClientes.estado) {
       resultados = resultados.filter((c) => c.estado === this.filtrosClientes.estado);
     }
+
     if (this.filtrosClientes.municipio) {
       resultados = resultados.filter((c) => c.municipio === this.filtrosClientes.municipio);
     }
+
     if (this.filtrosClientes.colonia) {
-      resultados = resultados.filter((c) => c.colonia.toLowerCase().includes(this.filtrosClientes.colonia));
+      resultados = resultados.filter((c) =>
+        c.colonia.toLowerCase().includes(this.filtrosClientes.colonia)
+      );
     }
 
-    this.resultadosAgrupadosClientes = this.agruparPorRazonSocial(resultados);
-    this.actualizarFiltrosClientes(resultados);
+    this.resultadosFiltradosClientes = resultados;
+    this.currentPageClientes = 0; // Reinicia paginación
+    this.resultadosAgrupadosClientes = this.agruparPorRazonSocial(this.cargarPaginaClientes());
   }
 
   async confirm(item: any) {

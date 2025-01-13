@@ -101,13 +101,17 @@
                   <div><strong>Aprobación:</strong> {{ item.num_aprobacion }} - {{ item.a_aprobacion }}</div>
                 </ion-col>
               </ion-row>
+              <ion-row>
+                <ion-col class="text-center">
+                  <ion-button expand="block" (click)="confirm(item)">Confirmar</ion-button>
+                </ion-col>
+              </ion-row>
             </ion-grid>
           </ion-card-content>
         </ion-card>
       </ion-accordion>
     </ion-accordion-group>
 
-    <!-- Scroll Infinito para Clientes -->
     <ion-infinite-scroll threshold="100px" (ionInfinite)="cargarMasClientes($event)">
       <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más clientes...">
       </ion-infinite-scroll-content>
@@ -126,12 +130,16 @@
             <div><strong>Fecha:</strong> {{ cita.fecha }}</div>
             <div><strong>Teléfono:</strong> {{ cita.telefono }}</div>
             <div><strong>Domicilio:</strong> {{ cita.domicilio }}, {{ cita.colonia }}, {{ cita.municipio }}</div>
+            <ion-row>
+              <ion-col class="text-center">
+                <ion-button expand="block" (click)="confirm(cita)">Confirmar</ion-button>
+              </ion-col>
+            </ion-row>
           </ion-card-content>
         </ion-card>
       </ion-accordion>
     </ion-accordion-group>
 
-    <!-- Scroll Infinito para Citas -->
     <ion-infinite-scroll threshold="100px" (ionInfinite)="cargarMasCitas($event)">
       <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más citas...">
       </ion-infinite-scroll-content>

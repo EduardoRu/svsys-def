@@ -701,119 +701,86 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
 
   async infoBasculaMtro(e: any) {
-    const datos: any = await this.storageService.getValue('estudioMtro').then(res => res)
-    if (
-      datos != undefined &&
-      datos.alc_max != undefined &&
-      datos.clase_ex != undefined &&
-      datos.divi_max != undefined &&
-      datos.ejemplo1 != undefined &&
-      datos.infoRepetibilidad != undefined &&
-      datos.observaciones != undefined &&
-      datos.precarga
-    ) {
-      this.estudioMtro.get('precarga').setValue(datos.precarga)
-      this.estudioMtro.get('alc_max').setValue(datos.alc_max)
-      this.estudioMtro.get('divi_max').setValue(datos.divi_max)
-      this.estudioMtro.get('clase_ex').setValue(datos.clase_ex)
-      this.estudioMtro.get('observaciones').setValue(datos.observaciones)
-      this.estudioMtro.get('ejemplo1').setValue(datos.ejemplo1)
-      this.estudioMtro.get('infoRepetibilidad').setValue(datos.infoRepetibilidad)
+    const datos: any = await this.storageService.getValue('estudioMtro').then(res => res);
+    if (datos?.alc_max && datos?.clase_ex && datos?.divi_max && datos?.ejemplo1 && datos?.infoRepetibilidad && datos?.observaciones) {
+      this.estudioMtro.get('precarga').setValue(datos.precarga);
+      this.estudioMtro.get('alc_max').setValue(datos.alc_max);
+      this.estudioMtro.get('divi_max').setValue(datos.divi_max);
+      this.estudioMtro.get('clase_ex').setValue(datos.clase_ex);
+      this.estudioMtro.get('observaciones').setValue(datos.observaciones);
+      this.estudioMtro.get('ejemplo1').setValue(datos.ejemplo1);
+      this.estudioMtro.get('infoRepetibilidad').setValue(datos.infoRepetibilidad);
     } else {
-      this.estudioMtro.get('alc_max').setValue(e.detail.value.alcance_max)
-      this.estudioMtro.get('divi_max').setValue(e.detail.value.divi_max)
-      this.estudioMtro.get('clase_ex').setValue(e.detail.value.clase)
-
-      const alc_max = this.estudioMtro.get('alc_max').value
-      const clase = this.estudioMtro.get('clase_ex').value
-
-      const [numerador, denominador] = alc_max.split('/')
-      this.estudioMtro.get('precarga').setValue(denominador)
-
-      // ACCEDER AL ARRAY
-
-      const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
-      const arrayCargas = [.002, .005, .025, .05, .1, .2, .35, .5, .6, 1]
-      for (let i = 0; i < 10; i++) {
-        const group = arrayCargaUno.at(i) as FormGroup;
-        group.get('carga').setValue(arrayCargas[i] * denominador)
+      // Obtener datos básicos
+      const alcanceMaximo = e.detail.value.alcance_max;
+      const divisionMinima = e.detail.value.divi_max;
+      const claseExactitud = e.detail.value.clase;
+      const [alcNumerador, alcDenominador] = alcanceMaximo.split('/').map(Number);
+      const [divNumerador, divDenominador] = divisionMinima.split('/').map(Number);
+  
+      this.estudioMtro.get('alc_max').setValue(alcanceMaximo);
+      this.estudioMtro.get('divi_max').setValue(divisionMinima);
+      this.estudioMtro.get('clase_ex').setValue(claseExactitud);
+  
+      // Calcular peso mínimo
+      const pMin = 20 * divNumerador;
+  
+      // Calcular escalas y límites según la clase
+      let escala1: number, escala2: number, escala3: number, emt1: number, emt2: number, emt3: number;
+      if (claseExactitud === "2") {
+        escala1 = divDenominador * 5000;
+        escala2 = divDenominador * 20000;
+        escala3 = divDenominador * 100000;
+        emt1 = divDenominador * 1;
+        emt2 = divDenominador * 2;
+        emt3 = divDenominador * 3;
+      } else if (claseExactitud === "3") {
+        escala1 = divDenominador * 500;
+        escala2 = divDenominador * 2000;
+        escala3 = divDenominador * 10000;
+        emt1 = divDenominador * 1;
+        emt2 = divDenominador * 2;
+        emt3 = divDenominador * 3;
+      } else if (claseExactitud === "4") {
+        escala1 = divDenominador * 50;
+        escala2 = divDenominador * 200;
+        escala3 = divDenominador * 1000;
+        emt1 = divDenominador * 1;
+        emt2 = divDenominador * 2;
+        emt3 = divDenominador * 3;
       }
-
+  
+      // Generar cargas y EMT
+      const arrayCargas = [0.002, 0.005, 0.025, 0.05, 0.1, 0.2, 0.35, 0.5, 0.6, 1].map(carga => carga * alcDenominador);
+      const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
+  
+      for (let i = 0; i < arrayCargas.length; i++) {
+        const group = arrayCargaUno.at(i) as FormGroup;
+        const carga = arrayCargas[i];
+  
+        // Asignar valores de EMT según escala
+        const emt = (carga * 1000) <= escala1
+          ? emt1
+          : (carga * 1000) <= escala2
+            ? emt2
+            : emt3;
+  
+        group.get('carga').setValue(carga.toFixed(3));
+        group.get('emt').setValue(emt);
+      }
+  
+      // Configuración de repetibilidad
       const arrayRepetibilidad = this.estudioMtro.get('infoRepetibilidad') as FormArray;
       const group = arrayRepetibilidad.at(0) as FormGroup;
-
-      group.get('rep50num').setValue(numerador * .5)
-      group.get('rep100num').setValue(numerador)
-      group.get('rep50den').setValue(denominador * .5)
-      group.get('rep100den').setValue(denominador)
-      group.get('rep13den').setValue(Math.round(denominador * 0.33))
-
-
-      if (clase == "2") {
-        const divi_mina = this.estudioMtro.get('divi_max').value
-        const [numerador, denominador] = divi_mina.split('/')
-
-        const escala1 = denominador * 5000
-        const escala2 = denominador * 20000
-        const escala3 = denominador * 100000
-
-        const cla1 = denominador * 1
-        const cla2 = denominador * 2
-        const cla3 = denominador * 3
-
-        for (let i = 0; i < 10; i++) {
-          const group = arrayCargaUno.at(i) as FormGroup;
-          group.get('emt').setValue(
-            (group.get('carga').value * 1000) <= escala1 ? cla1 :
-              (group.get('carga').value * 1000) >= escala2 && (group.get('carga').value * 1000) <= escala3 ? cla2 : cla3
-          )
-        }
-
-      } else if (clase == "3") {
-        const divi_mina = this.estudioMtro.get('divi_max').value
-        const [numerador, denominador] = divi_mina.split('/')
-
-        const escala1 = denominador * 500
-        const escala2 = denominador * 2000
-
-        const cla1 = denominador * 1
-        const cla2 = denominador * 2
-        const cla3 = denominador * 3
-
-        for (let i = 0; i < 10; i++) {
-          const group = arrayCargaUno.at(i) as FormGroup;
-          group.get('emt').setValue(
-            (group.get('carga').value * 1000) <= escala1 ? cla1 :
-              ((group.get('carga').value * 1000) > escala1 && (group.get('carga').value * 1000) <= escala2) ? cla2 : cla3
-          )
-        }
-
-      } else if (clase == "4") {
-
-        const divi_mina = this.estudioMtro.get('divi_max').value
-        const [numerador, denominador] = divi_mina.split('/')
-
-        const escala1 = denominador * 50
-        const escala2 = denominador * 200
-        const escala3 = denominador * 1000
-
-        const cla1 = denominador * 1
-        const cla2 = denominador * 2
-        const cla3 = denominador * 3
-
-        for (let i = 0; i < 10; i++) {
-          const group = arrayCargaUno.at(i) as FormGroup;
-          group.get('emt').setValue(
-            (group.get('carga').value * 1000) <= escala1 ? cla1 :
-              (group.get('carga').value * 1000) >= escala2 && (group.get('carga').value * 1000) <= escala3 ? cla2 : cla3
-          )
-        }
-      }
+  
+      group.get('rep50num').setValue(alcNumerador * 0.5);
+      group.get('rep100num').setValue(alcNumerador);
+      group.get('rep50den').setValue(alcDenominador * 0.5);
+      group.get('rep100den').setValue(alcDenominador);
+      group.get('rep13den').setValue(Math.round(alcDenominador * 0.33));
     }
-
-
-
   }
+  
 
 
   // OBTENER LA INFORMACIÓN METROLOGICA
