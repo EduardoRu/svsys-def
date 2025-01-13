@@ -26,8 +26,8 @@
   <ion-card-content>
     <ng-container *ngIf="segment == 'infoClientes'">
 
-      <ion-searchbar [debounce]="25" cancel-button-text="Borrar"
-        placeholder="Busca un cliente" showCancelButton="focus" (click)="buscarClientes()"></ion-searchbar>
+      <ion-searchbar [debounce]="25" cancel-button-text="Borrar" placeholder="Busca un cliente" showCancelButton="focus"
+        (click)="buscarClientes()"></ion-searchbar>
 
       <hr>
       <form (ngSubmit)="getinfoCliente()" [formGroup]="clienteInformacion">
@@ -175,70 +175,68 @@
       <hr>
       <form (ngSubmit)="getBascula()" [formGroup]="registroBasculas">
         <div class="p-2 text-center">
-          <h3>Registro de basculas</h3>
+          <h3>Registro de Básculas</h3>
         </div>
-        <div class="row">
-          <div class="col-md-3">
+        <div class="row g-3">
+          <div class="col-md-4">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="marca">
-              <label for="floatingtelefono">Marca</label>
+              <input type="text" class="form-control" id="marca" formControlName="marca">
+              <label for="marca">Marca</label>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputfecha" formControlName="modelo">
-              <label for="floatingInputfecha">Modelo</label>
+              <input type="text" class="form-control" id="modelo" formControlName="modelo">
+              <label for="modelo">Modelo</label>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputtipo_servicio" formControlName="no_serie">
-              <label for="floatingInputtipo_servicio">No. Serie</label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputtipo_servicio" formControlName="clase">
-              <label for="floatingInputtipo_servicio">Clase de exactitud</label>
+              <input type="text" class="form-control" id="no_serie" formControlName="no_serie">
+              <label for="no_serie">No. Serie</label>
             </div>
           </div>
         </div>
-
-
-        <div class="row">
-          <div class="col-md-3">
+        <div class="row g-3">
+          <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingtelefono" formControlName="divi_max"
-                (input)="clasifiacionbasculas($event,'divi_max')">
-              <label for="floatingtelefono">Divisón maxima</label>
+              <input type="text" class="form-control" id="clase" formControlName="clase">
+              <label for="clase">Clase de Exactitud</label>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInputfecha" formControlName="alcance_max"
-                (input)="clasifiacionbasculas($event,'alcance_max')">
-              <label for="floatingInputfecha">Alcance maximo</label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            Tipo de instrumento
-            <select class="form-select" aria-label=".form-select-lg" formControlName="tipo_bascula">
+          <div class="col-md-4 mt-4">
+            <select class="form-select form-select-lg mb-3" aria-label="Large select example" formControlName="tipo_bascula">
+              <option value="">Tipo de instrumento</option>
               <option value="M">Mecánico</option>
               <option value="E">Electrónico</option>
-              <option value="H">Hibrido</option>
+              <option value="H">Híbrido</option>
             </select>
           </div>
           <div class="col-md-3">
-            <div class="form-floating">
-              <ion-button type="submit" expand="block" class="pt-2">
-                Agregar Bascula
-              </ion-button>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="alc_max" formControlName="alc_max" placeholder="Ej: 2/4/20" (input)="clasifiacionbasculas()">
+              <label for="alc_max">Alcance Máximo</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="divi_min" formControlName="divi_min" placeholder="Ej: 1/2/5" (input)="clasifiacionbasculas()">
+              <label for="divi_min">División Mínima</label>
             </div>
           </div>
         </div>
+        <div class="row g-3">
+          
+          <div class="col-md-12 text-center align-self-end">
+            <ion-button type="submit" expand="block" color="primary">
+              Agregar Báscula
+            </ion-button>
+          </div>
+        </div>
       </form>
+      
       <hr>
-
+      
       <div class="table-responsive">
         <table class="table table-striped table-hover">
           <thead>
@@ -247,9 +245,9 @@
               <th>Modelo</th>
               <th>No. Serie</th>
               <th>Clase</th>
-              <th>División maxima</th>
-              <th>Alcance maximo</th>
-              <th>Tipo de instrumento</th>
+              <th>Tipo de Instrumento</th>
+              <th>Alcance Máximo</th>
+              <th>División Mínima</th>
               <th>Opciones</th>
             </tr>
           </thead>
@@ -259,9 +257,9 @@
               <td>{{ item.modelo }}</td>
               <td>{{ item.no_serie }}</td>
               <td>{{ item.clase }}</td>
-              <td>{{ item.divi_max }}</td>
-              <td>{{ item.alcance_max }}</td>
               <td>{{ item.tipo_bascula }}</td>
+              <td>{{ item.alc_max }}</td>
+              <td>{{ item.divi_min }}</td>
               <td>
                 <ion-button (click)="eliminarBascula(i)" expand="block" fill="clear" class="btn btn-danger btn-sm">
                   Eliminar
@@ -271,6 +269,8 @@
           </tbody>
         </table>
       </div>
+      
+
 
 
       <div class="row text-center ">
@@ -505,7 +505,7 @@
           <div class="col-md-3">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingtelefono" formControlName="divi_max">
-              <label for="floatingtelefono">Divisón máxima</label>
+              <label for="floatingtelefono">Divisón mínima</label>
             </div>
           </div>
           <div class="col-md-3">
@@ -648,7 +648,7 @@
           <hr>
           <div class="row text-center m-3">
             <div class="col-md-6 d-grid gap-2">
-              <ion-button fill="clear" class="btn btn-secondary">
+              <ion-button fill="clear" class="btn btn-secondary" (click)="limpiarEstudioMetro()">
                 Limpiar Formulario
               </ion-button>
             </div>
@@ -681,7 +681,7 @@
                 <th>Modelo</th>
                 <th>No. Serie</th>
                 <th>Clase</th>
-                <th>División maxima</th>
+                <th>División mínima</th>
                 <th>Alcance maximo</th>
                 <th>Tipo de instrumento</th>
               </tr>

@@ -120,11 +120,10 @@ export class GenerarReporteDesktopComponent implements OnInit {
       modelo: ['', Validators.required],
       no_serie: ['', Validators.required],
       clase: ['', Validators.required],
-      divi_max: ['', Validators.required],
-      alcance_max: ['', Validators.required],
-      tipo_bascula: ['', Validators.required]
+      tipo_bascula: ['', Validators.required],
+      alc_max: ['', Validators.required],
+      divi_min: ['', Validators.required]
     });
-
 
     // INSEPCCIÓN VISUAL
     this.inspeccionVisual = this.fb.group({
@@ -447,7 +446,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
     ctx.lineWidth = 2;
   }
 
-  
+
 
   citaProgramada(e: any) {
     console.log(e.detail.value)
@@ -617,7 +616,7 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.presentToast('Información del cliente guardada exitosamente', 'bottom', 'success');
       this.segment = 'Basculas'
     } else {
-      this.presentToast('Todos los campos son obligatorios','bottom','warning');
+      this.presentToast('Todos los campos son obligatorios', 'bottom', 'warning');
       loading.dismiss();
       return;
     }
@@ -651,39 +650,64 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
   }
 
-  clasifiacionbasculas(event: any, tipo: string) {
-    const valor = event.target.value;
-
-    if (tipo == 'divi_max') {
-      const fraccionRegex = /^\d+\/\d+$/;
-      if (fraccionRegex.test(valor)) {
-        const [numerador, denominador] = valor.split('/')
-        this.divi_max = parseInt(denominador)
-      } else {
-        //console.log("Formato invalido");
+  clasifiacionbasculas() {
+    // Obtener los valores de alcance máximo y división mínima
+    const alcanceMax = this.registroBasculas.get('alc_max').value; // Ej: "8/40"
+    const divisionMin = this.registroBasculas.get('divi_min').value; // Ej: "5/10"
+  
+    // Validar formato
+    const fraccionRegex = /^(\d+\/?)+$/;
+    if (!fraccionRegex.test(alcanceMax) || !fraccionRegex.test(divisionMin)) {
+      this.registroBasculas.get('clase').setValue('');
+      return;
+    }
+  
+    // Convertir a arrays de números
+    const alcances = alcanceMax.split('/').map(Number); // [8, 40]
+    const divisiones = divisionMin.split('/').map(Number); // [5, 10]
+  
+    if (alcances.length !== divisiones.length) {
+      this.registroBasculas.get('clase').setValue('');
+      return;
+    }
+  
+    // Convertir a divisiones (n)
+    const divisionesE = [];
+    for (let i = 0; i < alcances.length; i++) {
+      const alcanceGramos = alcances[i] * 1000; // Convertir a gramos
+      const divisionGramos = divisiones[i]; // Ya está en gramos
+      const e = alcanceGramos / divisionGramos;
+      divisionesE.push(e); // Guardar n1, n2, n3...
+    }
+  
+    // Determinar la clase más restrictiva
+    let claseFinal = '4'; // Inicializamos con la clase más restrictiva
+    for (const e of divisionesE) {
+      if (e > 1000) {
+        claseFinal = '3'; // Si excede Clase III (1000), pasamos a Clase II
       }
-    } else if (tipo == 'alcance_max') {
-      const fraccionRegex = /^\d+\/\d+$/;
-      if (fraccionRegex.test(valor)) {
-        const [numerador, denominador] = valor.split('/')
-        this.alcance_max = parseInt(denominador)
-      } else {
-        //console.log("Formato invalido");
+      if (e > 10_000) {
+        claseFinal = '2'; // Si excede Clase II (10,000), pasamos a Clase I
+      }
+      if (e > 100_000) {
+        claseFinal = '1'; // Si excede Clase I (100,000), pasamos a Especial
       }
     }
-
-    if (this.divi_max != undefined && this.alcance_max != undefined) {
-      const clasificacion = (this.alcance_max * 1000) / this.divi_max
-
-      if (clasificacion >= 0 && clasificacion <= 1000) {
-        this.registroBasculas.get('clase').setValue('4')
-      } else if (clasificacion >= 500 && clasificacion <= 10000) {
-        this.registroBasculas.get('clase').setValue('3')
-      } else if (clasificacion >= 5000 && clasificacion <= 100000) {
-        this.registroBasculas.get('clase').setValue('2')
-      }
-    }
+  
+    // Determinar el peso mínimo
+    const pesoMinimo = 20 * Math.min(...divisiones); // Basado en la división más pequeña
+  
+    // Asignar los valores calculados al formulario
+    this.registroBasculas.get('clase').setValue(claseFinal);
+    this.registroBasculas.get('precarga').setValue(pesoMinimo);
+  
+    console.log(`Clase asignada: ${claseFinal}`);
+    console.log(`Peso mínimo: ${pesoMinimo} g`);
   }
+  
+  
+  
+  
 
   eliminarBascula(item: any) {
     this.basculas.splice(item, 1)
@@ -701,86 +725,139 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
 
   async infoBasculaMtro(e: any) {
-    const datos: any = await this.storageService.getValue('estudioMtro').then(res => res);
-    if (datos?.alc_max && datos?.clase_ex && datos?.divi_max && datos?.ejemplo1 && datos?.infoRepetibilidad && datos?.observaciones) {
-      this.estudioMtro.get('precarga').setValue(datos.precarga);
-      this.estudioMtro.get('alc_max').setValue(datos.alc_max);
-      this.estudioMtro.get('divi_max').setValue(datos.divi_max);
-      this.estudioMtro.get('clase_ex').setValue(datos.clase_ex);
-      this.estudioMtro.get('observaciones').setValue(datos.observaciones);
-      this.estudioMtro.get('ejemplo1').setValue(datos.ejemplo1);
-      this.estudioMtro.get('infoRepetibilidad').setValue(datos.infoRepetibilidad);
-    } else {
-      // Obtener datos básicos
-      const alcanceMaximo = e.detail.value.alcance_max;
-      const divisionMinima = e.detail.value.divi_max;
-      const claseExactitud = e.detail.value.clase;
-      const [alcNumerador, alcDenominador] = alcanceMaximo.split('/').map(Number);
-      const [divNumerador, divDenominador] = divisionMinima.split('/').map(Number);
+    const basculaSeleccionada = e.detail.value; // Información de la báscula seleccionada
+    const tipoInspeccion: any = await this.storageService.getValue('infoBasculas').then(res => res);
   
-      this.estudioMtro.get('alc_max').setValue(alcanceMaximo);
-      this.estudioMtro.get('divi_max').setValue(divisionMinima);
-      this.estudioMtro.get('clase_ex').setValue(claseExactitud);
+    if (!basculaSeleccionada) {
+      console.error("No se seleccionó una báscula.");
+      return;
+    }
   
-      // Calcular peso mínimo
-      const pMin = 20 * divNumerador;
+    const divisiones = basculaSeleccionada.divisiones; // Obtener divisiones de la báscula
+    if (!divisiones || divisiones.length === 0) {
+      console.error("La báscula seleccionada no tiene divisiones definidas.");
+      return;
+    }
   
-      // Calcular escalas y límites según la clase
-      let escala1: number, escala2: number, escala3: number, emt1: number, emt2: number, emt3: number;
+    const tipoInspeccionSeleccionada = tipoInspeccion.tipo_inspeccion; // Inicial, Periódica o Extraordinaria
+    const claseExactitud = basculaSeleccionada.clase; // Clase de exactitud
+  
+    // Ajuste de multiplicador según el tipo de inspección
+    const multiplicador =
+      tipoInspeccionSeleccionada === "Inicial" ? 1 :
+      tipoInspeccionSeleccionada === "Periódica" ? 2 :
+      tipoInspeccionSeleccionada === "Extraordinaria" ? 3 : 1;
+  
+    let arrayCargas: number[] = [];
+    let arrayEMTs: number[] = [];
+    let alcanceMaximoGeneral: string = ""; // Campo alcance máximo general
+    let divisionMinimaGeneral: string = ""; // Campo división mínima general
+    let precarga: number | null = null; // Precarga actualizada
+  
+    divisiones.forEach((division: any, index: number) => {
+      const [alcNumerador, alcDenominador] = division.alcance_max.split('/').map(Number);
+      const [divNumerador, divDenominador] = division.division_min.split('/').map(Number);
+  
+      if (index === 0) {
+        // Guardar la primera división mínima como referencia
+        divisionMinimaGeneral = `${divNumerador}/${divDenominador}`;
+      }
+  
+      if (index === divisiones.length - 1) {
+        // Guardar el alcance máximo de la última división
+        alcanceMaximoGeneral = `${alcNumerador}/${alcDenominador}`;
+        precarga = alcDenominador; // Precarga es el denominador del alcance máximo general
+      }
+  
+      // Calcular escalas y EMTs según clase de exactitud
+      let escala1: number, escala2: number, escala3: number;
+      let emt1: number, emt2: number, emt3: number;
+  
       if (claseExactitud === "2") {
         escala1 = divDenominador * 5000;
         escala2 = divDenominador * 20000;
         escala3 = divDenominador * 100000;
-        emt1 = divDenominador * 1;
-        emt2 = divDenominador * 2;
-        emt3 = divDenominador * 3;
+        emt1 = divDenominador * 0.5 * multiplicador;
+        emt2 = divDenominador * 1 * multiplicador;
+        emt3 = divDenominador * 1.5 * multiplicador;
       } else if (claseExactitud === "3") {
         escala1 = divDenominador * 500;
         escala2 = divDenominador * 2000;
         escala3 = divDenominador * 10000;
-        emt1 = divDenominador * 1;
-        emt2 = divDenominador * 2;
-        emt3 = divDenominador * 3;
+        emt1 = divDenominador * 0.5 * multiplicador;
+        emt2 = divDenominador * 1 * multiplicador;
+        emt3 = divDenominador * 1.5 * multiplicador;
       } else if (claseExactitud === "4") {
         escala1 = divDenominador * 50;
         escala2 = divDenominador * 200;
         escala3 = divDenominador * 1000;
-        emt1 = divDenominador * 1;
-        emt2 = divDenominador * 2;
-        emt3 = divDenominador * 3;
+        emt1 = divDenominador * 0.5 * multiplicador;
+        emt2 = divDenominador * 1 * multiplicador;
+        emt3 = divDenominador * 1.5 * multiplicador;
       }
   
-      // Generar cargas y EMT
-      const arrayCargas = [0.002, 0.005, 0.025, 0.05, 0.1, 0.2, 0.35, 0.5, 0.6, 1].map(carga => carga * alcDenominador);
-      const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
+      // Generar cargas dentro del rango de la división
+      const cargas = [];
+      const emts = [];
+      const step = alcDenominador / 10; // Generar 10 pasos hasta el alcance máximo (denominador)
   
-      for (let i = 0; i < arrayCargas.length; i++) {
-        const group = arrayCargaUno.at(i) as FormGroup;
-        const carga = arrayCargas[i];
+      for (let i = 0; i <= 10; i++) {
+        const carga = i === 10 ? alcDenominador : step * i; // Última carga es el alcance máximo (denominador)
+        const emt =
+          carga * 1000 <= escala1 ? emt1 :
+          carga * 1000 <= escala2 ? emt2 :
+          emt3;
   
-        // Asignar valores de EMT según escala
-        const emt = (carga * 1000) <= escala1
-          ? emt1
-          : (carga * 1000) <= escala2
-            ? emt2
-            : emt3;
-  
-        group.get('carga').setValue(carga.toFixed(3));
-        group.get('emt').setValue(emt);
+        cargas.push(carga.toFixed(3)); // Redondear a 3 decimales
+        emts.push(emt);
       }
   
-      // Configuración de repetibilidad
-      const arrayRepetibilidad = this.estudioMtro.get('infoRepetibilidad') as FormArray;
-      const group = arrayRepetibilidad.at(0) as FormGroup;
+      arrayCargas = [...arrayCargas, ...cargas];
+      arrayEMTs = [...arrayEMTs, ...emts];
+    });
   
-      group.get('rep50num').setValue(alcNumerador * 0.5);
-      group.get('rep100num').setValue(alcNumerador);
-      group.get('rep50den').setValue(alcDenominador * 0.5);
-      group.get('rep100den').setValue(alcDenominador);
-      group.get('rep13den').setValue(Math.round(alcDenominador * 0.33));
+    // Asignar los valores al formulario
+    const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
+    for (let i = 0; i < arrayCargas.length; i++) {
+      if (i >= arrayCargaUno.length) {
+        // Si hay más datos que campos en el formulario, agregar nuevos grupos
+        arrayCargaUno.push(
+          this.fb.group({
+            carga: [''],
+            emt: [''],
+            errASC: [''],
+            errDSC: [''],
+            num50: [''],
+            num100: [''],
+            den50: [''],
+            den100: [''],
+            emt13: [''],
+          })
+        );
+      }
+      const group = arrayCargaUno.at(i) as FormGroup;
+      group.get('carga').setValue(arrayCargas[i]);
+      group.get('emt').setValue(arrayEMTs[i]);
     }
+  
+    // Asignar información general a los campos automáticos
+    this.estudioMtro.get('alc_max').setValue(alcanceMaximoGeneral);
+    this.estudioMtro.get('divi_max').setValue(divisionMinimaGeneral);
+    this.estudioMtro.get('clase_ex').setValue(claseExactitud);
+    this.estudioMtro.get('precarga').setValue(precarga);
+  
+    console.log("Cargas calculadas:", arrayCargas);
+    console.log("EMTs calculados:", arrayEMTs);
+    console.log("Precarga (alcance máximo denominador):", precarga);
   }
   
+  
+  
+
+  limpiarEstudioMetro() {
+    this.estudioMtro.reset();
+  }
+
 
 
   // OBTENER LA INFORMACIÓN METROLOGICA
@@ -1012,7 +1089,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
 
   // IMPRIMIR Y/O GENERAR PDF
   async imprimirReporte() {
-
     const infoCliente = await this.storageService.getValue('infoClientes');
     const infoPago = await this.storageService.getValue('infoPago');
     const infoVisuales = await this.storageService.getValue('inspeccionVisual');
@@ -1021,6 +1097,12 @@ export class GenerarReporteDesktopComponent implements OnInit {
     const estudioMtro = await this.storageService.getValue('estudioMtro');
     const infoResumen = await this.storageService.getValue('resumen');
 
+    const firmaInspectorBase64 = await this.storageService.getValue('firmaInspectorBase64');
+    const firmaClienteBase64 = await this.storageService.getValue('firmaClienteBase64');
+    const firmaApoyoBase64 = await this.storageService.getValue('firmaApoyoBase64');
+
+    const usuario = await this.storageService.getValue('usuario');
+
     this.generarReporteService.generarReporte(
       infoCliente,
       infoPago,
@@ -1028,7 +1110,11 @@ export class GenerarReporteDesktopComponent implements OnInit {
       encuesta,
       infoBasculas,
       estudioMtro,
-      infoResumen
+      infoResumen,
+      firmaInspectorBase64,
+      firmaClienteBase64,
+      firmaApoyoBase64,
+      usuario
     ).then((res: any) => {
       console.log(res);
     })

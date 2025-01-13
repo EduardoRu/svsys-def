@@ -115,7 +115,11 @@ export class GenerarDictamenService {
     encuesta: any,
     infoBasculas: any,
     estudioMtro: any,
-    infoResumen: any
+    infoResumen: any,
+    firmaInspectorBase64:any,
+    firmaClienteBase64:any,
+    firmaApoyoBase64:any,
+    usuario
   ) {
     
     var estudioMtroDatos: any = [];
@@ -383,95 +387,68 @@ export class GenerarDictamenService {
                           text: 'MARCA',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 23]
                         }, {
                           text: 'MODELO',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 23]
                         }, {
                           text: 'No. SERIE',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 23]
                         }, {
                           text: 'DIVISIÓN \n MÍNIMA (g)',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 18]
                         }, {
                           text: 'ALCANCE MÁXIMO\nDE MEDICIÓN (kg)',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 18]
                         }, {
                           text: 'CLASE DE \n EXACTITUD',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 18]
                         }, {
                           text: 'TIPO DE INSTRUMENTO\n(M) MECÁNICO\n(E)ELECTRÓNICO\n(H)HIBRIDO',
                           bold: true,
                           alignment: 'center',
-                          fontSize: 10,
+                          fontSize: 9,
                           margin: [0, 20]
                         }
                       ],
                       [
                         {
-                          text: '1' + infoBasculas.basculas[0].marca
+                          text: '1' + infoBasculas.basculas[0].marca,
+                          fontSize: '9'
                         }, {
-                          text: infoBasculas.basculas[0].modelo
+                          text: infoBasculas.basculas[0].modelo,
+                          fontSize: '9'
                         }, {
-                          text: infoBasculas.basculas[0].no_serie
+                          text: infoBasculas.basculas[0].no_serie,
+                          fontSize: '9'
                         }, {
-                          text: infoBasculas.basculas[0].divi_max
+                          text: infoBasculas.basculas[0].divi_max,
+                          fontSize: '9'
                         }, {
-                          text: infoBasculas.basculas[0].alcance_max
+                          text: infoBasculas.basculas[0].alcance_max,
+                          fontSize: '9'
                         }, {
-                          text: infoBasculas.basculas[0].clase
+                          text: infoBasculas.basculas[0].clase,
+                          fontSize: '9'
                         }, {
-                          text: infoBasculas.basculas[0].tipo_bascula
-                        } // SUJETO A CAMBIOS
-                      ],
-                      [
-                        {
-                          text: '2'
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        } // SUJETO A CAMBIOS
-                      ],
-                      [
-                        {
-                          text: '3'
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
-                        }, {
-    
+                          text: infoBasculas.basculas[0].tipo_bascula,
+                          fontSize: '9'
                         } // SUJETO A CAMBIOS
                       ],
                       [
@@ -488,13 +465,13 @@ export class GenerarDictamenService {
     
                         }, {
                           text: 'DESCRIPCIÓN',
-                          fontSize: 10,
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
                         }, {
                           text: 'CENTRO UNITARIO',
-                          fontSize: 10,
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
@@ -515,13 +492,13 @@ export class GenerarDictamenService {
     
                         }, {
                           text: '0-99 kg',
-                          fontSize: 10,
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
                         }, {
-                          text: '$' + infoPago.importe + '.00',
-                          fontSize: 10,
+                          text: '$380.00',
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
@@ -541,13 +518,13 @@ export class GenerarDictamenService {
     
                         }, {
                           text: 'De 100 a 200 kg',
-                          fontSize: 10,
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
                         }, {
-                          text: '$' + infoPago.importe2 + '.00',
-                          fontSize: 10,
+                          text: '$480.00',
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
@@ -567,7 +544,7 @@ export class GenerarDictamenService {
     
                         }, {
                           text: 'MAYOR DE 200 kg SEGÚN COTIZACIÓN',
-                          fontSize: 10,
+                          fontSize: 9,
                           alignment: 'center',
                           bold: true,
                           fillColor: '#eeeeee'
@@ -591,22 +568,27 @@ export class GenerarDictamenService {
                 {
                   alignment: 'center',
                   columns: [
-    
                     {
-                      text: '___________________________________________________\n NOMBRE Y FIRMA DEL SOLICITANTE',
-                      fontSize: 9
+                      width: '50%',
+                      stack: [
+                        { image: firmaClienteBase64, width: 70, height: 20 }, // Ajusta el tamaño de la imagen
+                        { text: '___________________________________________________', margin: [0, 0, 0, 0] }, // Guion con margen
+                        { text: 'NOMBRE Y FIRMA DEL SOLICITANTE', fontSize: 9, margin: [0, 0, 0, 0] }
+                      ]
                     },
                     {
-                      text: '___________________________________________________ \n NOMBRE Y FIRMA DEL INSPECTOR',
-                      fontSize: 9
+                      width: '50%',
+                      stack: [
+                        { image: firmaInspectorBase64, width: 70, height: 20 }, // Ajusta el tamaño de la imagen
+                        { text: '___________________________________________________', margin: [0, 0, 0, 0] }, // Guion con margen
+                        { text: 'NOMBRE Y FIRMA DEL INSPECTOR', fontSize: 9, margin: [0, 0, 0, 0] }
+                      ]
                     }
-                  ],
-    
-                },
+                  ]
+                },                
                 {
                   text: 'CLÁUSULAS',
                   alignment: 'center',
-    
                 },
                 {
                   text: `
@@ -1433,7 +1415,7 @@ export class GenerarDictamenService {
                         colSpan: 3,
                         text: ''
                       }, {}, {}, {}, {
-                        text: 'OBSERVACIONES:',
+                        text: 'OBSERVACIONES: CUMPLIO',
                         colSpan: 2
                       }, {}],
                       [{
@@ -1448,10 +1430,10 @@ export class GenerarDictamenService {
                       [{
                         text: 'VEHICULO',
                         fontSize: 10
-                      }, {}, {
+                      }, { text: '1'}, {
                         text: 'PLACA',
                         fontSize: 9
-                      }, {}, {}, {}, {}],
+                      }, {text: usuario.autos[0].placa}, {}, {}, {}],
                     ]
                   }
                 },
@@ -1496,7 +1478,7 @@ export class GenerarDictamenService {
                       }],
                       [{
                         fillColor: '#bbf7cf',
-                        text: ''
+                        text: '1'
                       }, {
                         fillColor: '#bbf7cf',
                         text: 'DE 0 A 99 Kg'
@@ -1550,28 +1532,34 @@ export class GenerarDictamenService {
                   }
                 },
                 {
-                  margin: [0, 50, 10, 10],
+                  margin: [0, 0, 10, 10],
                   columns: [
                     {
-                      wdith: '33%',
-                      text: '_________________________________________________ \n NOMBRE Y FIRMA DEL CLIENTE',
-                      fontSize: 10,
-                      alignment: 'center'
+                      width: '33%',
+                      stack: [
+                        { image: firmaClienteBase64, width: 90, height: 40, alignment: 'center' }, // Firma del cliente
+                        { text: '_____________________________________________', margin: [0, 0, 0, 0], alignment: 'center' }, // Línea
+                        { text: 'NOMBRE Y FIRMA DEL CLIENTE', fontSize: 10, alignment: 'center', margin: [0, 5, 0, 0] } // Etiqueta
+                      ]
                     },
                     {
-                      wdith: '33%',
-                      text: '________________________________________ \n NOMBRE Y FIRMA DEL INSPECTOR',
-                      fontSize: 10,
-                      alignment: 'center'
+                      width: '33%',
+                      stack: [
+                        { image: firmaInspectorBase64, width: 90, height: 40, alignment: 'center' }, // Firma del inspector
+                        { text: '________________________________________', margin: [0, 0, 0, 0], alignment: 'center' }, // Línea
+                        { text: 'NOMBRE Y FIRMA DEL INSPECTOR', fontSize: 10, alignment: 'center', margin: [0, 5, 0, 0] } // Etiqueta
+                      ]
                     },
                     {
-                      wdith: '33%',
-                      text: '____________________________________________ \n NOMBRE Y FIRMA DEL PERSONAL DE APOYO',
-                      fontSize: 10,
-                      alignment: 'center'
+                      width: '33%',
+                      stack: [
+                        { image: firmaApoyoBase64, width: 90, height: 40, alignment: 'center' }, // Firma del personal de apoyo
+                        { text: '____________________________________________', margin: [0, 0, 0, 0], alignment: 'center' }, // Línea
+                        { text: 'NOMBRE Y FIRMA DEL PERSONAL DE APOYO', fontSize: 10, alignment: 'center', margin: [0, 5, 0, 0] } // Etiqueta
+                      ]
                     }
                   ]
-                },
+                },                
                 {
                   fontSize: 6,
                   text: 'SERVICIOS DE VERIFICACION SALIA Y SUAREZ S.A. DE C.V. SE COMPROMETE A MANTENER LA CONFIDENCIALIDAD, SALVAGUARDAR TODA LA INFORMACION Y/O DOCUMENTACION QUE LE ES PROPORCIONADA Y/O PRESENTADA POR SUS CLIENTES. EL PRESENTE DICTAMEN DE INSPECCION CERTIFICA QUE LAS PRUEBAS EFECTUADAS CON LOS INSTRUMENTOS DESCRITOS SE EFECTUARON DE ACUERDO CON LA NORMA NOM-010-SCFI-1994 (INSTRUMENTOS DE MEDICION - INSTRUMENTOS PARA PESAR DE FUNCIONAMIENTO NO AUTOMATICO REQUISITOS TECNICOS Y METROLOGICOS ASI COMO TAMBIEN CONFORME AL PROCEDIMIENTO DCN-P-02 DE SERVICIOS DE VERIFICACION SALIA Y SUAREZ S.A. DE C.V.'
