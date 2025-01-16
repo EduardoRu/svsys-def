@@ -705,9 +705,6 @@ export class GenerarReporteDesktopComponent implements OnInit {
   }
 
 
-
-
-
   eliminarBascula(item: any) {
     this.basculas.splice(item, 1)
   }
@@ -722,6 +719,8 @@ export class GenerarReporteDesktopComponent implements OnInit {
       this.presentAlert('Todos los campos son obligatorios para generar un registro de las basculas');
     }
   }
+
+
   async infoBasculaMtro(e: any) {
     const basculaSeleccionada = e.detail.value;
     if (!basculaSeleccionada) {
@@ -748,65 +747,78 @@ export class GenerarReporteDesktopComponent implements OnInit {
     let arrayCargas: number[] = [];
     let arrayEMTs: number[] = [];
 
-    // Determinar el caso y llamar a la función correspondiente
+    // Asignar valores a la sección de repetibilidad
+    const arrayRepetibilidad = this.estudioMtro.get('infoRepetibilidad') as FormArray;
+    const repetibilidadGroup = arrayRepetibilidad.at(0) as FormGroup;
+
+    // Generar cargas y EMTs según el número de divisiones
     if (alcances.length === 1) {
-      // Caso de 1 división
-      if (alcances.length === 1) {
-        // Llamar a la función para generar cargas y EMTs
-        const { cargas, emts } = this.generarCargasUnaDivision(
-          pesoMinimo,    // Peso mínimo calculado
-          precarga,      // Precarga o alcance máximo
-          clase,         // Clase de la báscula
-          divisiones[0], // División mínima (n1)
-          multiplicador  // Multiplicador según tipo de inspección
-        );
+      ({ cargas: arrayCargas, emts: arrayEMTs } = this.generarCargasUnaDivision(
+        pesoMinimo, precarga, clase, divisiones[0], multiplicador
+      ));
 
-        const repetibilidad = this.estudioMtro.get('infoRepetibilidad') as FormArray;
-        const repGroup = repetibilidad.at(0) as FormGroup;
-
-        repGroup.get('rep50num').setValue(precarga * 0.5); // 50% de Máx
-        repGroup.get('rep100num').setValue(precarga); // 100% de Máx
-        repGroup.get('rep50den').setValue(precarga * 0.5); // 50% del mínimo
-        repGroup.get('rep100den').setValue(precarga); // 100% del mínimo
-        repGroup.get('rep13den').setValue(Math.round(precarga / 3)); // 1/3 de Máx
-
-        // Actualizar arrays de cargas y EMTs
-        arrayCargas.push(...cargas);
-        arrayEMTs.push(...emts);
-      }
+      repetibilidadGroup.get('rep50den').setValue(divi_min * 0.5);
+      repetibilidadGroup.get('rep100den').setValue(divi_min);
     } else if (alcances.length === 2) {
-      // Caso de 2 divisiones (ya está perfecto, no se modifica)
       ({ cargas: arrayCargas, emts: arrayEMTs } = this.generarCargasDosDivisiones(
         pesoMinimo, alcances, divisiones, clase, multiplicador
       ));
+      repetibilidadGroup.get('rep50den').setValue(divisiones[1] * 0.5);
+      repetibilidadGroup.get('rep100den').setValue(divisiones[1]);
     } else if (alcances.length === 3) {
-      // Caso de 3 divisiones
       ({ cargas: arrayCargas, emts: arrayEMTs } = this.generarCargasTresDivisiones(
         pesoMinimo, alcances, divisiones, clase, multiplicador
       ));
+      repetibilidadGroup.get('rep50den').setValue(divisiones[2] * 0.5);
+      repetibilidadGroup.get('rep100den').setValue(divisiones[2]);
     }
 
-    // Asignar los valores al formulario principal
+    // Identificar los índices donde ocurre un cambio de EMT
+    const indicesCambioEMT: number[] = [];
+    for (let i = 1; i < arrayEMTs.length; i++) {
+      if (arrayEMTs[i] !== arrayEMTs[i - 1]) {
+        indicesCambioEMT.push(i);
+      }
+    }
+
+    // Asegurarse de incluir siempre el primer y último índice
+    const indicesFinales = new Set<number>([0, arrayCargas.length - 1, ...indicesCambioEMT]);
+
+    // Asignar los valores al formulario `ejemplo1`
+    const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
+    for (let i = 0; i < 10; i++) {
+      if (i >= arrayCargaUno.length) {
+        arrayCargaUno.push(this.fb.group({ carga: [''], emt: [''] }));
+      }
+      const group = arrayCargaUno.at(i) as FormGroup;
+
+      if (indicesFinales.has(i)) {
+        group.get('carga').setValue(arrayCargas[i]);
+        group.get('emt').setValue(arrayEMTs[i]);
+      } else {
+        group.get('carga').setValue(''); // Dejar en blanco
+        group.get('emt').setValue('');
+      }
+    }
+
+    // Asignar valores al formulario superior
     this.estudioMtro.get('alc_max').setValue(alc_max);
     this.estudioMtro.get('divi_max').setValue(divi_min);
     this.estudioMtro.get('clase_ex').setValue(clase);
     this.estudioMtro.get('precarga').setValue(precarga);
 
-    // Asignar los valores al formulario
-    const arrayCargaUno = this.estudioMtro.get('ejemplo1') as FormArray;
-    for (let i = 0; i < arrayCargas.length; i++) {
-      if (i >= arrayCargaUno.length) {
-        arrayCargaUno.push(this.fb.group({ carga: [''], emt: [''] }));
-      }
-      const group = arrayCargaUno.at(i) as FormGroup;
-      group.get('carga').setValue(arrayCargas[i]);
-      group.get('emt').setValue(arrayEMTs[i]);
-    }
 
-    // Asignar valores automáticos a infoRepetibilidad
+    console.log(divi_min)
+    repetibilidadGroup.get('rep50num').setValue(precarga * 0.5);
+    repetibilidadGroup.get('rep100num').setValue(precarga);
 
+
+    repetibilidadGroup.get('rep13den').setValue(Math.round(precarga / 3)); // 1/3 de precarga
+
+    console.log("Cargas calculadas (kg):", arrayCargas);
+    console.log("EMTs calculados (g):", arrayEMTs);
+    console.log("Indices de cambio de EMT:", indicesCambioEMT);
   }
-
 
 
   generarCargasUnaDivision(
@@ -822,31 +834,37 @@ export class GenerarReporteDesktopComponent implements OnInit {
     const step = (precarga - pesoMinimo) / 9; // Dividir en 9 pasos después del peso mínimo
 
     for (let i = 0; i < 10; i++) {
-      let carga;
+      let carga: number;
 
       if (i === 0) {
-        // La primera carga siempre es el peso mínimo
+        // Primera carga: peso mínimo
         carga = pesoMinimo;
       } else if (i === 9) {
-        // La última carga siempre es igual a la precarga
+        // Última carga: precarga exacta
         carga = precarga;
       } else {
-        // Cálculo del resto de las cargas
+        // Cargas intermedias
         carga = pesoMinimo + step * i;
+        carga = this.redondearCarga(carga, precarga, false);
       }
 
-      // Redondear carga adecuadamente
-      let cargaRedondeada = this.redondearCarga(carga, precarga, i === 0);
-
-      // Evitar valores repetidos
-      while (cargas.includes(cargaRedondeada)) {
-        cargaRedondeada += precarga <= 1000 ? 1 : 10; // Incrementar ligeramente para evitar repetición
+      // Evitar valores duplicados solo en cargas intermedias
+      if (i !== 9 && cargas.includes(carga)) {
+        // Incrementar ligeramente si hay repetición
+        carga += precarga <= 1000 ? 1 : 10;
       }
 
-      cargas.push(cargaRedondeada);
+      cargas.push(carga);
 
       // Calcular EMT correspondiente
-      const emt = this.calcularEMT(cargaRedondeada, division, clase, multiplicador);
+      let emt: number;
+      if (i === 9) {
+        // Precarga siempre EMT3
+        emt = division * 1.5 * multiplicador;
+      } else {
+        emt = this.calcularEMT(carga, division, clase, multiplicador);
+      }
+
       emts.push(emt);
     }
 
@@ -863,49 +881,26 @@ export class GenerarReporteDesktopComponent implements OnInit {
   ) {
     const cargas: number[] = [];
     const emts: number[] = [];
-
     const step1 = (alcances[0] - pesoMinimo) / 5; // 5 pasos para n1
     const step2 = (alcances[1] - alcances[0]) / 4; // 4 pasos para n2
 
-    const repetibilidad = this.estudioMtro.get('infoRepetibilidad') as FormArray;
-    const repGroup = repetibilidad.at(0) as FormGroup;
-
-    repGroup.get('rep50num').setValue(alcances[0] * 0.5); // 50% de Máx
-    repGroup.get('rep100num').setValue(alcances[0]); // 100% de Máx
-    repGroup.get('rep50den').setValue(alcances[1] * 0.5); // 50% del mínimo
-    repGroup.get('rep100den').setValue(alcances[1]); // 100% del mínimo
-    repGroup.get('rep13den').setValue(Math.round(alcances[1] / 3)); // 1/3 de Máx
-
-
-    for (let i = 0; i < 10; i++) {
-      let carga;
-
-      if (i === 0) {
-        carga = pesoMinimo;
-      } else if (i <= 5) {
-        carga = pesoMinimo + step1 * (i - 1);
-      } else {
-        carga = alcances[0] + step2 * (i - 6);
-      }
-
-      // Redondear carga adecuadamente
-      let cargaRedondeada = this.redondearCarga(carga, alcances[1]);
-
-      // Evitar valores repetidos
-      while (cargas.includes(cargaRedondeada)) {
-        cargaRedondeada += alcances[1] <= 1000 ? 1 : 10; // Incrementar ligeramente para evitar repetición
-      }
-
-      cargas.push(cargaRedondeada);
-
-      if (cargaRedondeada <= alcances[0]) {
-        emts.push(this.calcularEMT(cargaRedondeada, divisiones[0], clase, multiplicador));
-      } else {
-        emts.push(this.calcularEMT(cargaRedondeada, divisiones[1], clase, multiplicador));
-      }
+    cargas.push(pesoMinimo); // Primera carga sin redondeo
+    for (let i = 1; i <= 5; i++) {
+      const carga = pesoMinimo + step1 * i;
+      cargas.push(this.redondearCarga(carga, alcances[1]));
+    }
+    for (let i = 1; i <= 4; i++) {
+      const carga = alcances[0] + step2 * i;
+      cargas.push(this.redondearCarga(carga, alcances[1]));
     }
 
-
+    cargas.forEach((carga) => {
+      if (carga <= alcances[0]) {
+        emts.push(this.calcularEMT(carga, divisiones[0], clase, multiplicador));
+      } else {
+        emts.push(this.calcularEMT(carga, divisiones[1], clase, multiplicador));
+      }
+    });
 
     return { cargas, emts };
   }
@@ -919,42 +914,38 @@ export class GenerarReporteDesktopComponent implements OnInit {
   ) {
     const cargas: number[] = [];
     const emts: number[] = [];
-
     const step1 = (alcances[0] - pesoMinimo) / 3; // 3 pasos para n1
     const step2 = (alcances[1] - alcances[0]) / 3; // 3 pasos para n2
     const step3 = (alcances[2] - alcances[1]) / 3; // 3 pasos para n3
 
-    for (let i = 0; i < 10; i++) {
-      let carga;
-
-      if (i === 0) {
-        carga = pesoMinimo;
-      } else if (i <= 3) {
-        carga = pesoMinimo + step1 * (i - 1);
-      } else if (i <= 6) {
-        carga = alcances[0] + step2 * (i - 4);
-      } else {
-        carga = alcances[1] + step3 * (i - 7);
-      }
-
-      // Redondear carga adecuadamente
-      let cargaRedondeada = this.redondearCarga(carga, alcances[2]);
-
-      // Evitar valores repetidos
-      while (cargas.includes(cargaRedondeada)) {
-        cargaRedondeada += alcances[2] <= 1000 ? 1 : 10; // Incrementar ligeramente para evitar repetición
-      }
-
-      cargas.push(cargaRedondeada);
-
-      if (cargaRedondeada <= alcances[0]) {
-        emts.push(this.calcularEMT(cargaRedondeada, divisiones[0], clase, multiplicador));
-      } else if (cargaRedondeada <= alcances[1]) {
-        emts.push(this.calcularEMT(cargaRedondeada, divisiones[1], clase, multiplicador));
-      } else {
-        emts.push(this.calcularEMT(cargaRedondeada, divisiones[2], clase, multiplicador));
-      }
+    // Cargas para n1
+    cargas.push(pesoMinimo); // Primera carga sin redondeo
+    for (let i = 1; i <= 3; i++) {
+      const carga = pesoMinimo + step1 * i;
+      cargas.push(this.redondearCarga(carga, alcances[2]));
     }
+
+    // Cargas para n2
+    for (let i = 1; i <= 3; i++) {
+      const carga = alcances[0] + step2 * i;
+      cargas.push(this.redondearCarga(carga, alcances[2]));
+    }
+
+    // Cargas para n3
+    for (let i = 1; i <= 3; i++) {
+      const carga = alcances[1] + step3 * i;
+      cargas.push(this.redondearCarga(carga, alcances[2]));
+    }
+
+    cargas.forEach((carga) => {
+      if (carga <= alcances[0]) {
+        emts.push(this.calcularEMT(carga, divisiones[0], clase, multiplicador));
+      } else if (carga <= alcances[1]) {
+        emts.push(this.calcularEMT(carga, divisiones[1], clase, multiplicador));
+      } else {
+        emts.push(this.calcularEMT(carga, divisiones[2], clase, multiplicador));
+      }
+    });
 
     return { cargas, emts };
   }
@@ -969,18 +960,21 @@ export class GenerarReporteDesktopComponent implements OnInit {
       return Math.round(carga * 10) / 10; // Redondear a un decimal para valores < 5
     }
 
-    if (precarga <= 1000) {
+    if (precarga <= 100) {
       return Math.round(carga / 5) * 5; // Redondear a múltiplos de 5 para precargas ≤ 1000
     } else {
-      return Math.round(carga / 100) * 100; // Redondear a múltiplos de 100 para precargas > 1000
+      return Math.round(carga / 10) * 10; // Redondear a múltiplos de 10 para precargas > 1000
     }
   }
 
-
-
-
-  calcularEMT(carga: number, division: number, clase: string, multiplicador: number): number {
-    let escala1, escala2, escala3, emt1, emt2, emt3;
+  calcularEMT(
+    carga: number,
+    division: number,
+    clase: string,
+    multiplicador: number
+  ): number {
+    let escala1: number, escala2: number, escala3: number;
+    let emt1: number, emt2: number, emt3: number;
 
     if (clase === "2") {
       escala1 = division * 5000;
@@ -1005,9 +999,16 @@ export class GenerarReporteDesktopComponent implements OnInit {
       emt3 = division * 1.5 * multiplicador;
     }
 
-    return carga * 1000 <= escala1 ? emt1 :
-      carga * 1000 <= escala2 ? emt2 : emt3;
+    // Cambiar <= a < para evitar asignar emt2 cuando carga * 1000 == escala2
+    if (carga * 1000 < escala1) {
+      return emt1;
+    } else if (carga * 1000 < escala2) {
+      return emt2;
+    } else {
+      return emt3;
+    }
   }
+
 
 
 
