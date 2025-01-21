@@ -8,14 +8,10 @@
           <ion-card-title class="text-center" style="color: white;">
             VEHICULOS
             <div>
-              <ion-searchbar 
-              [debounce]="250" 
-              showCancelButton="always" 
-              mode="ios" color="light"
-              cancel-button-text="Borrar"
-              placeholder="Busca la placa de un vehiculo"
-              (ionInput)="handleSearchCar($event)">
-              ></ion-searchbar>
+              <ion-searchbar [debounce]="250" showCancelButton="always" mode="ios" color="light"
+                cancel-button-text="Borrar" placeholder="Busca la placa de un vehiculo"
+                (ionInput)="handleSearchCar($event)">
+                ></ion-searchbar>
             </div>
           </ion-card-title>
         </ion-card-header>
@@ -24,27 +20,27 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">No. Vehiculo</th>
-                  <th scope="col">Placa</th>
+                  <th scope="col" style="text-align: center;">Placa</th>
                   <th scope="col" class="text-center">Opciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of carResult; let i = index">
-                  <ng-container *ngIf="i < 8">
-                    <th scope="row" class="center-elements-table" style="padding-top: 3%;">
-                      {{ i + 1 }}
-                    </th>
-                    <td class="center-elements-table" style="padding-top: 3%;">{{ item.placa }}</td>
-                    <td>
-                      <ion-button expand="block" color="primary" fill="clear"
-                        shape="round" (click)="editarAuto(item)">
-                        Detalles
-                      </ion-button>
-                    </td>
-                  </ng-container>
+                <tr *ngFor="let item of registrosCarPaginados">
+                  <td style="padding-left: 5%; padding-top: 3%;">{{ item.placa }}</td>
+                  <td style="text-align: center;">
+                    <ion-button fill="clear" color="primary" size="large" (click)="editarAuto(item)">
+                      <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                    </ion-button>
+                  </td>
                 </tr>
               </tbody>
+              <div class="pagination">
+                <ion-button (click)="paginaAnteriorCar()" [disabled]="paginaActualCar === 1">Anterior</ion-button>
+                <ion-label>{{ paginaActualCar }} / {{ getTotalPaginasCar() }}</ion-label>
+                <ion-button (click)="paginaSiguienteCar()"
+                  [disabled]="paginaActualCar === getTotalPaginasCar()">Siguiente</ion-button>
+              </div>
+
             </table>
           </div>
         </ion-card-content>
@@ -56,14 +52,9 @@
           <ion-card-title class="text-center" style="color: white;">
             EQUIPOS DE MEDICIÓN
             <div>
-              <ion-searchbar 
-              [debounce]="250" 
-              showCancelButton="always" 
-              mode="ios" color="light"
-              cancel-button-text="Borrar"
-              placeholder="Busca un equipo"
-              (ionInput)="handleSearchTool($event)"
-              ></ion-searchbar>
+              <ion-searchbar [debounce]="250" showCancelButton="always" mode="ios" color="light"
+                cancel-button-text="Borrar" placeholder="Busca un equipo"
+                (ionInput)="handleSearchTool($event)"></ion-searchbar>
             </div>
           </ion-card-title>
         </ion-card-header>
@@ -72,27 +63,26 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">No. Equipo</th>
-                  <th scope="col">Identificador</th>
+                  <th scope="col" style="text-align: center;">Identificador</th>
                   <th scope="col" class="text-center">Opciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of toolResult; let i = index">
-                  <ng-container *ngIf="i < 7">
-                    <th scope="row" class="center-elements-table" style="padding-top: 3%;">
-                      {{ i + 1 }}
-                    </th>
-                    <td class="center-elements-table" style="padding-top: 3%;">{{ item.identificacion }}</td>
-                    <td>
-                      <ion-button expand="block" color="primary" fill="clear"
-                        shape="round" (click)="editarHerramienta(item)">
-                        Detalles
-                      </ion-button>
-                    </td>
-                  </ng-container>
+                <tr *ngFor="let item of registrosToolPaginados">
+                  <td style="padding-left: 5%; padding-top: 3%;">{{ item.identificacion }}</td>
+                  <td style="text-align: center;">
+                    <ion-button fill="clear" color="primary" size="large" (click)="editarHerramienta(item)">
+                      <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                    </ion-button>
+                  </td>
                 </tr>
               </tbody>
+              <div class="pagination">
+                <ion-button (click)="paginaAnteriorTool()" [disabled]="paginaActualTool === 1">Anterior</ion-button>
+                <ion-label>{{ paginaActualTool }} / {{ getTotalPaginasTool() }}</ion-label>
+                <ion-button (click)="paginaSiguienteTool()"
+                  [disabled]="paginaActualTool === getTotalPaginasTool()">Siguiente</ion-button>
+              </div>
             </table>
           </div>
         </ion-card-content>

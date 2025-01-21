@@ -21,6 +21,15 @@ export class VehiEquiPage implements OnInit {
   public carResult: any = [];
   public toolResult: any = [];
 
+  public registrosCarPaginados: any[] = [];
+  public registrosToolPaginados: any[] = [];
+
+  public paginaActualCar: number = 1;
+  public registrosPorPaginaCar: number = 5;
+
+  public paginaActualTool: number = 1;
+  public registrosPorPaginaTool: number = 5;
+
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
@@ -44,27 +53,78 @@ export class VehiEquiPage implements OnInit {
     await toast.present();
   }
 
-  async getInformacion(){
+  actualizarTablaCar() {
+    const inicio = (this.paginaActualCar - 1) * this.registrosPorPaginaCar;
+    const fin = inicio + this.registrosPorPaginaCar;
+    this.registrosCarPaginados = this.autos.slice(inicio, fin);
+  }
+
+  actualizarTablaTool() {
+    const inicio = (this.paginaActualTool - 1) * this.registrosPorPaginaTool;
+    const fin = inicio + this.registrosPorPaginaTool;
+    this.registrosToolPaginados = this.herramientas.slice(inicio, fin);
+  }
+
+  paginaSiguienteCar() {
+    if (this.paginaActualCar < this.getTotalPaginasCar()) {
+      this.paginaActualCar++;
+      this.actualizarTablaCar();
+    }
+  }
+
+  paginaAnteriorCar() {
+    if (this.paginaActualCar > 1) {
+      this.paginaActualCar--;
+      this.actualizarTablaCar();
+    }
+  }
+
+  paginaSiguienteTool() {
+    if (this.paginaActualTool < this.getTotalPaginasTool()) {
+      this.paginaActualTool++;
+      this.actualizarTablaTool();
+    }
+  }
+
+  paginaAnteriorTool() {
+    if (this.paginaActualTool > 1) {
+      this.paginaActualTool--;
+      this.actualizarTablaTool();
+    }
+  }
+
+  getTotalPaginasCar() {
+    return Math.ceil(this.autos.length / this.registrosPorPaginaCar);
+  }
+
+  getTotalPaginasTool() {
+    return Math.ceil(this.herramientas.length / this.registrosPorPaginaTool);
+  }
+
+
+  async getInformacion() {
     this.carService.getCar().subscribe({
       next: (car) => {
-        this.autos = car
-        this.carResult = car
+        this.autos = car;
+        this.actualizarTablaCar();
       },
       error: (error) => {
-        this.presentToast('Error: '+ error.message, 'bottom', 'danger');
+        this.presentToast('Error: ' + error.message, 'bottom', 'danger');
       }
     });
 
     this.toolService.getTool().subscribe({
       next: (data) => {
         this.herramientas = data;
-        this.toolResult = data
+        this.actualizarTablaTool();
       },
       error: (error) => {
-        this.presentToast('Error: '+ error.message, 'bottom', 'danger');
+        this.presentToast('Error: ' + error.message, 'bottom', 'danger');
       }
-    })
+    });
   }
+
+
 
   async addNewCar(){
     const modalCar = await this.modalController.create({

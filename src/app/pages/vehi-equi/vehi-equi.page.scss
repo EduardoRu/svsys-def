@@ -1,0 +1,114 @@
+/* Tabla responsiva */
+.table-container {
+    overflow-x: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.responsive-table th {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f8f8f8;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.responsive-table td {
+    font-size: 16px;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.responsive-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.responsive-table th:first-child,
+.responsive-table td:first-child {
+    border-left: none;
+}
+
+.responsive-table th:last-child,
+.responsive-table td:last-child {
+    border-right: none;
+}
+
+/* Controles de paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 30%;
+    gap: 10px;
+}
+
+.pagination ion-button {
+    --background: #007bff;
+    /* Color del botón */
+    --color: white;
+    /* Color del texto */
+    --border-radius: 4px;
+    /* Bordes redondeados */
+    --padding: 8px 16px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.pagination ion-button:hover {
+    --background: #0056b3;
+    /* Color al pasar el cursor */
+}
+
+.pagination ion-label {
+    font-size: 14px;
+    color: #333;
+    margin: 0 10px;
+}
+
+/* Botón deshabilitado */
+.pagination ion-button[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+    --background: #ccc;
+    --color: #666;
+}
+
+/* Personalización general */
+ion-card-content {
+    padding: 0;
+}
+
+ion-card {
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+ion-button {
+    --border-radius: 4px;
+    --padding: 8px 12px;
+}
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 768px) {
+
+    .responsive-table th,
+    .responsive-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .pagination ion-button {
+        font-size: 12px;
+        --padding: 6px 10px;
+    }
+}

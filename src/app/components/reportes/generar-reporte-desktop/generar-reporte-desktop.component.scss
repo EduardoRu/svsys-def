@@ -1,4 +1,4 @@
-.texto-visual{
+.texto-visual {
     text-align: center;
 }
 
@@ -6,4 +6,27 @@ canvas {
     border: 2px solid #000;
     display: block;
     margin: 0 auto;
-  }
+}
+
+/* estudio-metro.component.css */
+
+/* Estilos para mensajes de error */
+.error {
+    color: red;
+}
+
+/* Opcional: Estilos para mejorar la apariencia de los inputs */
+ion-input {
+    width: 100%;
+}
+
+/* Opcional: Estilos para filas asignadas y vacías si deseas diferenciarlas */
+.asignada {
+    background-color: #e0ffe0;
+    /* Verde claro para filas asignadas */
+}
+
+.vacia {
+    background-color: #ffffff;
+    /* Blanco para filas vacías */
+}
