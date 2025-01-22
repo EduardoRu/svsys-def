@@ -1,5 +1,5 @@
 <ion-card>
-  <ion-card-header>
+  <!--ion-card-header>
     <ion-segment [value]="segment" (ionChange)="onSegementChanged($event)">
       <ion-segment-button value="infoClientes">
         <ion-label>Información cliente</ion-label>
@@ -21,10 +21,10 @@
       </ion-segment-button>
     </ion-segment>
     <hr>
-  </ion-card-header>
+  </ion-card-header-->
 
   <ion-card-content>
-    <ng-container *ngIf="segment == 'infoClientes'">
+    <!--ng-container *ngIf="segment == 'infoClientes'"-->
 
       <ion-searchbar [debounce]="25" cancel-button-text="Borrar" placeholder="Busca un cliente" showCancelButton="focus"
         (click)="buscarClientes()"></ion-searchbar>
@@ -132,11 +132,13 @@
           </div>
         </div>
       </form>
-    </ng-container>
+    <!--/ng-container-->
 
+    <hr>
+    <hr>
     <!-- AQUÍ TERMINA LA DE INFO PERSONAL-->
 
-    <ng-container *ngIf="segment == 'Basculas'">
+    <!--ng-container *ngIf="segment == 'Basculas'"-->
 
       <form [formGroup]="basculaInformacion">
         <div class="row">
@@ -259,7 +261,7 @@
               <td>{{ item.marca }}</td>
               <td>{{ item.modelo }}</td>
               <td>{{ item.no_serie }}</td>
-              <td>{{ item.clase }}</td>
+              <td>{{ item.clase == "2" ? "II" : item.clase == "3" ? "III" : "IIII"}}</td>
               <td>{{ item.tipo_bascula }}</td>
               <td>{{ item.alc_max }}</td>
               <td>{{ item.divi_min }}</td>
@@ -290,11 +292,13 @@
       </div>
 
 
-    </ng-container>
+    <!--/ng-container-->
+    <hr>
+    <hr>
 
     <!-- AQUI TERMINA EL REGISTOR DE LAS BASCULAS-->
 
-    <ng-container *ngIf="segment == 'InspeccionVisual'">
+    <!--ng-container *ngIf="segment == 'InspeccionVisual'"-->
       <h5 class="text-center">INSPECCIONAR QUE EL INSTRUMENTO DE MEDICIÓN CUMPLA CON LAS CARACTERÍSTICAS QUE LE APLIQUEN
         DE LA SIGUIENTE LISTA Y REGISTRAR EL CUMPLIMIENTO ( C ), NO CUMPLIMIENTO (NC) O NO APLICA (NA)</h5>
       <hr>
@@ -487,11 +491,13 @@
           </div>
         </div>
       </form>
-    </ng-container>
+    <!--/ng-container-->
 
+    <hr>
+    <hr>
     <!-- AQUÍ TERMINA LA INSPECCIÓN VISUAL -->
 
-    <ng-container *ngIf="segment == 'InspeccionMetro'">
+    <!--ng-container *ngIf="segment == 'InspeccionMetro'"-->
       <!-- estudio-metro.component.html -->
       <ion-select placeholder="Seleccione una báscula" (ionChange)="infoBasculaMtro($event)" fill="outline">
         <ion-select-option *ngFor="let item of basculasMetro; let i = index" [value]="item">
@@ -664,9 +670,11 @@
 
 
 
-    </ng-container>
+    <!--/ng-container-->
+    <hr>
+    <hr>
 
-    <ng-container *ngIf="segment == 'Resumen'">
+    <!--ng-container *ngIf="segment == 'Resumen'"-->
       <form (ngSubmit)="getDictamenBascula()" [formGroup]="resumen">
         <ion-select placeholder="Seleccione a una bascula" (ionChange)="infoBasculaResumen($event)" fill="outline"
           formControlName="basculaResumen">
@@ -798,9 +806,12 @@
         </div>
       </form>
 
-    </ng-container>
+    <!--/ng-container-->
 
-    <ng-container *ngIf="segment == 'Firma'">
+    <hr>
+    <hr>
+
+    <!--ng-container *ngIf="segment == 'Firma'"-->
 
       <form [formGroup]="infoPago">
         <div class="table-responsive">
@@ -900,7 +911,7 @@
           Imprimir reporte
         </ion-button>
       </div>
-    </ng-container>
+    <!--/ng-container-->
   </ion-card-content>
 
 </ion-card>

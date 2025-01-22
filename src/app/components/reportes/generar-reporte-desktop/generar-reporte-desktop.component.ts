@@ -644,6 +644,14 @@ export class GenerarReporteDesktopComponent implements OnInit {
     console.log(this.registroBasculas.value)
     // Obtener la información de las basculas
     if (this.registroBasculas.valid) {
+      const clase = this.registroBasculas.get('clase').value;
+
+      this.registroBasculas.get('clase').setValue(
+        clase == 'IIII (ORDINARIA)' ? '4' :
+        clase == 'III (MEDIA)'  ? '3' :
+        clase == 'II (FINA)'? '2' :
+        clase == 'I (ESPECIAL)'   ? '1' : '4'
+      );
       this.basculas.push(this.registroBasculas.value);
       this.registroBasculas.reset();
     } else {
@@ -682,16 +690,16 @@ export class GenerarReporteDesktopComponent implements OnInit {
     }
 
     // Determinar la clase más restrictiva
-    let claseFinal = '4'; // Inicializamos con la clase más restrictiva
+    let claseFinal = 'IIII (ORDINARIA)'; // Inicializamos con la clase más restrictiva
     for (const e of divisionesE) {
       if (e > 1000) {
-        claseFinal = '3'; // Si excede Clase III (1000), pasamos a Clase II
+        claseFinal = 'III (MEDIA)'; // Si excede Clase III (1000), pasamos a Clase II
       }
       if (e > 10_000) {
-        claseFinal = '2'; // Si excede Clase II (10,000), pasamos a Clase I
+        claseFinal = 'II (FINA)'; // Si excede Clase II (10,000), pasamos a Clase I
       }
       if (e > 100_000) {
-        claseFinal = '1'; // Si excede Clase I (100,000), pasamos a Especial
+        claseFinal = 'I (ESPECIAL)'; // Si excede Clase I (100,000), pasamos a Especial
       }
     }
 
