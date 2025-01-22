@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar style="--background: #757374; color: white;">
+    <ion-title>
+      Agregar Certificados
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <form (ngSubmit)="guardarCer()" [formGroup]="certificado">
+
+      <div class="row">
+        <div class="col-md-6">
+          <ion-textarea class="p-2" label="Rango inicial" labelPlacement="floating" fill="outline"
+            placeholder="Ejemplo: U20170330131306" [autoGrow]="true" formControlName="rIni">
+          </ion-textarea>
+        </div>
+        <div class="col-md-6">
+          <ion-textarea class="p-2" label="Rango final" labelPlacement="floating" fill="outline"
+            placeholder="Ejemplo: U20170330131320" [autoGrow]="true" formControlName="rFin">
+          </ion-textarea>
+        </div>
+      </div>
+
+      <ion-button type="submit" expand="block" color="primary">Agregar</ion-button>
+      <hr>
+      <ion-button type="button" expand="block" (click)="cancel()" color="danger">Cancelar</ion-button>
+    </form>
+  </div>
+</ion-content>

@@ -1,50 +1,105 @@
-<app-menu titulo="Certificados / Hologramas"></app-menu>
+<app-menu titulo="Hologramas"></app-menu>
 
 <ion-content [fullscreen]="true">
-  <div class="row">
-    <div class="col-md-6">
-      <ion-card class="custom-card-height-usuarios" style="border-radius: 15px;">
-        <ion-card-header style="background-color: #211F20;">
-          <ion-card-title class="text-center" style="color: white;">
-            Hologramas usados por certificado
-          </ion-card-title>
-          <ion-card-subtitle>
-            <ion-searchbar placeholder="Buscar dictamen" inputmode="decimal" type="decimal" [debounce]="250"
-              showCancelButton="always"></ion-searchbar>
-          </ion-card-subtitle>
-        </ion-card-header>
+  <ion-grid style="height: 100%;">
+    <ion-row style="height: 100%;">
+      <!-- Lista de usuarios -->
+      <ion-col size-md="4" size-sm="12" style="height: 100%;">
+        <ion-card style="height: 95%; border-radius: 15px; display: flex; flex-direction: column;">
+          <ion-card-header style="background-color: #211F20;">
+            <ion-card-title class="text-center" style="color: white;">
+              Lista de Usuarios
+            </ion-card-title>
+            <ion-card-subtitle>
+              <ion-searchbar placeholder="Buscar usuario" (ionInput)="filterUsers($event)"></ion-searchbar>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content style="flex: 1; overflow-y: auto;">
+            <ion-list>
+              <ion-item *ngFor="let user of paginatedUsers" (click)="selectUser(user)"
+                [class.selected]="user.id === selectedUser?.id" button>
+                {{ user.usuario }}
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+          <!-- Controles de paginación -->
+          <ion-footer style="text-align: center;">
+            <ion-button color="primary" [disabled]="currentUserPage === 1" (click)="prevUserPage()">
+              Anterior
+            </ion-button>
+            <span>Página {{ currentUserPage }} de {{ totalUserPages }}</span>
+            <ion-button color="primary" [disabled]="currentUserPage === totalUserPages" (click)="nextUserPage()">
+              Siguiente
+            </ion-button>
+          </ion-footer>
+        </ion-card>
+      </ion-col>
 
-        <ion-card-content>
+      <!-- Información del usuario seleccionado -->
+      <ion-col size-md="8" size-sm="12" style="height: 100%;">
+        <ion-card style="height: 95%; border-radius: 15px; display: flex; flex-direction: column;">
+          <ion-card-header style="background-color: #211F20;">
+            <ion-card-title class="text-center" style="color: white;">
+              Información del Usuario
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content *ngIf="selectedUser; else noUserSelected" style="flex: 1; overflow-y: auto; margin: 1%;">
+            <!-- Detalles del usuario -->
+            <div class="row" style="text-align: center;">
+              <div class="col-md-4">
+                <strong>Usuario</strong> <br> {{ selectedUser.usuario }}
+              </div>
+              <div class="col-md-4">
+                <strong>Email</strong> <br> {{ selectedUser.email }}
+              </div>
+              <div class="col-md-4">
+                <strong>Role</strong> <br> {{ selectedUser.role }}
+              </div>
+            </div>
+            <hr>
+            <!-- Botón de administración de certificados -->
+            <ion-button expand="block" color="primary" (click)="openAdminModal()">
+              Administrar Certificados
+            </ion-button>
+            <hr>
+            <!-- Lista paginada de certificados -->
+            <div>
+              <h5 style="text-align: center;">
+                <b>Certificados Utilizados</b>
+              </h5>
+              <ion-list>
+                <ion-item *ngFor="let cert of paginatedAssignedCertificates">
+                  {{ cert.certificado }}
+                </ion-item>
+              </ion-list>
+              <!-- Controles de paginación -->
+              <div class="pagination-controls" style="text-align: center;">
+                <ion-button color="primary" [disabled]="currentPage === 1" (click)="prevPage()">
+                  Anterior
+                </ion-button>
+                <span>Página {{ currentPage }} de {{ getTotalPages() }}</span>
+                <ion-button color="primary" [disabled]="currentPage === getTotalPages()" (click)="nextPage()">
+                  Siguiente
+                </ion-button>
 
-        </ion-card-content>
-      </ion-card>
-    </div>
-    <div class="col-md-6">
-      <ion-card class="custom-card-height-usuarios" style="border-radius: 15px;">
-        <ion-card-header style="background-color: #211F20;">
-          <ion-card-title class="text-center" style="color: white;">
-            Asigrnación de hologramas a los usuarios
-          </ion-card-title>
-          <ion-card-subtitle>
-            <ion-searchbar placeholder="Buscar usuario" inputmode="decimal" type="decimal" [debounce]="250"
-              showCancelButton="always"></ion-searchbar>
-          </ion-card-subtitle>
-        </ion-card-header>
-
-        <ion-card-content>
-
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </div>
-
-
+              </div>
+            </div>
+          </ion-card-content>
+          <ng-template #noUserSelected>
+            <div class="text-center" style="margin-top: 20%;">
+              <h4>Selecciona un usuario para ver su información</h4>
+            </div>
+          </ng-template>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" color="primary">
     <ion-fab-button color="primary">
       <ion-icon name="chevron-up-circle"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="primary">
+      <ion-fab-button (click)="agregarCertificados()" color="primary">
         <ion-icon name="add-circle-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>

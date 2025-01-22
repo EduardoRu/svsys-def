@@ -135,4 +135,20 @@ export class AuthService {
 		  console.error('Error al actualizar usuario y role: ', error);
 		}
 	}
+
+	async updateUserCertificados(id: string, reportes: any){
+		const docRef = doc(this.firestore, 'users', id);
+
+		// Define el objeto de actualización usando UpdateData
+		const updatedData: UpdateData<{ usuario: string; reportes: any }> = {
+		  reportes,
+		};
+	
+		try {
+		  await updateDoc(docRef, updatedData);
+		} catch (error) {
+		  console.error('Error al actualizar usuario y reportes: ', error);
+		}
+	}
 }
+

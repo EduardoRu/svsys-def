@@ -14,6 +14,7 @@ import { QrModalComponent } from 'src/app/qr-modal/qr-modal.component';
 })
 export class GenerarDictamenService {
 
+
   constructor(
     private storage: Storage,
     private modalController: ModalController
@@ -129,11 +130,13 @@ export class GenerarDictamenService {
     firmaInspectorBase64: any,
     firmaClienteBase64: any,
     firmaApoyoBase64: any,
-    usuario
+    usuario:any,
+    imagenURL:any
   ) {
+    // Definir el tamaño de la hoja
+    console.log(imagenURL)
 
     var estudioMtroDatos: any = [];
-    const imagenBase64 = await this.getBase64ImageFromURL('assets/logo_bg1.png');
 
     for (let i = 0; i < estudioMtro.ejemplo1.length; i++) {
       const element = estudioMtro.ejemplo1[i];
@@ -162,16 +165,14 @@ export class GenerarDictamenService {
     if (
       infoCliente && infoPago && infoVisuales && encuesta
     ) {
-      this.obtenerUbicacion().then((res: any) => {
+      try {
         var dd = {
           pageOrientation: 'landscape',
           content: [
-
             {
-
               columns: [
                 {
-                  image: imagenBase64,
+                  text:"j",
                   width: '7%'
                 },
                 {
@@ -450,13 +451,13 @@ export class GenerarDictamenService {
                       text: infoBasculas.basculas[0].no_serie,
                       fontSize: '9'
                     }, {
-                      text: infoBasculas.basculas[0].divi_max,
+                      text: infoBasculas.basculas[0].divi_min,
                       fontSize: '9'
                     }, {
-                      text: infoBasculas.basculas[0].alcance_max,
+                      text: infoBasculas.basculas[0].alc_max,
                       fontSize: '9'
                     }, {
-                      text: infoBasculas.basculas[0].clase,
+                      text: infoBasculas.basculas[0].clase == "3" ? "III" : infoBasculas.basculas[0].alc_max == "2" ? "II" : "I",
                       fontSize: '9'
                     }, {
                       text: infoBasculas.basculas[0].tipo_bascula,
@@ -672,7 +673,6 @@ export class GenerarDictamenService {
                 ]
               }
             },
-
             {
               style: 'tableInspeccionMtro',
               table: {
@@ -693,12 +693,12 @@ export class GenerarDictamenService {
                     { text: estudioMtro.alc_max + ' kg', colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                     { text: [estudioMtro.divi_max + 'g'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
                     { text: estudioMtro.clase_ex, colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                    { text: [estudioMtro.precarga + 'kg'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
-                    { text: ['50% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep50num], fontSize: 6, alignment: 'center' },
-                    { text: ['100% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep100num], fontSize: 6, alignment: 'center' },
-                    { text: ['50% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep50den], fontSize: 6, alignment: 'center' },
-                    { text: ['50% DE MÁ\n' + estudioMtro.infoRepetibilidad[0].rep100den], fontSize: 6, alignment: 'center' },
-                    { text: ['1/3 DE MÁX \n' + estudioMtro.infoRepetibilidad[0].rep13den], fontSize: 7, alignment: 'center' }
+                    { text: [estudioMtro.precarga.toString() + 'kg'], colSpan: 2, fontSize: 10.5, alignment: 'center' }, {},
+                    { text: ['50% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep50num.toString()], fontSize: 6, alignment: 'center' },
+                    { text: ['100% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep100num.toString()], fontSize: 6, alignment: 'center' },
+                    { text: ['50% DE MÁX\n' + estudioMtro.infoRepetibilidad[0].rep50den.toString()], fontSize: 6, alignment: 'center' },
+                    { text: ['50% DE MÁ\n' + estudioMtro.infoRepetibilidad[0].rep100den.toString()], fontSize: 6, alignment: 'center' },
+                    { text: ['1/3 DE MÁX \n' + estudioMtro.infoRepetibilidad[0].rep13den.toString()], fontSize: 7, alignment: 'center' }
                   ],
                   [
                     { text: 'EXACTITUD', fontSize: 10.5, colSpan: 9, alignment: 'center' },
@@ -784,10 +784,9 @@ export class GenerarDictamenService {
               ],
             },
             {
-
               columns: [
                 {
-                  image: imagenBase64,
+                  text: "logo",
                   width: '5%',
                   alignment: 'center',
                   margin: [5, 5, 5, 5]
@@ -915,12 +914,12 @@ export class GenerarDictamenService {
                 {
                   width: '33%',
                   fontSize: 10,
-                  text: 'UTMX: ' + res.easting
+                  text: 'UTMX: '
                 },
                 {
                   width: '33%',
                   fontSize: 10,
-                  text: 'UTMY: ' + res.northing
+                  text: 'UTMY: '
                 },
                 {
                   width: '33%',
@@ -1272,10 +1271,10 @@ export class GenerarDictamenService {
                     text: infoResumen.basculaResumen.no_serie,
                     fontSize: 8
                   }, {
-                    text: infoResumen.basculaResumen.divi_max,
+                    text: infoResumen.basculaResumen.divi_min,
                     fontSize: 8
                   }, {
-                    text: infoResumen.basculaResumen.alcance_max,
+                    text: infoResumen.basculaResumen.alc_max,
                     fontSize: 8
                   }, {
                     text: infoResumen.basculaResumen.clase,
@@ -1868,17 +1867,15 @@ export class GenerarDictamenService {
           }
         };
 
-        const pdfDocGenerator = pdfMake.createPdf(dd);
-
-        pdfDocGenerator.getBlob(async (blob) => {
-          const fileName = `ejemplo_${new Date().getTime()}.pdf`;
-          const url = await this.uploadPDF(blob, fileName);
-          await this.presentQrModal(url);
-          console.log('Enlace del PDF:', url);
-        });
-
-        pdfMake.createPdf(dd).open();
-      });
+        try {
+          pdfMake.createPdf(dd).open();
+        } catch (error) {
+          console.log(error);
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
 
 
     }
@@ -1899,7 +1896,7 @@ export class GenerarDictamenService {
     usuario
   ) {
     var estudioMtroDatos: any = [];
-    const imagenBase64 = await this.getBase64ImageFromURL('assets/logo_bg1.png');
+    const imagenBase64:any = await this.getBase64ImageFromURL('assets/logo_bg1.png');
 
 
     for (let i = 0; i < estudioMtro.ejemplo1.length; i++) {
@@ -1933,7 +1930,7 @@ export class GenerarDictamenService {
         var dd = {
           pageOrientation: 'landscape',
           info: {
-            title: infoCliente.nombre_razon_social+'_'+new Date().getTime(),
+            title: infoCliente.nombre_razon_social + '_' + new Date().getTime(),
             author: 'john doe'
           },
           content: [
